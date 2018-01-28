@@ -1,0 +1,102 @@
+{
+  "user": {
+    "name": "小云",
+    "lastlogintime": "2017.07.14 12:00",
+    "avatar": "/static/images/avatar.png"
+  },
+  "basicInfo": {
+    "name": "xx公司",
+    "address": "广东省",
+    "email": "lan",
+    "telephone": "13432",
+    "worktime": "9:00am - 6:00pm",
+    "logo": "",
+    "banner": [
+      {"id": "1", "img": "/static/images/banner-01.jpg", "link": "admin/ad/list", "order": "1"},
+      {"id": "2", "img": "/static/images/banner-02.jpg", "link": "", "order": "2"},
+      {"id": "3", "img": "/static/images/banner-02.jpg", "link": "", "order": "6"},
+      {"id": "4", "img": "/static/images/banner-02.jpg", "link": "", "order": "4"},
+      {"id": "5", "img": "/static/images/banner-02.jpg", "link": "", "order": "5"},
+      {"id": "6", "img": "/static/images/banner-03.jpg", "link": "admin/ad/list", "order": "2"}
+    ],
+    "brief": "As Phoenixcontrols and Aircuity authorized distributor in China, we offer innovative, technologically sound airflow and pressurization. As Phoenixcontrols and Aircuity authorized distributor in China."
+  },
+  "infoList": [
+    {
+      "id": "1398",
+      "title": "企业文化",
+      "show": true,
+      "addTime": "2017.05.20 12:00",
+      "editTime": "2017.05.20 12:58"
+    },
+    {
+      "id": "1399",
+      "title": "我们的目标",
+      "show": false,
+      "addTime": "2017.05.15 12:00",
+      "editTime": "2017.05.30 12:58"
+    }
+  ],
+  "infoDisplay": {
+    "id_1398": {
+      "title": "企业文化",
+      "show": true,
+      "author": "cxy",
+      "summary": "传承品质生活，提高幸福体验",
+      "content": "传承品质生活，提高幸福体验传承品质生活，提高幸福体验传承品质生活，提高幸福体验"
+    },
+    "id_1399": {
+      "title": "我们的目标",
+      "show": false,
+      "author": "xhb",
+      "summary": "提高幸福体验",
+      "content": "提高幸福体验提高幸福体验提高幸福体验提高幸福体验提高幸福体验提高幸福体验"
+    }
+  },
+  "productList": {
+    "list": [
+      {
+        "id": "1",
+        "order": "1",
+        "title": "Valves and Controllers",
+        "display": true,
+        "picture": "/static/images/prodct-phoenix-01.jpg",
+        "classify": ["Phoenix Controls"],
+        "createTime": "2017.05.20 12:00",
+        "editTime": "2017.05.20 12:58"
+      },
+      {
+        "id": "2",
+        "order": "2",
+        "title": "Combustible Gas Detection",
+        "display": true,
+        "picture": "/static/images/prodct-drager-01.jpg",
+        "classify": ["Drager"],
+        "createTime": "2017.05.20 12:00",
+        "editTime": "2017.05.20 12:58"
+      }
+    ]
+  },
+  "experienceList": {
+    "list": [
+      {
+        "id": "1",
+        "order": "1",
+        "title": "Phoenix Controls",
+        "display": true,
+        "classify": ["Chemical Industry","Pharmaceuticals"],
+        "createTime": "2017.05.20 12:00",
+        "editTime": "2017.05.20 12:58"
+      },
+      {
+        "id": "2",
+        "order": "2",
+        "title": "Drager",
+        "display": true,
+        "classify": ["Manufacturing","Chemical Industry","Pharmaceuticals"],
+        "createTime": "2017.05.20 12:00",
+        "editTime": "2017.05.20 12:58"
+      }
+    ]
+  }
+}

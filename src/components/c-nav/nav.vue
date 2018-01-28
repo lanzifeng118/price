@@ -1,0 +1,104 @@
+<template>
+<div class="nav" :style="{height: height + 'px'}">
+  <div class="nav-avatar">
+    <img :src="avatar"/>
+  </div>
+  <ul class="nav-ul">
+    <li
+      class="nav-item"
+      v-for="item in items"
+    >
+      <router-link :to="item.src">
+        <span
+          class="icon"
+          :class="'icon-' + item.style"
+        >
+        </span>{{item.name}}
+      </router-link>
+    </li>
+  </ul>
+</div>
+</template>
+
+<script>
+import { winHeigth } from 'components/tools/global'
+
+export default {
+  data() {
+    return {
+      height: winHeigth - 50,
+      avatar: './static/images/avatar.png'
+    }
+  },
+  computed: {
+    items() {
+      let items = [{
+        src: '/admin/calculate',
+        name: '计算',
+        style: 'home'
+      }, {
+        src: '/admin/search',
+        name: '查询SKU',
+        style: 'experience'
+      }]
+      if (this.$store.state.user.name === 'admin') {
+        items = items.concat([{
+          src: '/admin/product',
+          name: '商品信息',
+          style: 'cart'
+        }, {
+          src: '/admin/logistics',
+          name: '物流价格',
+          style: 'evaluate'
+        }, {
+          src: '/admin/config',
+          name: '系统设置',
+          style: 'config'
+        }])
+      }
+      return items
+    }
+  }
+}
+</script>
+
+<style>
+.nav {
+  width: 150px;
+  float: left;
+  overflow: hidden;
+  background-color: #363f46;
+}
+.nav .icon {
+  margin-right: 10px;
+}
+.nav-avatar {
+  font-size: 0;
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+}
+.nav-avatar img {
+  max-width: 150px;
+  max-height: 150px;
+}
+.nav-item {
+  height: 45px;
+  line-height: 45px;
+  border-bottom: 1px solid #4a4a4a;
+}
+
+.nav-item a {
+  display: block;
+  color: #fff;
+  padding-left: 20px;
+  transition: all 0.2s;
+}
+.nav-item a:hover {
+  color: #07efd9;
+}
+.nav-item a.active {
+  background: #07efd9;
+  color: #363f46;
+}
+</style>
