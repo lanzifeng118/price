@@ -6,6 +6,10 @@ import Admin from 'components/p-admin/admin'
 import Calculate from 'components/p-calculate/index'
 import Search from 'components/p-search/index'
 
+import Logistics from 'components/p-logistics/index'
+import LogDomestic from 'components/p-logistics/domestic/index'
+import LogDomesticEdit from 'components/p-logistics/domestic-edit/index'
+
 // config
 import Config from 'components/p-config/config'
 import ConfigList from 'components/p-config/list/list'
@@ -19,12 +23,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: {name: 'admin'}
+      redirect: { name: 'admin' }
     },
     {
       path: '/login',
       component: Login,
-      meta: {loginPage: true}
+      meta: { loginPage: true }
     },
     {
       path: '/error',
@@ -33,9 +37,9 @@ export default new Router({
     {
       path: '/admin',
       name: 'admin',
-      meta: {requiresAuth: true}, // 需要登录
+      meta: { requiresAuth: true }, // 需要登录
       component: Admin,
-      redirect: {name: 'calculate'},
+      redirect: { name: 'calculate' },
       children: [
         {
           path: 'calculate',
@@ -55,7 +59,16 @@ export default new Router({
         // logistics
         {
           path: 'logistics',
-          component: Config
+          component: Logistics,
+          children: [
+            { path: '/', component: LogDomestic },
+            {
+              path: 'edit',
+              component: LogDomesticEdit,
+              children: [{ path: ':id' }]
+            },
+            { path: 'password', component: ConfigPassword }
+          ]
         },
         // config
         {
@@ -63,9 +76,9 @@ export default new Router({
           component: Config,
           children: [
             // 中文
-            {path: '/', component: ConfigList},
-            {path: 'edit', component: ConfigEdit},
-            {path: 'password', component: ConfigPassword}
+            { path: '/', component: ConfigList },
+            { path: 'edit', component: ConfigEdit },
+            { path: 'password', component: ConfigPassword }
           ]
         }
       ]

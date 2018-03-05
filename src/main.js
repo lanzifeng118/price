@@ -15,6 +15,7 @@ Vue.config.productionTip = false
 
 const store = new Vuex.Store({
   state: {
+    zone: ['uk', 'us', 'de', 'au'],
     user: {
       name: '',
       lastlogintime: '',

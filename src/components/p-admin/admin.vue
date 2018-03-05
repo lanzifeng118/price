@@ -67,7 +67,7 @@ export default {
 
 .content-right {
   overflow: auto;
-  padding: 30px;
+  /* padding: 30px; */
   background-color: #fff;
   float: left;
   width: calc(100% - 150px);

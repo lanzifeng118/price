@@ -3,19 +3,19 @@
     <div v-if="!hasResult" class="cal-form">
       <ul class="cal-form-ul f-clearfix">
         <li>
-          <span class="cal-form-item-name">商品sku</span><input type="text" class="input" v-model="input.sku">
+          <span class="cal-form-item-name">商品sku</span><input type="text" class="input" v-model.trim="input.sku">
         </li>
         <li>
-          <span class="cal-form-item-name"><span class="icon-nessisary"></span>外币售价</span><input type="text" class="input" v-model="input.selling_price">
+          <span class="cal-form-item-name"><span class="icon-nessisary"></span>外币售价</span><input type="text" class="input" v-model.trim.number="input.selling_price">
         </li> 
         <li>
-          <span class="cal-form-item-name"><span class="icon-nessisary"></span>重量</span><input type="text" class="input" v-model="input.weight"><i>克</i>
+          <span class="cal-form-item-name"><span class="icon-nessisary"></span>重量</span><input type="text" class="input" v-model.trim.number="input.weight"><i>克</i>
         </li>
         <li>
-          <span class="cal-form-item-name"><span class="icon-nessisary"></span>采购价</span><input type="text" class="input" v-model="input.purchase_price"><i>元</i>
+          <span class="cal-form-item-name"><span class="icon-nessisary"></span>采购价</span><input type="text" class="input" v-model.trim.number="input.purchase_price"><i>元</i>
         </li>
         <li>
-          <span class="cal-form-item-name">体积</span><input type="text" class="input" v-model="input.bulk"><i>m³</i>
+          <span class="cal-form-item-name">体积</span><input type="text" class="input" v-model.trim.number="input.bulk"><i>m³</i>
         </li>
       </ul>
       <div class="cal-form-btns f-clearfix">
@@ -178,7 +178,7 @@ export default {
     },
     verify() {
       let input = this.input
-      let sellingPrice = input.selling_price.trim()
+      let sellingPrice = input.selling_price
       if (!sellingPrice) {
         this.note = '外币售价不能为空'
         return false
@@ -188,7 +188,7 @@ export default {
         return false
       }
 
-      let weight = input.weight.trim()
+      let weight = input.weight
       if (!weight) {
         this.note = '重量不能为空'
         return false
@@ -198,7 +198,7 @@ export default {
         return false
       }
 
-      let purchasePrice = input.purchase_price.trim()
+      let purchasePrice = input.purchase_price
       if (!purchasePrice) {
         this.note = '采购价不能为空'
         return false
@@ -208,7 +208,7 @@ export default {
         return false
       }
 
-      let bulk = input.bulk.trim()
+      let bulk = input.bulk
       if (bulk && !util.isNum(bulk)) {
         this.note = '体积必须为数字'
         return false
@@ -224,6 +224,9 @@ export default {
 }
 </script>
 <style>
+.cal {
+  padding: 30px;
+}
 .cal-form {
   position: relative;
   left: 50%;
