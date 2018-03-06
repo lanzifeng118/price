@@ -26,7 +26,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in items" :class="item.country">
+        <tr v-for="item in items" :class="item.className">
           <td class="country">{{item.country}}</td>
           <td>{{item.logistics}}</td>
           <td>{{item.money}}{{item.selling_price}}</td>
@@ -62,14 +62,8 @@ export default {
     items() {
       // 1.国内小包 2.海运小包 3.空运小包
       let items = []
-      let area = ['uk', 'us', 'de', 'au']
+      let zone = this.$store.state.zone
       let logOrder = ['1', '2', '3']
-      let mapMoney = {
-        uk: '￡',
-        us: '$',
-        de: '€',
-        au: '$'
-      }
       let mapLog = {
         '1': '国内小包',
         '2': '海运小包',
@@ -79,11 +73,15 @@ export default {
       console.log(product)
       // let logistics = this.factor.logistics
       console.log(this.factor)
-      area.forEach(v => {
+
+      let counter = 0
+      zone.forEach(v => {
+        counter = counter + 1
         logOrder.forEach(vL => {
           let item = {}
-          item.country = v
-          item.money = mapMoney[v]
+          item.className = counter % 2 === 0 ? 'grey' : ''
+          item.country = v.name
+          item.money = v.symbol
           item.bulk = product.bulk
           item.weight = product.weight
           item.purchase_price = product.purchase_price
@@ -144,10 +142,6 @@ export default {
 }
 </script>
 <style>
-.list-table-wrap tr.us td,
-.list-table-wrap tr.au td {
-  background-color: #f1f1f1;
-}
 .list-table-wrap td.country {
   text-transform: uppercase;
 }

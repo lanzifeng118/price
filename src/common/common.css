@@ -201,6 +201,9 @@ table {
   line-height: 1.5em;
 }
 /* .list-table-wrap th, */
+.list-table-wrap tr.grey {
+  background-color: #f3f3f3;
+}
 .list-table-wrap td {
   border: 1px solid #e5e5e5;
   text-align: center;

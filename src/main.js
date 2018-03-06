@@ -6,7 +6,7 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
-import {getCookie} from 'components/tools/util'
+import { getCookie } from 'components/tools/util'
 
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
@@ -15,7 +15,25 @@ Vue.config.productionTip = false
 
 const store = new Vuex.Store({
   state: {
-    zone: ['uk', 'us', 'de', 'au'],
+    zone: [
+      {
+        name: 'us',
+        symbol: '$',
+        rate: '0.87'
+      },
+      {
+        name: 'uk',
+        symbol: '￡'
+      },
+      {
+        name: 'de',
+        symbol: '€'
+      },
+      {
+        name: 'au',
+        symbol: '$'
+      }
+    ],
     user: {
       name: '',
       lastlogintime: '',
@@ -37,7 +55,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.matched.length === 0) {
-    from.name ? next({name: from.name}) : next('/admin/calculate')
+    from.name ? next({ name: from.name }) : next('/admin/calculate')
     return
   }
   // console.log(getCookie())
@@ -55,7 +73,7 @@ router.beforeEach((to, from, next) => {
     } else {
       next({
         path: path,
-        query: {redirect: to.fullPath}
+        query: { redirect: to.fullPath }
       })
     }
   }

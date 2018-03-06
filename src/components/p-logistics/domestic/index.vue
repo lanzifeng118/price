@@ -9,23 +9,30 @@
       <table>
         <thead>
           <tr>
-            <th>收费分区/Zone</th>
-            <th>开始重量段/StartWeight</th>
-            <th>截止重量段/EndWeight</th>
-            <th>价格值/Price</th>
+            <th>收费分区</th>
+            <th>开始重量段(g)</th>
+            <th>截止重量段(g)</th>
+            <th>价格值</th>
+            <th>单件价格</th>
+            <th>附加处理费</th>
             <th>操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in items">
+          <tr v-for="(item, index) in items" :class="item.className">
             <td v-if="item.rowspan" :rowspan="item.rowspan">{{item.zone}}</td>
-            <td>{{item.startWeight}}</td>
-            <td>{{item.endWeight}}</td>
-            <td>{{item.price}}</td>
+            <td>{{item.startWeight || '-'}}</td>
+            <td>{{item.endWeight || '-'}}</td>
+            <td>{{item.price || '-'}}</td>
+            <td>{{item.unitPrice || '-'}}</td>
+            <td>{{item.extra || '-'}}</td>
             <td>
-              <router-link :to="'/admin/logistics/edit/' + item.id">修改</router-link>
-              <span class="icon-cutting_line"></span>
-              <a href="javascipt: void 0" @click="deleteItem(index)">删除</a>
+              <div v-if="!item.noData"> 
+                <router-link :to="'/admin/logistics/edit/' + item.id">修改</router-link>
+                <span class="icon-cutting_line"></span>
+                <a href="javascipt: void 0" @click="deleteItem(index)">删除</a>
+              </div>
+              <div v-else>-</div>
             </td>
           </tr>
         </tbody>
@@ -44,6 +51,8 @@ export default {
   created() {
     this.getItems()
   },
+  mounted() {
+  },
   methods: {
     getItems() {
       // ajax
@@ -51,54 +60,66 @@ export default {
         us: [
           {
             id: 1,
-            startWeight: 0,
-            endWeight: 0.113,
-            price: 2.864
-          },
-          {
-            startWeight: 0.113,
-            endWeight: 0.198,
-            price: 3.645
-          },
-          {
-            startWeight: 0.198,
-            endWeight: 0.283,
-            price: 4.006
-          },
-          {
-            startWeight: 0.1,
-            endWeight: 0.113,
-            price: 2.811
+            startWeight: '',
+            endWeight: '',
+            price: 71.2,
+            extra: 10
           }
         ],
         uk: [
           {
             id: 2,
-            startWeight: 0,
-            endWeight: 0.113,
-            price: 2.864
+            startWeight: '0',
+            endWeight: 100,
+            price: 87.56,
+            extra: '0'
           },
           {
-            startWeight: 0.113,
-            endWeight: 0.198,
-            price: 3.645
+            startWeight: 100,
+            endWeight: 300,
+            price: 83.5,
+            extra: '0'
           },
           {
-            startWeight: 0.198,
-            endWeight: 0.283,
-            price: 4.006
+            startWeight: 300,
+            endWeight: 3000,
+            price: 40,
+            extra: 18
+          }
+        ],
+        de: [
+          {
+            id: 3,
+            startWeight: '0',
+            endWeight: 20,
+            unitPrice: 2.69,
+            price: '',
+            extra: '0'
+          },
+          {
+            startWeight: 300,
+            endWeight: 750,
+            price: 71.78,
+            extra: 5.75
           }
         ]
       }
       let zone = this.$store.state.zone
+      let counter = 0
       zone.forEach(v => {
-        let itemsV = data[v]
-        if (itemsV && itemsV.length > 0) {
-          this.sort(itemsV)
-          itemsV[0].rowspan = itemsV.length
-          itemsV[0].zone = v.toUpperCase()
-          this.items = this.items.concat(itemsV)
-        }
+        counter = counter + 1
+        let itemsV = data[v.name]
+        itemsV = itemsV && itemsV.length > 0 ? itemsV : [{noData: true}]
+        // 排序
+        this.sort(itemsV)
+        itemsV.forEach((vL, iL) => {
+          if (iL === 0) {
+            vL.rowspan = itemsV.length
+            vL.zone = v.name.toUpperCase()
+          }
+          vL.className = counter % 2 === 0 ? 'grey' : ''
+        })
+        this.items = this.items.concat(itemsV)
       })
     },
     deleteItem() {},
