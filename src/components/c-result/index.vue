@@ -25,27 +25,27 @@
           <th width="5%">30%利润率售价</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="item in items" :class="item.className">
-          <td class="country">{{item.country}}</td>
+      <tbody v-for="itemT in items">
+        <tr v-for="(item, index) in itemT.list">
+          <td v-if="index === 0" :rowspan="itemT.list.length" class="uppercase">{{itemT.name}}</td>
           <td>{{item.logistics}}</td>
-          <td>{{item.money}}{{item.selling_price}}</td>
+          <td>{{itemT.symbol}}{{item.selling_price}}</td>
           <td>{{item.weight}}g</td>
           <td>¥{{item.purchase_price}}</td>
           <td>¥0</td>
-          <td>{{item.money}}0.3</td>
+          <td>{{itemT.symbol}}0.3</td>
           <td>¥2.5</td>
           <td>¥1.5</td>
           <td>¥5.0</td>
           <td>3.3</td>
           <td>40.0%</td>
-          <td>{{item.money}}0.5</td>
-          <td>{{item.money}}0.6</td>
-          <td>{{item.money}}0.6</td>
-          <td>{{item.money}}0.6</td>
-          <td>{{item.money}}0.7</td>
-          <td>{{item.money}}0.7</td>
-          <td>{{item.money}}0.8</td>
+          <td>{{itemT.symbol}}0.5</td>
+          <td>{{itemT.symbol}}0.6</td>
+          <td>{{itemT.symbol}}0.6</td>
+          <td>{{itemT.symbol}}0.6</td>
+          <td>{{itemT.symbol}}0.7</td>
+          <td>{{itemT.symbol}}0.7</td>
+          <td>{{itemT.symbol}}0.8</td>
         </tr>
       </tbody>
     </table>
@@ -74,23 +74,20 @@ export default {
       // let logistics = this.factor.logistics
       console.log(this.factor)
 
-      let counter = 0
       zone.forEach(v => {
-        counter = counter + 1
+        v.list = []
         logOrder.forEach(vL => {
           let item = {}
-          item.className = counter % 2 === 0 ? 'grey' : ''
-          item.country = v.name
-          item.money = v.symbol
           item.bulk = product.bulk
           item.weight = product.weight
           item.purchase_price = product.purchase_price
           item.selling_price = product.selling_price
           item.logistics = mapLog[vL]
-          items.push(item)
+          v.list.push(item)
         })
+        items.push(v)
       })
-      // console.log(items)
+      console.log(items)
       return items
     }
   },
@@ -142,7 +139,4 @@ export default {
 }
 </script>
 <style>
-.list-table-wrap td.country {
-  text-transform: uppercase;
-}
 </style>

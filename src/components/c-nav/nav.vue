@@ -47,6 +47,10 @@ export default {
           name: '商品信息',
           style: 'cart'
         }, {
+          src: '/admin/zone',
+          name: '地区',
+          style: 'cart'
+        }, {
           src: '/admin/logistics',
           name: '物流价格',
           style: 'evaluate'

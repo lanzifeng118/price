@@ -33,6 +33,12 @@ module.exports = {
         pathRewrite: {
           '^/price': ''
         }
+      },
+      '/binheng': {
+        target: 'http://www.lanzifeng.com/binheng',
+        pathRewrite: {
+          '^/binheng': ''
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

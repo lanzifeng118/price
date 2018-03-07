@@ -41,6 +41,9 @@ html, body {
 .f-clearfix:after {
     clear: both
 }
+.uppercase {
+  text-transform: uppercase;
+}
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Chrome/Safari/Opera */
@@ -201,7 +204,7 @@ table {
   line-height: 1.5em;
 }
 /* .list-table-wrap th, */
-.list-table-wrap tr.grey {
+.list-table-wrap tbody:nth-child(odd) {
   background-color: #f3f3f3;
 }
 .list-table-wrap td {
@@ -211,16 +214,42 @@ table {
   padding: 8px 10px;
   line-height: 1.5em;
 }
-/* .list-table-wrap th {
-  background-color: #f1f1f1;
-} */
-.list-btn-add {
+.list-table-wrap td.zone {
+  font-size: 14px;
+}
+.list-table-wrap td.zone .icon-round_add{
+  cursor: pointer;
+  color: #f0a807;
+}
+.list-table-wrap td.zone .icon-round_add:hover {
+  color: #ffba1f;
+}
+/* .list-table-wrap edit */
+.list-table-wrap input {
+  display: block;
+  width: 100%;
   text-align: center;
-  margin-right: 15px;
 }
-.list-btn-add:hover {
-  color: #fff;
+.list-table-wrap tr.edit td.operate {
+  color: #00d0bc;
 }
+.list-table-wrap tr.edit td.operate a{
+  color: #00d0bc;
+}
+.list-table-wrap tr.edit td.operate a:hover {
+  color: #07efd9;
+}
+/* add */
+.list-table-wrap tr.add td.operate {
+  color: #f0a807;
+}
+.list-table-wrap tr.add td.operate a{
+  color: #f0a807;
+}
+.list-table-wrap tr.add td.operate a:hover {
+  color: #ffba1f;
+}
+
 
 /*edit-table*/
 .edit-table-wrap {
@@ -281,7 +310,7 @@ table {
   color: #00d0bc;
   margin-bottom: 25px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #f0f0f0;
+  /* border-bottom: 1px solid #f0f0f0; */
 }
 .edit-close-btn {
   position: absolute;

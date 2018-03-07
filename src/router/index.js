@@ -5,10 +5,11 @@ import ErrorPage from 'components/p-error/error'
 import Admin from 'components/p-admin/admin'
 import Calculate from 'components/p-calculate/index'
 import Search from 'components/p-search/index'
+// zone
+import Zone from 'components/p-zone/index'
 
 import Logistics from 'components/p-logistics/index'
 import LogDomestic from 'components/p-logistics/domestic/index'
-import LogDomesticEdit from 'components/p-logistics/domestic-edit/index'
 
 // config
 import Config from 'components/p-config/config'
@@ -56,18 +57,17 @@ export default new Router({
           path: 'product',
           component: Config
         },
+        // zone
+        {
+          path: 'zone',
+          component: Zone
+        },
         // logistics
         {
           path: 'logistics',
           component: Logistics,
           children: [
-            { path: '/', component: LogDomestic },
-            {
-              path: 'edit',
-              component: LogDomesticEdit,
-              children: [{ path: ':id' }]
-            },
-            { path: 'password', component: ConfigPassword }
+            { path: '/', component: LogDomestic }
           ]
         },
         // config

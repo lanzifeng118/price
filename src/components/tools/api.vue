@@ -1,8 +1,9 @@
 <script>
 let calUrl = '/price/calculation'
 let searchUrl = '/price/costinfo'
+let zoneUrl = '/binheng/api/zone'
 
-let queryFun = (url, pageData) => {
+let queryFun = (url) => {
   return {
     method: 'post',
     url: url,
@@ -56,18 +57,19 @@ let updateFun = (url, data) => {
 //     }
 //   }
 // }
-// let deleteFun = (url, ids) => {
-//   return {
-//     method: 'post',
-//     url: url,
-//     data: {
-//       method: 'delete',
-//       data: {
-//         ids: ids.toString()
-//       }
-//     }
-//   }
-// }
+let deleteFun = (url, ids) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'delete',
+      data: {
+        // ids: ids.toString()
+        ids: ids
+      }
+    }
+  }
+}
 let saveFun = (url, data) => {
   return {
     method: 'post',
@@ -78,9 +80,19 @@ let saveFun = (url, data) => {
     }
   }
 }
+let insertFun = (url, data) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'insert',
+      data: data
+    }
+  }
+}
 let api = {
   cal: {
-    query(data) {
+    query() {
       return queryFun(calUrl)
     },
     save(data) {
@@ -102,6 +114,20 @@ let api = {
           }
         }
       }
+    }
+  },
+  zone: {
+    query() {
+      return queryFun(zoneUrl)
+    },
+    insert(data) {
+      return insertFun(zoneUrl, data)
+    },
+    delete(ids) {
+      return deleteFun(zoneUrl, ids)
+    },
+    update(data) {
+      return updateFun(zoneUrl, data)
     }
   }
 }
