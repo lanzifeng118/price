@@ -1,7 +1,7 @@
 <template>
   <div class="logistics-domestic">
     <div class="list-table-wrap">
-       <!-- msg -->
+      <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
       <table>
         <thead>
@@ -16,8 +16,19 @@
           </tr>
         </thead>
         <tbody v-for="(itemS, indexS) in items">
-          <tr v-for="(item, index) in itemS.list" :class="{edit: item.type === 2, add: item.type === 3}">
-            <td v-if="index === 0" :rowspan="itemS.list.length" class="zone uppercase">
+          <tr v-if="itemS.list.length === 0">
+            <td class="zone">
+              <span class="icon icon-round_add" @click="addItem(indexS)"></span>{{itemS.name}}
+            </td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>无数据</td>
+          </tr>
+          <tr v-else v-for="(item, index) in itemS.list" :class="{edit: item.type === 2, add: item.type === 3}">
+            <td v-if="index === 0" :rowspan="itemS.list.length" class="zone">
               <span class="icon icon-round_add" @click="addItem(indexS)"></span>{{itemS.name}}
             </td>
             <!-- startWeight -->
@@ -174,15 +185,17 @@ export default {
       let zone = this.$store.state.zone
       zone.forEach(v => {
         let itemsV = data[v.name]
+        this.$set(v, 'list', [])
+        v.list = []
         // 排序
         if (itemsV && itemsV.length > 0) {
           this.sort(itemsV)
-          itemsV.forEach(v => {
-            v.type = 1
+          itemsV.forEach(v1 => {
+            v1.type = 1
           })
           this.$set(v, 'list', itemsV)
-          this.items.push(v)
         }
+        this.items.push(v)
       })
       console.log(this.items)
     },
@@ -211,6 +224,7 @@ export default {
         return
       }
       this.busy = true
+      console.log(this.items[index])
       let data = this.items[index]
       data.list.push({
         type: 3,
