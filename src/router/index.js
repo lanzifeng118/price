@@ -8,8 +8,9 @@ import Search from 'components/p-search/index'
 // zone
 import Zone from 'components/p-zone/index'
 
-import Logistics from 'components/p-logistics/index'
-import LogDomestic from 'components/p-logistics/domestic/index'
+// Domestic 国内小包
+import Domestic from 'components/p-domestic/index'
+import DomesticNomal from 'components/p-domestic/normal/index'
 
 // config
 import Config from 'components/p-config/config'
@@ -62,13 +63,23 @@ export default new Router({
           path: 'zone',
           component: Zone
         },
-        // logistics
+        // domestic
         {
-          path: 'logistics',
-          component: Logistics,
+          path: 'domestic',
+          component: Domestic,
           children: [
-            { path: '/', component: LogDomestic }
+            { path: '/', component: DomesticNomal }
           ]
+        },
+        // sea
+        {
+          path: 'air',
+          component: Config
+        },
+        // sea
+        {
+          path: 'sea',
+          component: Config
         },
         // config
         {

@@ -98,6 +98,12 @@
         </tbody>
       </table>
     </div>
+    <div class="test">
+      <select v-model="test.zone">
+        <option disabled value="">选择地区</option>
+        <option v-for="item in zone">{{item.name}}</option>
+      </select>
+    </div>
     <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
     <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
   </div>
@@ -127,6 +133,9 @@ export default {
       pop: {
         text: '',
         show: false
+      },
+      test: {
+        zone: ''
       }
     }
   },
@@ -140,6 +149,7 @@ export default {
         let data = res.data
         if (data.code === 200) {
           let list = data.data.list || []
+          this.zone = list
           callback(list)
         }
       })
@@ -160,7 +170,6 @@ export default {
               v.list = []
               // 排序
               if (itemsV && itemsV.length > 0) {
-                this.sort(itemsV)
                 itemsV.forEach(v1 => {
                   v1.type = 1
                 })
@@ -270,11 +279,6 @@ export default {
         }
       })
     },
-    sort(input) {
-      input = input.sort((a, b) => {
-        return parseFloat(a.start_weight) - parseFloat(b.start_weight)
-      })
-    },
     isBusy() {
       if (this.busy) {
         util.toast.fade(this.toast, '请先提交编辑中的数据!')
@@ -302,5 +306,7 @@ export default {
 </script>
 
 <style>
-
+.test {
+  margin-top: 20px;
+}
 </style>

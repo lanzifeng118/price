@@ -35,11 +35,11 @@ export default {
       let items = [{
         src: '/admin/calculate',
         name: '计算',
-        style: 'home'
+        style: 'calculate'
       }, {
         src: '/admin/search',
         name: '查询SKU',
-        style: 'experience'
+        style: 'barcode-scan'
       }]
       if (this.$store.state.user.name === 'admin') {
         items = items.concat([{
@@ -48,12 +48,20 @@ export default {
           style: 'cart'
         }, {
           src: '/admin/zone',
-          name: '地区',
-          style: 'cart'
+          name: '地区信息',
+          style: 'map'
         }, {
-          src: '/admin/logistics',
-          name: '物流价格',
-          style: 'evaluate'
+          src: '/admin/domestic',
+          name: '国内小包',
+          style: 'truck'
+        }, {
+          src: '/admin/air',
+          name: '空运小包',
+          style: 'plane'
+        }, {
+          src: '/admin/sea',
+          name: '海运小包',
+          style: 'ship'
         }, {
           src: '/admin/config',
           name: '系统设置',

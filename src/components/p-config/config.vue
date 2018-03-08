@@ -16,5 +16,6 @@
 
 <style>
   .support {
+    padding: 30px;
   }
 </style>
