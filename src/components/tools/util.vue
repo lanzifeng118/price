@@ -1,4 +1,23 @@
 <script>
+import api from './api.vue'
+
+function uploadFile(_this, file, success, error) {
+  let formData = new FormData()
+  formData.append('upload', file)
+  _this.axios(api.uploadFile(formData))
+    .then((res) => {
+      let data = res.data
+      if (data.code === 200) {
+        success(data)
+      } else {
+        error()
+      }
+    }).catch((err) => {
+      console.log(err)
+      error()
+    })
+}
+
 function isNum(str) {
   return /^\d+.{0,1}\d*$/.test(str)
 }
@@ -50,6 +69,7 @@ export default {
   isInteger,
   toast,
   req,
-  getCookie
+  getCookie,
+  uploadFile
 }
 </script>

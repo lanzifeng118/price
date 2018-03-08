@@ -88,8 +88,8 @@ devMiddleware.waitUntilValid(() => {
 })
 
 var server = app.listen(port)
-var appHypo = require('../../backend/app.js');
-app.use('/', appHypo);
+// var appHypo = require('../../backend/app.js');
+// app.use('/', appHypo);
 
 // apiRoutes.post('/admin/basicinfo', function(req, res){ //获取数据
 //   res.json({

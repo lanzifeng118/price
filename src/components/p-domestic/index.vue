@@ -1,10 +1,6 @@
 <template>
   <div class="logistics">
     <tab :items="tabItems"></tab>
-    <div class="logistics-btns">
-      <button class="button grey"><span class="icon icon-excel"></span>导入</button>
-      <button class="button yellow"><span class="icon icon-excel"></span>导出</button>
-    </div>
     <div class="logistics-view">
       <router-view ></router-view>
     </div>

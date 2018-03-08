@@ -1,5 +1,6 @@
 <template>
   <div class="logistics-domestic">
+    <upload @update="update"></upload>
     <div class="list-table-wrap">
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
@@ -7,8 +8,8 @@
         <thead>
           <tr>
             <th>收费分区</th>
-            <th width="15%">开始重量段(g)</th>
-            <th width="15%">截止重量段(g)</th>
+            <th width="15%">开始重量段(Kg)</th>
+            <th width="15%">截止重量段(Kg)</th>
             <th width="15%">价格值</th>
             <th width="15%">单件价格</th>
             <th width="15%">附加处理费</th>
@@ -98,11 +99,18 @@
         </tbody>
       </table>
     </div>
-    <div class="test">
+    <div class="test" v-if="items.length > 0">
       <select v-model="test.zone">
         <option disabled value="">选择地区</option>
-        <option v-for="item in zone">{{item.name}}</option>
+        <option v-for="(item, index) in zone" :value="index">{{item.name}}</option>
       </select>
+      <input placeholder="重量(g)" type="text" v-model.trim.number.lazy="test.weight">
+      <input placeholder="体积(m³)" type="text" v-model.trim.number.lazy="test.bulk">
+      <button class="button" @click="calTest">计算邮费</button> 
+      <div v-if="test.result.ok">
+        <p>实重：{{test.result.weight}}kg {{test.result.symbol}} 体积重：{{test.result.bulkWeight}}kg</p>
+        <p>邮费：{{test.result.total}}</p>
+      </div>
     </div>
     <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
     <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
@@ -110,6 +118,7 @@
 </template>
 
 <script>
+import upload from 'components/c-upload/index'
 import pop from 'components/pop/pop'
 import toast from 'components/toast/toast'
 import util from 'components/tools/util'
@@ -122,20 +131,29 @@ export default {
       msg: '',
       busy: false,
       deleteIds: [],
+      zone: [],
       // toast
       toast: {
         show: false,
         text: '',
         icon: ''
       },
-      zone: [],
       // pop
       pop: {
         text: '',
         show: false
       },
       test: {
-        zone: ''
+        zone: '',
+        weight: '',
+        bulk: '',
+        result: {
+          ok: false,
+          bulkWeight: '',
+          weight: '',
+          symbol: '',
+          total: null
+        }
       }
     }
   },
@@ -184,6 +202,9 @@ export default {
           util.req.queryError(this.toast)
         }
       })
+    },
+    update() {
+      this.getItems()
     },
     // type 1 初始化 2 edit 3 add
     editItem(index1, index2) {
@@ -296,17 +317,64 @@ export default {
         return false
       }
       return true
+    },
+    calTest() {
+      // 实重=重量(g)/1000
+      // 体积重=体积（cm³）/6000
+      let test = this.test
+      let result = test.result
+      result.total = null
+      result.ok = true
+      result.weight = this.test.weight / 1000 || 0
+      result.bulkWeight = this.test.bulk / 6000 || 0
+      result.symbol = result.weight >= result.bulkWeight ? '>=' : '<'
+      // 物流成本=重量(kg)*87.56 + 附加费
+      let zone = this.items[test.zone]
+      if (!zone) {
+        return
+      }
+      let weight = result.weight >= result.bulkWeight ? result.weight : result.bulkWeight
+      let list = zone.list
+      for (let i = 0; i < list.length; i++) {
+        let item = list[i]
+        let sw = parseFloat(item.start_weight) || 0
+        let ew = parseFloat(item.end_weight) || Infinity
+        if (weight >= sw && weight < ew) {
+          console.log(item)
+          let up = parseFloat(item.unit_price)
+          let tp = parseFloat(item.total_price)
+          let ec = parseFloat(item.extra_charge) || 0
+          if (up) {
+            console.log('单')
+            result.total = `${up} + ${ec} = ${up + ec}`
+            return
+          } else if (tp) {
+            console.log('重')
+            result.total = `${weight} * ${tp} + ${ec} = ${weight * tp + ec}`
+          } else {
+            result.total = '价格有误'
+          }
+          break
+        }
+        if (i === list.length - 1) {
+          result.total = '不在重量区间内'
+        }
+      }
     }
   },
   components: {
     toast,
-    pop
+    pop,
+    upload
   }
 }
 </script>
 
 <style>
 .test {
-  margin-top: 20px;
+  margin: 20px 0;
+}
+.test p {
+  margin-top: 10px;
 }
 </style>

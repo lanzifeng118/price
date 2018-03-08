@@ -92,6 +92,14 @@ let insertFun = (url, data) => {
   }
 }
 let api = {
+  uploadFile(data) {
+    return {
+      method: 'post',
+      url: '/binheng/api/upload',
+      headers: {'content-type': 'multipart/form-data'},
+      data: data
+    }
+  },
   cal: {
     query() {
       return queryFun(calUrl)
