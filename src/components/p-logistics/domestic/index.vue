@@ -3,7 +3,7 @@
     <div class="list-table-wrap">
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
-      <table>
+      <table v-if="items.length > 0">
         <thead>
           <tr>
             <th>收费分区</th>
@@ -31,49 +31,49 @@
             <td v-if="index === 0" :rowspan="itemS.list.length" class="zone">
               <span class="icon icon-round_add" @click="addItem(indexS)"></span>{{itemS.name}}
             </td>
-            <!-- startWeight -->
+            <!-- start_weight -->
             <td>
               <div v-if="item.type === 1">
-                {{item.startWeight || '-'}}
+                {{item.start_weight || '-'}}
               </div>
               <div v-else>
-                <input type="text" v-model="item.startWeight">
+                <input type="text" v-model.trim.number="item.start_weight">
               </div>
             </td>
-            <!-- endWeight -->
+            <!-- end_weight -->
             <td>
               <div v-if="item.type === 1">
-                {{item.endWeight || '-'}}
+                {{item.end_weight || '-'}}
               </div>
               <div v-else>
-                <input type="text" v-model="item.endWeight">
+                <input type="text" v-model.trim.number="item.end_weight">
               </div>
             </td>
-            <!-- price -->
+            <!-- total_price -->
             <td>
               <div v-if="item.type === 1">
-                {{item.price || '-'}}
+                {{item.total_price || '-'}}
               </div>
               <div v-else>
-                <input type="text" v-model="item.price">
+                <input type="text" v-model.trim.number="item.total_price">
               </div>
             </td>
-            <!-- unitPrice -->
+            <!-- unit_price -->
             <td>
               <div v-if="item.type === 1">
-                {{item.unitPrice || '-'}}
+                {{item.unit_price || '-'}}
               </div>
               <div v-else>
-                <input type="text" v-model="item.unitPrice">
+                <input type="text" v-model.trim.number="item.unit_price">
               </div>
             </td>
-            <!-- extra -->
+            <!-- extra_charge -->
             <td>
               <div v-if="item.type === 1">
-                {{item.extra || '-'}}
+                {{item.extra_charge || '-'}}
               </div>
               <div v-else>
-                <input type="text" v-model="item.extra">
+                <input type="text" v-model.trim.number="item.extra_charge">
               </div>
             </td>
             <!-- 操作 -->
@@ -81,7 +81,7 @@
               <div v-if="item.type === 1">
                 <a href="javascipt: void 0" @click="editItem(indexS, index)">修改</a>
                 <span class="icon-cutting_line"></span>
-                <a href="javascipt: void 0" @click="deleteItem(item.id)">删除</a>
+                <a href="javascipt: void 0" @click="deleteItem(item)">删除</a>
               </div>
               <div v-else-if="item.type === 2">
                 <a href="javascipt: void 0" @click="submitEdit(item)">提交</a>
@@ -98,14 +98,16 @@
         </tbody>
       </table>
     </div>
-    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon">
-    </toast>
+    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
+    <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
   </div>
 </template>
 
 <script>
+import pop from 'components/pop/pop'
 import toast from 'components/toast/toast'
 import util from 'components/tools/util'
+import api from 'components/tools/api'
 
 export default {
   data() {
@@ -113,11 +115,18 @@ export default {
       items: [],
       msg: '',
       busy: false,
+      deleteIds: [],
       // toast
       toast: {
         show: false,
         text: '',
         icon: ''
+      },
+      zone: [],
+      // pop
+      pop: {
+        text: '',
+        show: false
       }
     }
   },
@@ -126,78 +135,46 @@ export default {
   },
   mounted() {},
   methods: {
+    getZone(callback) {
+      this.axios(api.zone.query()).then(res => {
+        let data = res.data
+        if (data.code === 200) {
+          let list = data.data.list || []
+          callback(list)
+        }
+      })
+    },
     getItems() {
       // ajax
-      let data = {
-        us: [
-          {
-            id: 1,
-            zone: 'US',
-            startWeight: '',
-            endWeight: '',
-            price: 71.2,
-            extra: 10
-          }
-        ],
-        uk: [
-          {
-            id: 2,
-            zone: 'UK',
-            startWeight: '0',
-            endWeight: 100,
-            price: 87.56,
-            extra: '0'
-          },
-          {
-            zone: 'UK',
-            startWeight: 100,
-            endWeight: 300,
-            price: 83.5,
-            extra: '0'
-          },
-          {
-            zone: 'UK',
-            startWeight: 300,
-            endWeight: 3000,
-            price: 40,
-            extra: 18
-          }
-        ],
-        de: [
-          {
-            id: 3,
-            zone: 'DE',
-            startWeight: '0',
-            endWeight: 20,
-            unitPrice: 2.69,
-            price: '',
-            extra: '0'
-          },
-          {
-            zone: 'DE',
-            startWeight: 300,
-            endWeight: 750,
-            price: 71.78,
-            extra: 5.75
-          }
-        ]
-      }
-      let zone = this.$store.state.zone
-      zone.forEach(v => {
-        let itemsV = data[v.name]
-        this.$set(v, 'list', [])
-        v.list = []
-        // 排序
-        if (itemsV && itemsV.length > 0) {
-          this.sort(itemsV)
-          itemsV.forEach(v1 => {
-            v1.type = 1
+      this.items = []
+      this.msg = '加载中...'
+      // ajax
+      this.axios(api.logistics.query()).then(res => {
+        let data = res.data
+        console.log(data)
+        if (data.code === 200) {
+          this.getZone(zone => {
+            zone.forEach(v => {
+              let itemsV = data.data[v.name.toLowerCase()]
+              this.$set(v, 'list', [])
+              v.list = []
+              // 排序
+              if (itemsV && itemsV.length > 0) {
+                this.sort(itemsV)
+                itemsV.forEach(v1 => {
+                  v1.type = 1
+                })
+                this.$set(v, 'list', itemsV)
+              }
+              this.items.push(v)
+            })
+            this.msg = ''
           })
-          this.$set(v, 'list', itemsV)
+        } else {
+          this.msg = '出错了，请稍后再试'
+          util.req.queryError(this.toast)
         }
-        this.items.push(v)
       })
-      console.log(this.items)
     },
     // type 1 初始化 2 edit 3 add
     editItem(index1, index2) {
@@ -209,14 +186,13 @@ export default {
       item.type = 2
     },
     submitEdit(item) {
-      this.busy = false
-      item.type = 1
-      console.log(item)
+      this.submitChange(item, 'update')
     },
     cancelEdit(index1, index2) {
       this.busy = false
       let item = this.items[index1].list[index2]
       item.type = 1
+      this.getItems()
     },
     // add
     addItem(index) {
@@ -229,31 +205,74 @@ export default {
       data.list.push({
         type: 3,
         zone: data.name,
-        startWeight: '',
-        endWeight: '',
-        price: '',
-        extra: ''
+        start_weight: '',
+        end_weight: '',
+        total_price: '',
+        unit_price: '',
+        extra_charge: ''
       })
     },
-    cancelAdd(index1) {
+    cancelAdd(index) {
       this.busy = false
-      let list = this.items[index1].list
+      let list = this.items[index].list
       list.pop()
     },
     submitAdd(item) {
       this.busy = false
-      item.type = 1
-      console.log(item)
+      this.submitChange(item)
+    },
+    submitChange(item, type) {
+      if (!this.verify(item)) {
+        return
+      }
+      type = type || 'insert'
+      let text = type === 'insert' ? '添加' : '修改'
+      util.toast.show(this.toast, `正在${text}...`, 'upload')
+      this.axios(api.logistics[type](item)).then(res => {
+        // console.log(res)
+        let code = res.data.code
+        if (code === 200) {
+          this.busy = false
+          item.type = 1
+          util.toast.fade(this.toast, `${text}成功`, 'appreciate')
+          this.getItems()
+        } else {
+          util.req.changeError(this.toast)
+        }
+      })
     },
     // delete
-    deleteItem() {
+    deleteItem(item) {
       if (this.isBusy()) {
         return
       }
+      this.deleteIds = []
+      let start = item.start_weight || '?'
+      let end = item.end_weight || '?'
+      let text = `确定删除${item.zone} ${start}g至${end}g 的数据?`
+      this.pop.text = text
+      this.pop.show = true
+      this.deleteIds.push(item.id)
+    },
+    closePop() {
+      this.pop.show = false
+    },
+    confirmPop() {
+      this.pop.show = false
+      util.toast.show(this.toast, '正在删除...', 'upload')
+      this.axios(api.logistics.delete(this.deleteIds)).then(res => {
+        let data = res.data
+        if (data.code === 200) {
+          util.toast.fade(this.toast, '删除成功', 'check')
+          this.getItems()
+        } else {
+          util.req.changeError(this.toast)
+        }
+      })
     },
     sort(input) {
       input = input.sort((a, b) => {
-        return a.startWeight - b.startWeight
+        return parseFloat(a.start_weight) - parseFloat(b.start_weight)
       })
     },
     isBusy() {
@@ -262,10 +281,22 @@ export default {
         return true
       }
       return false
+    },
+    verify(item) {
+      if (!item.total_price && !item.unit_price) {
+        util.toast.fade(this.toast, '请填写价格值或单件价格')
+        return false
+      }
+      if (item.start_weight && item.end_weight && parseFloat(item.end_weight) < parseFloat(item.start_weight)) {
+        util.toast.fade(this.toast, '截止重量要大于开始重量')
+        return false
+      }
+      return true
     }
   },
   components: {
-    toast
+    toast,
+    pop
   }
 }
 </script>

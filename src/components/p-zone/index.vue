@@ -2,7 +2,7 @@
   <div class="p-zone">
     <div class="f-clearfix">
       <a href="javascipt: void 0" class="f-right button yellow list-btn-add" @click="addItem">
-        <span class="icon icon-round_add"></span>添加
+        <span class="icon icon-round_add"></span>添加地区
       </a>
     </div>
     <div class="list-table-wrap">
@@ -69,7 +69,7 @@
                 <a href="javascipt: void 0" @click="cancelEdit(index)">取消</a>
               </div>
               <div v-else>
-                <a href="javascipt: void 0" @click="submitAdd(item)">添加</a>
+                <a href="javascipt: void 0" @click="submitAdd(item)">提交</a>
                 <span class="icon-cutting_line"></span>
                 <a href="javascipt: void 0" @click="cancelAdd">取消</a>
               </div>
@@ -94,7 +94,7 @@ export default {
     return {
       items: [],
       busy: false,
-      msg: '加载中...',
+      msg: '',
       deleteIds: [],
       // toast
       toast: {

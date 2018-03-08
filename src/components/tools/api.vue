@@ -2,8 +2,9 @@
 let calUrl = '/price/calculation'
 let searchUrl = '/price/costinfo'
 let zoneUrl = '/binheng/api/zone'
+let logisticsUrl = '/binheng/api/logistics'
 
-let queryFun = (url) => {
+let queryFun = url => {
   return {
     method: 'post',
     url: url,
@@ -64,8 +65,8 @@ let deleteFun = (url, ids) => {
     data: {
       method: 'delete',
       data: {
-        // ids: ids.toString()
-        ids: ids
+        ids: ids.toString()
+        // ids: ids
       }
     }
   }
@@ -128,6 +129,20 @@ let api = {
     },
     update(data) {
       return updateFun(zoneUrl, data)
+    }
+  },
+  logistics: {
+    query() {
+      return queryFun(logisticsUrl)
+    },
+    insert(data) {
+      return insertFun(logisticsUrl, data)
+    },
+    delete(ids) {
+      return deleteFun(logisticsUrl, ids)
+    },
+    update(data) {
+      return updateFun(logisticsUrl, data)
     }
   }
 }
