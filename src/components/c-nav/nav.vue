@@ -55,13 +55,13 @@ export default {
           name: '国内小包',
           style: 'truck'
         }, {
-          src: '/admin/air',
-          name: '空运小包',
-          style: 'plane'
+          src: '/admin/ebay',
+          name: 'EBAY',
+          style: 'eee'
         }, {
-          src: '/admin/sea',
-          name: '海运小包',
-          style: 'ship'
+          src: '/admin/amazon',
+          name: 'Amazon',
+          style: 'amazon'
         }, {
           src: '/admin/config',
           name: '系统设置',

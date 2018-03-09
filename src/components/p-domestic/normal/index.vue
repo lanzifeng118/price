@@ -80,19 +80,19 @@
             <!-- 操作 -->
             <td class="operate">
               <div v-if="item.type === 1">
-                <a href="javascipt: void 0" @click="editItem(indexS, index)">修改</a>
+                <a href="javascript: void (0)" @click="editItem(indexS, index)">修改</a>
                 <span class="icon-cutting_line"></span>
-                <a href="javascipt: void 0" @click="deleteItem(item)">删除</a>
+                <a href="javascript: void 0" @click="deleteItem(item)">删除</a>
               </div>
               <div v-else-if="item.type === 2">
-                <a href="javascipt: void 0" @click="submitEdit(item)">提交</a>
+                <a href="javascript: void 0" @click="submitEdit(item)">提交</a>
                 <span class="icon-cutting_line"></span>
-                <a href="javascipt: void 0" @click="cancelEdit(indexS, index)">取消</a>
+                <a href="javascript: void 0" @click="cancelEdit(indexS, index)">取消</a>
               </div>
               <div v-else>
-                <a href="javascipt: void 0" @click="submitAdd(item)">添加</a>
+                <a href="javascript: void 0" @click="submitAdd(item)">添加</a>
                 <span class="icon-cutting_line"></span>
-                <a href="javascipt: void 0" @click="cancelAdd(indexS)">取消</a>
+                <a href="javascript: void 0" @click="cancelAdd(indexS)">取消</a>
               </div>
             </td>
           </tr>
@@ -330,11 +330,18 @@ export default {
       result.symbol = result.weight >= result.bulkWeight ? '>=' : '<'
       // 物流成本=重量(kg)*87.56 + 附加费
       let zone = this.items[test.zone]
+      console.log('zone')
+      console.log(zone)
       if (!zone) {
+        result.total = '请选择区间'
+        return
+      }
+      let list = zone.list
+      if (list.length === 0) {
+        result.total = '无数据'
         return
       }
       let weight = result.weight >= result.bulkWeight ? result.weight : result.bulkWeight
-      let list = zone.list
       for (let i = 0; i < list.length; i++) {
         let item = list[i]
         let sw = parseFloat(item.start_weight) || 0
@@ -345,11 +352,9 @@ export default {
           let tp = parseFloat(item.total_price)
           let ec = parseFloat(item.extra_charge) || 0
           if (up) {
-            console.log('单')
             result.total = `${up} + ${ec} = ${up + ec}`
             return
           } else if (tp) {
-            console.log('重')
             result.total = `${weight} * ${tp} + ${ec} = ${weight * tp + ec}`
           } else {
             result.total = '价格有误'

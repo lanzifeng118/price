@@ -11,6 +11,7 @@ import Zone from 'components/p-zone/index'
 // Domestic 国内小包
 import Domestic from 'components/p-domestic/index'
 import DomesticNomal from 'components/p-domestic/normal/index'
+import DomesticElectric from 'components/p-domestic/electric/index'
 
 // config
 import Config from 'components/p-config/config'
@@ -68,18 +69,11 @@ export default new Router({
           path: 'domestic',
           component: Domestic,
           children: [
-            { path: '/', component: DomesticNomal }
+            { path: '/', component: DomesticNomal },
+            { path: 'electric', component: DomesticElectric },
+            { path: 'magnetism', component: DomesticElectric },
+            { path: 'oversize', component: DomesticElectric }
           ]
-        },
-        // sea
-        {
-          path: 'air',
-          component: Config
-        },
-        // sea
-        {
-          path: 'sea',
-          component: Config
         },
         // config
         {

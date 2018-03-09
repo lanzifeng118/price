@@ -1,7 +1,7 @@
 <template>
   <div class="p-zone">
     <div class="f-clearfix">
-      <a href="javascipt: void 0" class="f-right button yellow list-btn-add" @click="addItem">
+      <a href="javascript: void 0" class="f-right button yellow list-btn-add" @click="addItem">
         <span class="icon icon-round_add"></span>添加地区
       </a>
     </div>
@@ -12,10 +12,13 @@
         <thead>
           <tr>
             <th>排序</th>
-            <th width="22%">地区名称</th>
-            <th width="22%">货币符号</th>
-            <th width="22%">汇率</th>
-            <th width="22%">操作</th>
+            <th width="11%">地区名称</th>
+            <th width="11%">货币符号</th>
+            <th width="11%">汇率</th>
+            <th width="14%"><span class="icon icon-plane"></span>空运单价</th>
+            <th width="14%"><span class="icon icon-plane"></span>空运单价（带电、磁）</th>
+            <th width="14%"><span class="icon icon-ship"></span>海运单价</th>
+            <th width="13%">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -56,22 +59,25 @@
                 <input type="text" v-model.trim.lazy.number="item.exchange_rate">
               </div>
             </td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
             <!-- 操作 -->
             <td class="operate">
               <div v-if="item.type === 1">
-                <a href="javascipt: void 0" @click="editItem(index)">修改</a>
+                <a href="javascript: void 0" @click="editItem(index)">修改</a>
                 <span class="icon-cutting_line"></span>
-                <a href="javascipt: void 0" @click="deleteItem(item)">删除</a>
+                <a href="javascript: void 0" @click="deleteItem(item)">删除</a>
               </div>
               <div v-else-if="item.type === 2">
-                <a href="javascipt: void 0" @click="submitEdit(item)">提交</a>
+                <a href="javascript: void 0" @click="submitEdit(item)">提交</a>
                 <span class="icon-cutting_line"></span>
-                <a href="javascipt: void 0" @click="cancelEdit(index)">取消</a>
+                <a href="javascript: void 0" @click="cancelEdit(index)">取消</a>
               </div>
               <div v-else>
-                <a href="javascipt: void 0" @click="submitAdd(item)">提交</a>
+                <a href="javascript: void 0" @click="submitAdd(item)">提交</a>
                 <span class="icon-cutting_line"></span>
-                <a href="javascipt: void 0" @click="cancelAdd">取消</a>
+                <a href="javascript: void 0" @click="cancelAdd">取消</a>
               </div>
             </td>
           </tr>
