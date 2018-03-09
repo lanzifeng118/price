@@ -3,9 +3,9 @@
     <!-- 1: normal 2: electric 3: magnetism 4: oversize -->
     <logistics 
       uploadApiKey="inNormal" 
-      uploadName="带电"
+      uploadName="带磁"
       apiKey="domestic"
-      type="2"
+      type="3"
     >
     </logistics>
   </div>

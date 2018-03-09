@@ -12,6 +12,8 @@ import Zone from 'components/p-zone/index'
 import Domestic from 'components/p-domestic/index'
 import DomesticNomal from 'components/p-domestic/normal/index'
 import DomesticElectric from 'components/p-domestic/electric/index'
+import DomesticMagnetism from 'components/p-domestic/magnetism/index'
+import DomesticOversize from 'components/p-domestic/oversize/index'
 
 // config
 import Config from 'components/p-config/config'
@@ -71,8 +73,8 @@ export default new Router({
           children: [
             { path: '/', component: DomesticNomal },
             { path: 'electric', component: DomesticElectric },
-            { path: 'magnetism', component: DomesticElectric },
-            { path: 'oversize', component: DomesticElectric }
+            { path: 'magnetism', component: DomesticMagnetism },
+            { path: 'oversize', component: DomesticOversize }
           ]
         },
         // config

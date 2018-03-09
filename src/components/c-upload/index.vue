@@ -1,10 +1,11 @@
 <template>
   <div class="upload">
     <div class="upload-btns">
-      <label for="excel" class="button button-second"><span class="icon icon-excel"></span>导入</label>
-      <input type="file" id="excel" accept="application/vnd.ms-excel"
-      @change="chooseFile">
-      <button class="button yellow"><span class="icon icon-excel"></span>导出</button>
+      <label for="excel" class="button button-second">
+        <span class="icon icon-excel"></span>导入{{name}}</label>
+      <input type="file" id="excel" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseFile">
+      <button class="button yellow">
+        <span class="icon icon-excel"></span>导出{{name}}</button>
     </div>
     <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
     <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
@@ -15,8 +16,16 @@
 import pop from 'components/pop/pop'
 import toast from 'components/toast/toast'
 import util from 'components/tools/util'
+import api from 'components/tools/api'
 
 export default {
+  props: {
+    apiKey: {
+      type: String,
+      required: true
+    },
+    name: String
+  },
   data() {
     return {
       file: null,
@@ -48,14 +57,34 @@ export default {
       this.pop.show = false
       if (this.file) {
         util.toast.show(this.toast, '正在上传', 'upload')
-        util.uploadFile(this, this.file, data => {
-          console.log(data)
-          this.$emit('update')
-          util.toast.fade(this.toast, '更新成功', 'appreciate')
-        }, () => {
-          util.req.changeError(this.toast)
-        })
+        this.uploadFile(
+          data => {
+            console.log(data)
+            this.$emit('update')
+            util.toast.fade(this.toast, '更新成功', 'appreciate')
+          },
+          () => {
+            util.req.changeError(this.toast)
+          }
+        )
       }
+    },
+    uploadFile(success, error) {
+      let formData = new FormData()
+      formData.append('upload', this.file)
+      console.log(api[this.apiKey])
+      this.axios(api[this.apiKey](formData))
+        .then((res) => {
+          let data = res.data
+          if (data.code === 200) {
+            success(data)
+          } else {
+            error()
+          }
+        }).catch((err) => {
+          console.log(err)
+          error()
+        })
     }
   },
   components: {
@@ -66,12 +95,7 @@ export default {
 </script>
 
 <style>
-.upload {
-  /* position: relative; */
-}
-.upload-btns {
-  position: absolute;
-  right: 30px;
-  top: 10px;
+.upload-btns .button {
+  width: 120px;
 }
 </style>
