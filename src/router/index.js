@@ -15,11 +15,10 @@ import DomesticElectric from 'components/p-domestic/electric/index'
 import DomesticMagnetism from 'components/p-domestic/magnetism/index'
 import DomesticOversize from 'components/p-domestic/oversize/index'
 
-// ebay
-import Ebay from 'components/p-ebay/index'
-
-// amazon
-import Amazon from 'components/p-amazon/index'
+// local 当地配送
+import Local from 'components/p-local/index'
+import LocalEbay from 'components/p-local/ebay/index'
+import LocalAmazon from 'components/p-local/amazon/index'
 
 // config
 import Config from 'components/p-config/config'
@@ -83,15 +82,14 @@ export default new Router({
             { path: 'oversize', component: DomesticOversize }
           ]
         },
-        // ebay
+        // local
         {
-          path: 'ebay',
-          component: Ebay
-        },
-        // amazon
-        {
-          path: 'amazon',
-          component: Amazon
+          path: 'local',
+          component: Local,
+          children: [
+            { path: '/', component: LocalEbay },
+            { path: 'amazon', component: LocalAmazon }
+          ]
         },
         // config
         {

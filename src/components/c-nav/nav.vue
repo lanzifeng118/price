@@ -55,13 +55,9 @@ export default {
           name: '国内小包',
           style: 'truck'
         }, {
-          src: '/admin/ebay',
-          name: 'EBAY',
-          style: 'eee'
-        }, {
-          src: '/admin/amazon',
-          name: 'Amazon',
-          style: 'amazon'
+          src: '/admin/local',
+          name: '当地配送',
+          style: 'courier'
         }, {
           src: '/admin/config',
           name: '系统设置',

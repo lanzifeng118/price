@@ -1,9 +1,9 @@
 <template>
-  <div class="amazon">
-    <!-- 1: normal 2: electric 3: magnetism 4: oversize -->
+  <div class="ebay">
+    <!-- 1: ebay 2: amazon  -->
     <logistics 
       uploadApiKey="inNormal" 
-      uploadName="amazon"
+      uploadName="ebay"
       apiKey="domestic"
       type="1"
     >
@@ -27,10 +27,4 @@ export default {
 </script>
 
 <style>
-.amazon {
-  padding: 50px 30px 20px;
-}
-.amazon .logistics .upload {
-  top: -45px;
-}
 </style>
