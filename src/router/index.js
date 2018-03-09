@@ -15,6 +15,12 @@ import DomesticElectric from 'components/p-domestic/electric/index'
 import DomesticMagnetism from 'components/p-domestic/magnetism/index'
 import DomesticOversize from 'components/p-domestic/oversize/index'
 
+// ebay
+import Ebay from 'components/p-ebay/index'
+
+// amazon
+import Amazon from 'components/p-amazon/index'
+
 // config
 import Config from 'components/p-config/config'
 import ConfigList from 'components/p-config/list/list'
@@ -76,6 +82,16 @@ export default new Router({
             { path: 'magnetism', component: DomesticMagnetism },
             { path: 'oversize', component: DomesticOversize }
           ]
+        },
+        // ebay
+        {
+          path: 'ebay',
+          component: Ebay
+        },
+        // amazon
+        {
+          path: 'amazon',
+          component: Amazon
         },
         // config
         {

@@ -1,7 +1,7 @@
 <template>
-  <div class="logistics">
+  <div class="domestic">
     <tab :items="tabItems"></tab>
-    <div class="logistics-view">
+    <div class="domestic-view">
       <router-view ></router-view>
     </div>
   </div>
@@ -27,15 +27,10 @@ export default {
 </script>
 
 <style>
-.logistics {
+.domestic {
   position: relative;
 }
-.logistics-view {
+.domestic-view {
   padding: 0 30px;
-}
-.logistics-btns {
-  position: absolute;
-  right: 30px;
-  top: 10px;
 }
 </style>

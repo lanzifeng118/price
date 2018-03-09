@@ -396,6 +396,9 @@ export default {
 </script>
 
 <style>
+.logistics {
+  position: relative;
+}
 .logistics .upload {
   position: absolute;
   top: -55px;

@@ -270,6 +270,6 @@ export default {
 
 <style>
 .p-zone {
-  padding: 30px;
+  padding: 20px 30px;
 }
 </style>
