@@ -4,7 +4,7 @@
       <label for="excel" class="button button-second">
         <span class="icon icon-excel"></span>导入{{name}}</label>
       <input type="file" id="excel" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseFile">
-      <button class="button yellow">
+      <button class="button yellow" @click="download">
         <span class="icon icon-excel"></span>导出{{name}}</button>
     </div>
     <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
@@ -20,7 +20,11 @@ import api from 'components/tools/api'
 
 export default {
   props: {
-    apiKey: {
+    apiInKey: {
+      type: String,
+      required: true
+    },
+    dowloadUrl: {
       type: String,
       required: true
     },
@@ -72,8 +76,7 @@ export default {
     uploadFile(success, error) {
       let formData = new FormData()
       formData.append('upload', this.file)
-      console.log(api[this.apiKey])
-      this.axios(api[this.apiKey](formData))
+      this.axios(api[this.apiInKey](formData))
         .then((res) => {
           let data = res.data
           if (data.code === 200) {
@@ -85,6 +88,9 @@ export default {
           console.log(err)
           error()
         })
+    },
+    download() {
+      window.location.assign(this.dowloadUrl)
     }
   },
   components: {

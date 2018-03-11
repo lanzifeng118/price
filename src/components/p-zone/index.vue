@@ -59,9 +59,33 @@
                 <input type="text" v-model.trim.lazy.number="item.exchange_rate">
               </div>
             </td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
+            <!-- price_air -->
+            <td>
+              <div v-if="item.type === 1">
+                {{item.price_air}}
+              </div>
+              <div v-else>
+                <input type="text" v-model.trim.lazy.number="item.price_air">
+              </div>
+            </td>
+            <!-- price_air_em -->
+            <td>
+              <div v-if="item.type === 1">
+                {{item.price_air_em}}
+              </div>
+              <div v-else>
+                <input type="text" v-model.trim.lazy.number="item.price_air_em">
+              </div>
+            </td>
+            <!-- price_sea -->
+            <td>
+              <div v-if="item.type === 1">
+                {{item.price_sea}}
+              </div>
+              <div v-else>
+                <input type="text" v-model.trim.lazy.number="item.price_sea">
+              </div>
+            </td>
             <!-- 操作 -->
             <td class="operate">
               <div v-if="item.type === 1">
@@ -126,7 +150,7 @@ export default {
       // ajax
       this.axios(api.zone.query()).then(res => {
         let data = res.data
-        // console.log(data)
+        console.log(data)
         if (data.code === 200) {
           let list = data.data.list
           if (list.length > 0) {
@@ -172,7 +196,10 @@ export default {
         sort: '1',
         name: '',
         currency_symbol: '',
-        exchange_rate: ''
+        exchange_rate: '',
+        price_air: '',
+        price_air_em: '',
+        price_sea: ''
       })
     },
     cancelAdd() {

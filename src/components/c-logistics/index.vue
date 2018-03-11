@@ -1,6 +1,6 @@
 <template>
   <div class="logistics">
-    <upload @update="update" :apiKey="uploadApiKey" :name="uploadName"></upload>
+    <upload @update="update" :apiInKey="uploadApiInKey" :dowloadUrl="dowloadUrl" :name="uploadName"></upload>
     <div class="list-table-wrap">
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
@@ -34,7 +34,7 @@
             </td>
             <!-- start_weight -->
             <td>
-              <div v-if="item.doType === 1">
+              <div v-if="!item.doType || item.doType === 1">
                 {{item.start_weight || '-'}}
               </div>
               <div v-else>
@@ -43,34 +43,34 @@
             </td>
             <!-- end_weight -->
             <td>
-              <div v-if="item.doType === 1">
+              <div v-if="!item.doType || item.doType === 1">
                 {{item.end_weight || '-'}}
               </div>
               <div v-else>
                 <input type="text" v-model.trim.number.lazy="item.end_weight">
               </div>
             </td>
-            <!-- total_price -->
+            <!-- price_weight -->
             <td>
-              <div v-if="item.doType === 1">
-                {{item.total_price || '-'}}
+              <div v-if="!item.doType || item.doType === 1">
+                {{item.price_weight || '-'}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.number.lazy="item.total_price">
+                <input type="text" v-model.trim.number.lazy="item.price_weight">
               </div>
             </td>
-            <!-- unit_price -->
+            <!-- price_unit -->
             <td>
-              <div v-if="item.doType === 1">
-                {{item.unit_price || '-'}}
+              <div v-if="!item.doType || item.doType === 1">
+                {{item.price_unit || '-'}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.number.lazy="item.unit_price">
+                <input type="text" v-model.trim.number.lazy="item.price_unit">
               </div>
             </td>
             <!-- extra_charge -->
             <td>
-              <div v-if="item.doType === 1">
+              <div v-if="!item.doType || item.doType === 1">
                 {{item.extra_charge || '-'}}
               </div>
               <div v-else>
@@ -79,7 +79,7 @@
             </td>
             <!-- 操作 -->
             <td class="operate">
-              <div v-if="item.doType === 1">
+              <div v-if="!item.doType || item.doType === 1">
                 <a href="javascript: void (0)" @click="editItem(indexS, index)">修改</a>
                 <span class="icon-cutting_line"></span>
                 <a href="javascript: void 0" @click="deleteItem(item)">删除</a>
@@ -102,9 +102,9 @@
     <div class="test" v-if="items.length > 0">
       <select v-model="test.zone">
         <option disabled value="">选择地区</option>
-        <option v-for="(item, index) in zone" :value="index">{{item.name}}</option>
+        <option v-for="(item, index) in items" :value="index">{{item.name}}</option>
       </select>
-      <input placeholder="重量(g)" type="text" v-model.trim.number.lazy="test.weight">
+      <input placeholder="重量(kg)" type="text" v-model.trim.number.lazy="test.weight">
       <input placeholder="体积(m³)" type="text" v-model.trim.number.lazy="test.bulk">
       <button class="button" @click="calTest">计算邮费</button> 
       <div v-if="test.result.ok">
@@ -134,7 +134,11 @@ export default {
       type: String,
       required: true
     },
-    uploadApiKey: {
+    uploadApiInKey: {
+      type: String,
+      required: true
+    },
+    dowloadUrl: {
       type: String,
       required: true
     },
@@ -149,7 +153,6 @@ export default {
       msg: '',
       busy: false,
       deleteIds: [],
-      zone: [],
       // toast
       toast: {
         show: false,
@@ -180,16 +183,6 @@ export default {
   },
   mounted() {},
   methods: {
-    getZone(callback) {
-      this.axios(api.zone.query()).then(res => {
-        let data = res.data
-        if (data.code === 200) {
-          let list = data.data.list || []
-          this.zone = list
-          callback(list)
-        }
-      })
-    },
     getItems() {
       // ajax
       this.items = []
@@ -199,23 +192,8 @@ export default {
         let data = res.data
         console.log(data)
         if (data.code === 200) {
-          this.getZone(zone => {
-            zone.forEach(v => {
-              let itemsV = data.data[v.name.toLowerCase()]
-              this.$set(v, 'list', [])
-              v.list = []
-              // 排序
-              if (itemsV && itemsV.length > 0) {
-                itemsV.forEach(v1 => {
-                  v1.doType = 1
-                })
-                this.$set(v, 'list', itemsV)
-              }
-              this.items.push(v)
-            })
-            console.log(this.items)
-            this.msg = ''
-          })
+          this.items = data.data
+          this.msg = ''
         } else {
           this.msg = '出错了，请稍后再试'
           util.req.queryError(this.toast)
@@ -232,7 +210,7 @@ export default {
       }
       this.busy = true
       let item = this.items[index1].list[index2]
-      item.doType = 2
+      this.$set(item, 'doType', 2)
     },
     submitEdit(item) {
       this.submitChange(item, 'update')
@@ -257,8 +235,8 @@ export default {
         zone: data.name,
         start_weight: '',
         end_weight: '',
-        total_price: '',
-        unit_price: '',
+        price_weight: '',
+        price_unit: '',
         extra_charge: ''
       })
     },
@@ -283,7 +261,7 @@ export default {
         let code = res.data.code
         if (code === 200) {
           this.busy = false
-          item.doType = 1
+          this.$set(item, 'doType', 1)
           util.toast.fade(this.toast, `${text}成功`, 'appreciate')
           this.getItems()
         } else {
@@ -328,7 +306,7 @@ export default {
       return false
     },
     verify(item) {
-      if (!item.total_price && !item.unit_price) {
+      if (!item.price_weight && !item.price_unit) {
         util.toast.fade(this.toast, '请填写价格值或单件价格')
         return false
       }
@@ -345,7 +323,7 @@ export default {
       let result = test.result
       result.total = null
       result.ok = true
-      result.weight = this.test.weight / 1000 || 0
+      result.weight = this.test.weight || 0
       result.bulkWeight = this.test.bulk / 6000 || 0
       result.symbol = result.weight >= result.bulkWeight ? '>=' : '<'
       // 物流成本=重量(kg)*87.56 + 附加费
@@ -368,8 +346,8 @@ export default {
         let ew = parseFloat(item.end_weight) || Infinity
         if (weight >= sw && weight < ew) {
           console.log(item)
-          let up = parseFloat(item.unit_price)
-          let tp = parseFloat(item.total_price)
+          let up = parseFloat(item.price_unit)
+          let tp = parseFloat(item.price_weight)
           let ec = parseFloat(item.extra_charge) || 0
           if (up) {
             result.total = `${up} + ${ec} = ${up + ec}`

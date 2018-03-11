@@ -2,7 +2,8 @@
   <div class="domestic-normal">
     <!-- 1: normal 2: electric 3: magnetism 4: oversize -->
     <logistics 
-      uploadApiKey="inNormal" 
+      uploadApiInKey="dInMagnetism" 
+      dowloadUrl="/binheng/api/domestic/download?type=3" 
       uploadName="带磁"
       apiKey="domestic"
       type="3"

@@ -2,7 +2,8 @@
   <div class="domestic-normal">
     <!-- 1: normal 2: electric 3: magnetism 4: oversize -->
     <logistics 
-      uploadApiKey="inNormal" 
+      uploadApiInKey="dInElectric" 
+      dowloadUrl="/binheng/api/domestic/download?type=2"
       uploadName="带电"
       apiKey="domestic"
       type="2"

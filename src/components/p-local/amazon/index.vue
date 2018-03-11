@@ -1,11 +1,12 @@
 <template>
-  <div class="amazon">
+  <div class="local-amazon">
     <!-- 1: ebay 2: amazon  -->
     <logistics 
-      uploadApiKey="inNormal" 
-      uploadName="amazon"
-      apiKey="domestic"
-      type="1"
+      uploadApiInKey="lInAmazon" 
+      dowloadUrl="/binheng/api/local/download?type=2" 
+      uploadName="ebay"
+      apiKey="local"
+      type="2"
     >
     </logistics>
   </div>

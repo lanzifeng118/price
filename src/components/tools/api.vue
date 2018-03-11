@@ -2,29 +2,23 @@
 let calUrl = '/price/calculation'
 let searchUrl = '/price/costinfo'
 let zoneUrl = '/binheng/api/zone'
-let domesticUrl = '/binheng/api/logistics'
+
+let domesticUrl = '/binheng/api/domestic/change'
+let dInNormalUrl = '/binheng/api/domestic/in/normal'
+let dInElectricUrl = '/binheng/api/domestic/in/electric'
+let dInMagnetismUrl = '/binheng/api/domestic/in/magnetism'
+let dInOversizeUrl = '/binheng/api/domestic/in/oversize'
+
+let localUrl = '/binheng/api/local/change'
+let lInEbayUrl = '/binheng/api/local/in/ebay'
+let lInAmazonUrl = '/binheng/api/local/in/amazon'
 
 /**
-导入
-/binheng/domestic/in/normal
-/binheng/domestic/in/electric
-/binheng/domestic/in/magnetism
-/binheng/domestic/in/oversize
-
 导出
 /binheng/domestic/out/normal
 /binheng/domestic/out/electric
 /binheng/domestic/out/magnetism
 /binheng/domestic/out/oversize
-
-增删改查
-/binheng/domestic/change
-data: {
-  method: 'post',
-  data: {
-    type: '1', // 1: normal 2: electric 3: magnetism 4: oversize
-  }
-}
  */
 
 let queryFun = (url, pageData) => {
@@ -106,12 +100,6 @@ let uploadFun = (url, data) => {
 }
 
 let api = {
-  inNormal(data) {
-    return uploadFun('/binheng/api/upload', data)
-  },
-  inElectric(data) {
-    return uploadFun('/binheng/api/upload', data)
-  },
   cal: {
     query() {
       return queryFun(calUrl)
@@ -164,6 +152,38 @@ let api = {
     update(data) {
       return updateFun(domesticUrl, data)
     }
+  },
+  dInNormal(data) {
+    return uploadFun(dInNormalUrl, data)
+  },
+  dInElectric(data) {
+    return uploadFun(dInElectricUrl, data)
+  },
+  dInMagnetism(data) {
+    return uploadFun(dInMagnetismUrl, data)
+  },
+  dInOversize(data) {
+    return uploadFun(dInOversizeUrl, data)
+  },
+  local: {
+    query(data) {
+      return queryFun(localUrl, data)
+    },
+    insert(data) {
+      return insertFun(localUrl, data)
+    },
+    delete(ids) {
+      return deleteFun(localUrl, ids)
+    },
+    update(data) {
+      return updateFun(localUrl, data)
+    }
+  },
+  lInEbay(data) {
+    return uploadFun(lInEbayUrl, data)
+  },
+  lInAmazon(data) {
+    return uploadFun(lInAmazonUrl, data)
   }
 }
 export default api
