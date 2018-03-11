@@ -83,8 +83,8 @@ export default {
 }
 </script>
 <style>
-.serach-form {
-  border-radius: 2px;
+.serach {
+  padding: 20px 30px;
 }
 
 /*search*/

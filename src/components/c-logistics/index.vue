@@ -104,8 +104,10 @@
         <option disabled value="">选择地区</option>
         <option v-for="(item, index) in items" :value="index">{{item.name}}</option>
       </select>
-      <input placeholder="重量(kg)" type="text" v-model.trim.number.lazy="test.weight">
-      <input placeholder="体积(m³)" type="text" v-model.trim.number.lazy="test.bulk">
+      <input placeholder="重量" type="text" v-model.trim.number.lazy="test.weight">
+      <i>kg</i>
+      <input placeholder="体积" type="text" v-model.trim.number.lazy="test.bulk">
+      <i>m³</i>
       <button class="button" @click="calTest">计算邮费</button> 
       <div v-if="test.result.ok">
         <p>实重：{{test.result.weight}}kg {{test.result.symbol}} 体积重：{{test.result.bulkWeight}}kg</p>
@@ -384,6 +386,11 @@ export default {
 }
 .test {
   margin: 20px 0;
+}
+.test i {
+  display: inline-block;
+  width: 30px;
+  margin-left: -25px;
 }
 .test p {
   margin-top: 10px;
