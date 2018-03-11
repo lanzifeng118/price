@@ -4,7 +4,7 @@
     <logistics 
       uploadApiInKey="lInAmazon" 
       dowloadUrl="/binheng/api/local/download?type=2" 
-      uploadName="ebay"
+      uploadName="Amazon"
       apiKey="local"
       type="2"
     >

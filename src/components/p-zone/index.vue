@@ -1,7 +1,7 @@
 <template>
   <div class="p-zone">
     <div class="f-clearfix">
-      <a href="javascript: void 0" class="f-right button yellow list-btn-add" @click="addItem">
+      <a href="javascript: void 0" class="f-left button yellow list-btn-add" @click="addItem">
         <span class="icon icon-round_add"></span>添加地区
       </a>
     </div>
@@ -12,9 +12,9 @@
         <thead>
           <tr>
             <th>排序</th>
-            <th width="11%">地区名称</th>
-            <th width="11%">货币符号</th>
-            <th width="11%">汇率</th>
+            <th width="11%"><span class="icon-nessisary"></span>地区名称</th>
+            <th width="11%"><span class="icon-nessisary"></span>货币符号</th>
+            <th width="11%"><span class="icon-nessisary"></span>汇率</th>
             <th width="14%"><span class="icon icon-plane"></span>空运单价</th>
             <th width="14%"><span class="icon icon-plane"></span>空运单价（带电、磁）</th>
             <th width="14%"><span class="icon icon-ship"></span>海运单价</th>

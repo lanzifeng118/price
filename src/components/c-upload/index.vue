@@ -102,6 +102,6 @@ export default {
 
 <style>
 .upload-btns .button {
-  width: 120px;
+  width: 125px;
 }
 </style>
