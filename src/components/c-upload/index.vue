@@ -90,6 +90,11 @@ export default {
         })
     },
     download() {
+      // this.axios({
+      //   method: 'get',
+      //   url: '',
+      //   pr
+      // })
       window.location.assign(this.dowloadUrl)
     }
   },

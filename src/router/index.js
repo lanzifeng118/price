@@ -3,7 +3,11 @@ import Router from 'vue-router'
 import Login from 'components/p-login/login'
 import ErrorPage from 'components/p-error/error'
 import Admin from 'components/p-admin/admin'
+
 import Calculate from 'components/p-calculate/index'
+import CalculateInput from 'components/p-calculate/input/index'
+import CalculateResult from 'components/p-calculate/result/index'
+
 import Search from 'components/p-search/index'
 // zone
 import Zone from 'components/p-zone/index'
@@ -54,7 +58,18 @@ export default new Router({
         {
           path: 'calculate',
           name: 'calculate',
-          component: Calculate
+          component: Calculate,
+          redirect: { name: 'calculateInput' },
+          children: [
+            { path: 'input', component: CalculateInput, name: 'calculateInput' },
+            {
+              path: 'result',
+              component: CalculateResult,
+              children: [
+                { path: ':id', component: CalculateResult }
+              ]
+            }
+          ]
         },
         {
           path: 'search',
