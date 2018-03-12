@@ -64,10 +64,7 @@ export default new Router({
             { path: 'input', component: CalculateInput, name: 'calculateInput' },
             {
               path: 'result',
-              component: CalculateResult,
-              children: [
-                { path: ':id', component: CalculateResult }
-              ]
+              component: CalculateResult
             }
           ]
         },

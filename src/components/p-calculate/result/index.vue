@@ -1,6 +1,16 @@
 <template>
-  <div class="cal">
-    {{ $route.params.id }}
+  <div class="cal-result">
+    <div class="cal-result-back">
+      <router-link to="/admin/calculate/input"><span class="icon-back"></span>返回</router-link>
+    </div>
+    <div v-if="msg" class="cal-result-msg">{{msg}}</div>
+    <div v-else>
+      <div class="f-clearfix">
+        <button class="cal-result-save button f-right" @click="save">保存</button>
+        <h3 class="cal-result-title f-left">计算结果<span>（商品sku：{{input.sku}}，外币售价：{{input.selling_price}}，采购价：{{input.purchase_price}}元，重量：{{input.weight}}克，体积：{{input.bulk}}m³，种类：{{category[input.category]}}，当地配送：{{local[input.local]}}）</span></h3>
+      </div>
+      <result v-if="factor" :factor="factor"></result>
+    </div>
     <pop
       type="warning"
       :text="pop.text"
@@ -28,23 +38,19 @@ import api from 'components/tools/api'
 export default {
   data() {
     return {
-      input: {
-        sku: '',
-        weight: '',
-        purchase_price: '',
-        selling_price: '',
-        bulk: ''
-      },
-      hasResult: false,
-      calBtnText: '计算',
-      result: {
-        sku: '',
-        weight: '',
-        purchase_price: '',
-        bulk: ''
-      },
+      msg: '计算中...',
       note: '',
       factor: null,
+      category: {
+        '1': '普通',
+        '2': '带电',
+        '3': '带磁',
+        '4': '超尺寸'
+      },
+      local: {
+        '1': 'Ebay',
+        '2': 'Amazon'
+      },
       // toast
       toast: {
         show: false,
@@ -58,48 +64,64 @@ export default {
       }
     }
   },
-  mounted () {
-    window.addEventListener('keyup', this.enter)
+  computed: {
+    input() {
+      let query = this.$route.query
+      let item = {
+        sku: query.sku || '',
+        selling_price: parseFloat(query.selling_price) || 0,
+        purchase_price: parseFloat(query.purchase_price) || 0,
+        weight: parseFloat(query.weight) || 0,
+        bulk: parseFloat(query.bulk) || 0,
+        category: query.category || '1',
+        local: query.local || '1'
+      }
+      // console.log(item)
+      return item
+    }
   },
-  destroyed () {
-    window.removeEventListener('keyup', this.enter)
+  watch: {
+    $route(to, from) {
+      this.cal()
+    }
+  },
+  created () {
+    this.cal()
   },
   methods: {
-    enter(e) {
-      let code = e.charCode || e.keyCode
-      if (code === 13) {
-        this.cal()
-      }
-    },
     cal() {
-      this.note = ''
-      if (!this.verify()) {
-        return
-      }
-      this.hasResult = false
       this.factor = null
-      this.calBtnText = '计算中...'
+      this.msg = '计算中...'
+      let input = this.input
       // ajax
+      // 重量、当体配送重量、商品种类、当地配送种类
+      let weightReal = input.weight / 1000
+      let weightBulk = input.bulk / 6000
+      let weightBulkLocal = input.bulk / 7000
+
+      let weight = weightReal >= weightBulk ? weightReal : weightBulk
+      let weightLocal = weightReal >= weightBulkLocal ? weight : weightBulkLocal
+
+      let sendData = {
+        weight: weight.toFixed(5),
+        weight_local: weightLocal.toFixed(5),
+        category: input.category,
+        local: input.local
+      }
+      console.log(sendData)
+
       this.axios(api.cal.query()).then(res => {
         let data = res.data
         console.log(data)
-        this.calBtnText = '计算'
+        this.msg = ''
         if (data.code === 200) {
-          let input = this.input
-          let result = this.result
-          result.sku = input.sku
-          result.weight = input.weight
-          result.purchase_price = input.purchase_price
-          result.selling_price = input.selling_price
-          result.bulk = input.bulk
-          for (let key in input) {
-            input[key] = ''
-          }
+          // let  = [
+
+          // ]
           this.factor = {
-            product: result,
+            product: input,
             logistics: data.data.logistics
           }
-          this.hasResult = true
         } else {
           util.req.queryError(this.toast)
         }
@@ -138,48 +160,6 @@ export default {
         }
         this.closePop()
       })
-    },
-    goBack() {
-      this.hasResult = false
-    },
-    verify() {
-      let input = this.input
-      let sellingPrice = input.selling_price
-      if (!sellingPrice) {
-        this.note = '外币售价不能为空'
-        return false
-      }
-      if (!util.isNum(sellingPrice)) {
-        this.note = '外币售价必须为数字'
-        return false
-      }
-
-      let weight = input.weight
-      if (!weight) {
-        this.note = '重量不能为空'
-        return false
-      }
-      if (!util.isInteger(weight)) {
-        this.note = '重量必须为整数'
-        return false
-      }
-
-      let purchasePrice = input.purchase_price
-      if (!purchasePrice) {
-        this.note = '采购价不能为空'
-        return false
-      }
-      if (!util.isNum(purchasePrice)) {
-        this.note = '采购价必须为数字'
-        return false
-      }
-
-      let bulk = input.bulk
-      if (bulk && !util.isNum(bulk)) {
-        this.note = '体积必须为数字'
-        return false
-      }
-      return true
     }
   },
   components: {
@@ -190,57 +170,17 @@ export default {
 }
 </script>
 <style>
-.cal {
-  padding: 30px;
-}
-.cal-form {
-  position: relative;
-  left: 50%;
-  width: 400px;
-  margin-top: 80px;
-  margin-left: -276px;
-  /* transition: all 0.2s; */
-  padding: 30px 50px 30px 30px;
-  background-color: #eee;
-  border-radius: 2px;
-}
-.cal-form-ul {
-}
-.cal-form-ul li {
-  position: relative;
-  width: 320px;
-  margin-bottom: 15px;
-}
-.cal-form-item-name {
-  display: inline-block;
-  width: 80px;
-  text-align: right;
-  margin-right: 10px;
-}
-.cal-form-ul li > input {
-  width: calc(100% - 95px);
-  padding-right: 24px;
-}
-.cal-form-ul li > i {
-  position: absolute;
-  top: 12px;
-  font-size: 12px;
-  color: #999;
-  right: 15px;
-}
-.cal-form-btns {
-  margin-top: 5px;
-  padding-left: 15px;
-}
-.cal-form-btns button {
-  width: 100%;
-  line-height: 30px
-}
-.cal-form-note {
-  margin-bottom: 5px;
-  color: #ff1717;
-}
 .cal-result {
+  margin-bottom: 20px;
+}
+.cal-result-msg {
+  font-size: 16px;
+  text-align: center;
+  color: #ccc;
+}
+.cal-result-back {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
   margin-bottom: 20px;
 }
 .cal-result-title {
