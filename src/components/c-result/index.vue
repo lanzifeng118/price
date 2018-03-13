@@ -117,7 +117,7 @@ export default {
        * logSecondRmb 二程成本(人民币）
        * costSell 销售成本 = 售价 * 汇率 * 因子
        * cost 总成本 = 采购成本 + 物流成本 + 销售成本
-       * profit 毛利润 = 销售成本 - 总成本
+       * profit 毛利润 = 销售价格 - 总成本
        * profitRate 当前利润率 = 毛利润 / 总成本
        * （采购成本+物流成本）/汇率/(1 - 0.18 - 0.1)
        */
