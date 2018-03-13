@@ -1,30 +1,31 @@
 <template>
   <div class="c-result">
-    <h3 class="c-result-title">计算结果
-      <span>（商品sku：{{product.sku}}，外币售价：{{product.selling_price}}，采购价：¥{{product.purchase_price}}，重量：{{product.weight}}g，体积：{{product.bulk}}m³，种类：{{category[product.category]}}，当地配送：{{local[product.local]}}）</span>
+    <h3 class="c-result-title">
+      商品sku：{{product.sku}}，外币售价：{{product.selling_price}}，采购价：¥{{product.purchase_price}}，重量：{{product.weight}}g，体积：{{product.bulk}}m³，种类：{{category[product.category]}}，当地配送：{{local[product.local]}}
     </h3>
     <div class="list-table-wrap">
       <table>
         <thead>
           <!-- cn -->
           <tr>
-            <th width="5%">国家</th>
-            <th width="8%">物流方式</th>
-            <th width="5%">售价(当地货币）</th>
-            <th width="5%">头程成本¥</th>
-            <th width="5%">二程成本¥</th>
-            <th width="5%">二程成本(当地货币)</th>
-            <th width="5%">销售成本¥</th>
-            <th width="5%">总成本¥</th>
-            <th width="5%">毛利润¥</th>
-            <th width="7%">当前利润率</th>
-            <th width="5%">0%利润率售价</th>
-            <th width="5%">5%利润率售价</th>
-            <th width="5%">10%利润率售价</th>
-            <th width="5%">15%利润率售价</th>
-            <th width="5%">20%利润率售价</th>
-            <th width="5%">25%利润率售价</th>
-            <th width="5%">30%利润率售价</th>
+            <th width="5.4%">国家</th>
+            <th width="7%">物流方式</th>
+            <th width="5.4%">售价(当地货币）</th>
+            <th width="5.4%">采购成本¥</th>
+            <th width="5.4%">头程成本¥</th>
+            <th width="5.4%">二程成本¥</th>
+            <th width="5.4%">二程成本(当地货币)</th>
+            <th width="5.4%">销售成本¥</th>
+            <th width="5.4%">总成本¥</th>
+            <th width="5.4%">毛利润¥</th>
+            <th>当前利润率</th>
+            <th width="5.4%">0%利润率售价</th>
+            <th width="5.4%">5%利润率售价</th>
+            <th width="5.4%">10%利润率售价</th>
+            <th width="5.4%">15%利润率售价</th>
+            <th width="5.4%">20%利润率售价</th>
+            <th width="5.4%">25%利润率售价</th>
+            <th width="5.4%">30%利润率售价</th>
           </tr>
         </thead>
         <tbody v-for="itemZ in items">
@@ -33,29 +34,31 @@
             <!-- 物流方式 -->
             <td>{{item.logType}}</td>
             <!-- 售价 -->
-            <td>{{itemZ.currency_symbol}} {{product.selling_price}}</td>
+            <td>{{itemZ.currency_symbol}} {{item.sPrice}}</td>
+            <!-- 采购成本 -->
+            <td>¥ {{item.pPrice}}</td>
             <!-- 头程成本 -->
-            <td>¥ {{item.logFirst}}</td>
+            <td>{{item.logFirst ? '¥ ' + item.logFirst : '-'}}</td>
             <!-- 二程成本 -->
-            <td>¥ {{item.logSecondRmb}}</td>
+            <td>{{item.logSecondRmb ? '¥ ' + item.logSecondRmb : '-'}}</td>
             <!-- 二程成本(当地货币) -->
-            <td>{{itemZ.currency_symbol}} {{item.logSecond}}</td>
+            <td>{{item.logSecond ? itemZ.currency_symbol + ' ' + item.logSecond : '-'}}</td>
             <!-- 销售成本 -->
-            <td>¥ {{item.costSell}}</td>
+            <td>{{item.costSell ? '¥ ' + item.costSell : '-'}}</td>
             <!-- 总成本 -->
-            <td>¥ {{item.cost}}</td>
+            <td>{{item.cost ? '¥ ' + item.cost : '-'}}</td>
             <!-- 毛利润 -->
-            <td>¥ {{item.profit}}</td>
+            <td>{{item.profit ? '¥ ' + item.profit : '-'}}</td>
             <!-- 当前利润率 -->
-            <td>{{item.profitRate}}%</td>
+            <td :class="[item.earn ? 'ok' : 'warn']">{{item.profitRate ? item.profitRate + '%' : '-'}}</td>
             <!-- 0% -->
-            <td>{{itemZ.currency_symbol}} {{item.profitRate_0}}</td>
-            <td>{{itemZ.currency_symbol}} {{item.profitRate_5}}</td>
-            <td>{{itemZ.currency_symbol}} {{item.profitRate_10}}</td>
-            <td>{{itemZ.currency_symbol}} {{item.profitRate_15}}</td>
-            <td>{{itemZ.currency_symbol}} {{item.profitRate_20}}</td>
-            <td>{{itemZ.currency_symbol}} {{item.profitRate_25}}</td>
-            <td>{{itemZ.currency_symbol}} {{item.profitRate_30}}</td>
+            <td>{{item.pRate_0 ? itemZ.currency_symbol + ' ' + item.pRate_0 : '-'}}</td>
+            <td>{{item.pRate_5 ? itemZ.currency_symbol + ' ' + item.pRate_5 : '-'}}</td>
+            <td>{{item.pRate_10 ? itemZ.currency_symbol + ' ' + item.pRate_10 : '-'}}</td>
+            <td>{{item.pRate_15 ? itemZ.currency_symbol + ' ' + item.pRate_15 : '-'}}</td>
+            <td>{{item.pRate_20 ? itemZ.currency_symbol + ' ' + item.pRate_20 : '-'}}</td>
+            <td>{{item.pRate_25 ? itemZ.currency_symbol + ' ' + item.pRate_25 : '-'}}</td>
+            <td>{{item.pRate_30 ? itemZ.currency_symbol + ' ' + item.pRate_30 : '-'}}</td>
           </tr>
         </tbody>
       </table>
@@ -118,7 +121,7 @@ export default {
        * costSell 销售成本 = 售价 * 汇率 * 因子
        * cost 总成本 = 采购成本 + 物流成本 + 销售成本
        * profit 毛利润 = 销售价格 - 总成本
-       * profitRate 当前利润率 = 毛利润 / 总成本
+       * profitRate 利润率 = 毛利润 / 销售价格
        * （采购成本+物流成本）/汇率/(1 - 0.18 - 0.1)
        */
       zone.forEach(v => {
@@ -134,6 +137,7 @@ export default {
           if (iL === 0) {
             // 国内小包
             item.logFirst = this.calLog(this.weight, info.domestic[zoneLow])
+            console.log(item.logFirst)
             item.logSecond = 0
           } else {
             if (iL === 1) {
@@ -152,26 +156,33 @@ export default {
             item.logSecond = this.calLog(this.weightLocal, info.local[zoneLow])
           }
           let factorSC = info.factor.sell_cost
-
-          // 二程成本(人民币）
-          item.logSecondRmb = item.logSecond * exRate || 0
-          // sPriceRmb售价
+          // 售价
+          item.sPrice = sPrice
+          // 采购成本
+          item.pPrice = pPrice
+          // 售价 人民币
           item.sPriceRmb = sPrice * exRate
+          // 二程成本(人民币）
+          item.logSecondRmb = item.logSecond * exRate
           // 销售成本
           item.costSell = item.sPriceRmb * factorSC
           // 总成本
           item.cost = pPrice + item.costSell + item.logFirst + item.logSecondRmb
           // 毛利润
           item.profit = item.sPriceRmb - item.cost
+          // 是否盈利
+          item.earn = item.profit > 0
           // 当前利润
-          item.profitRate = item.profit / item.cost * 100
+          item.profitRate = item.profit / item.sPriceRmb * 100
           // 10%利润
 
           for (let k = 0; k <= 30; k += 5) {
-            item[`profitRate_${k}`] = calProfitRate(k / 100)
+            item[`pRate_${k}`] = calProfitRate(k / 100)
           }
 
           let keys = [
+            'pPrice',
+            'sPrice',
             'logFirst',
             'sPriceRmb',
             'logSecond',
@@ -183,16 +194,20 @@ export default {
           ]
 
           keys.forEach(v => {
-            item[v] = item[v].toFixed(DIGITS)
+            let val = item[v]
+            if (!isNaN(val)) {
+              item[v] = val.toFixed(DIGITS)
+            }
           })
 
           v.list.push(item)
-
+          console.log(item)
           function calProfitRate(rate) {
             let f = item.logFirst
             let s = item.logSecondRmb
-            let result = (f + s) / exRate / (1 - factorSC - rate)
-            return result.toFixed(DIGITS)
+            let result = (pPrice + f + s) / exRate / (1 - factorSC - rate)
+            result = isNaN(result) ? result : result.toFixed(DIGITS)
+            return result
           }
         })
         items.push(v)
@@ -215,8 +230,6 @@ export default {
         let sw = parseFloat(item.start_weight) || 0
         let ew = parseFloat(item.end_weight) || Infinity
         if (weight >= sw && weight < ew) {
-          // console.log('calLog-----')
-          // console.log(item)
           let priceUnit = parseFloat(item.price_unit)
           let priceWeight = parseFloat(item.price_weight)
           let extraCharge = parseFloat(item.extra_charge) || 0
@@ -226,12 +239,12 @@ export default {
             total = weight * priceWeight + extraCharge
           } else {
             // result.total = '价格有误'
-            total = '-'
+            total = NaN
           }
           break
         }
         if (i === list.length - 1) {
-          total = '~'
+          total = NaN
         }
       }
       return total
@@ -241,8 +254,15 @@ export default {
 }
 </script>
 <style>
-.c-result-title span {
-  font-weight: normal;
-  color: #999;
+.c-result-title {
+  color: #32b514;
+}
+.c-result .list-table-wrap td.warn {
+  background-color: #d24900;
+  color: #fff;
+}
+.c-result .list-table-wrap td.ok {
+  background-color: #32b514;
+  color: #fff;
 }
 </style>

@@ -1,5 +1,5 @@
 function isNum(str) {
-  return /^\d+.{0,1}\d*$/.test(str)
+  return /^\d+\.{0,1}\d*$/.test(str)
 }
 function isInteger(str) {
   return /^\d+$/.test(str)

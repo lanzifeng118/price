@@ -1,89 +1,94 @@
 <template>
   <div class="p-zone">
-    <div class="f-clearfix">
-      <a href="javascript: void 0" class="f-left button yellow list-btn-add" @click="addItem">
-        <span class="icon icon-round_add"></span>添加地区
-      </a>
-    </div>
     <div class="list-table-wrap">
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th>排序</th>
-            <th width="11%"><span class="icon-nessisary"></span>地区名称</th>
-            <th width="11%"><span class="icon-nessisary"></span>货币符号</th>
-            <th width="11%"><span class="icon-nessisary"></span>汇率</th>
-            <th width="13%"><span class="icon icon-plane"></span>空运单价 / ¥</th>
-            <th width="16%"><span class="icon icon-plane"></span>空运单价（带电、磁） / ¥</th>
-            <th width="13%"><span class="icon icon-ship"></span>海运单价 / ¥</th>
-            <th width="13%">操作</th>
+            <th>SKU</th>
+            <th width="12.5%">外币售价</th>
+            <th width="12.5%">采购价</th>
+            <th width="12.5%">重量 g</th>
+            <th width="12.5%">体积 m³</th>
+            <th width="12.5%">商品种类</th>
+            <th width="12.5%">当地配送</th>
+            <th width="12.5%">操作</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in items" :class="{edit: item.type === 2, add: item.type === 3}">
-            <!-- sort -->
+            <!-- sku -->
             <td>
               <div v-if="item.type === 1">
-                {{item.sort}}
+                {{item.sku}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.lazy="item.sort">
+                <input type="text" v-model.trim.lazy="item.sku">
               </div>
             </td>
-            <!-- name -->
+            <!-- selling_price -->
             <td>
               <div v-if="item.type === 1">
-                {{item.name}}
+                {{item.selling_price}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.lazy="item.name" @change="upperCase(item)">
+                <input type="text" v-model.trim.number.lazy="item.selling_price">
               </div>
             </td>
-            <!-- currency_symbol -->
+            <!-- purchase_price -->
             <td>
               <div v-if="item.type === 1">
-                {{item.currency_symbol}}
+                {{item.purchase_price}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.lazy="item.currency_symbol">
+                <input type="text" v-model.trim.number.lazy="item.purchase_price">
               </div>
             </td>
-            <!-- exchange_rate -->
+            <!-- weight -->
             <td>
               <div v-if="item.type === 1">
-                {{item.exchange_rate}}
+                {{item.weight}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.lazy.number="item.exchange_rate">
+                <input type="text" v-model.trim.number.lazy.number="item.weight">
               </div>
             </td>
-            <!-- price_air -->
+            <!-- bulk -->
             <td>
               <div v-if="item.type === 1">
-                {{item.price_air}}
+                {{item.bulk}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.lazy.number="item.price_air">
+                <input type="text" v-model.trim.number.lazy.number="item.bulk">
               </div>
             </td>
-            <!-- price_air_em -->
+            <!-- category -->
             <td>
               <div v-if="item.type === 1">
-                {{item.price_air_em}}
+                {{category[item.category]}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.lazy.number="item.price_air_em">
+                <select v-model="item.category">
+                  <option disabled value="">选择种类</option>
+                  <option value="1">普通</option>
+                  <option value="2">带电</option>
+                  <option value="3">带磁</option>
+                  <option value="4">超尺寸</option>
+                </select>
               </div>
             </td>
-            <!-- price_sea -->
+            <!-- local -->
             <td>
               <div v-if="item.type === 1">
-                {{item.price_sea}}
+                {{local[item.local]}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.lazy.number="item.price_sea">
+                <select v-model="item.local">
+                  <option disabled value="">选择类型</option>
+                  <option value="1">Ebay</option>
+                  <option value="2">Amazon</option>
+                </select>
               </div>
             </td>
             <!-- 操作 -->
@@ -93,15 +98,10 @@
                 <span class="icon-cutting_line"></span>
                 <a href="javascript: void 0" @click="deleteItem(item)">删除</a>
               </div>
-              <div v-else-if="item.type === 2">
+              <div v-else>
                 <a href="javascript: void 0" @click="submitEdit(item)">提交</a>
                 <span class="icon-cutting_line"></span>
                 <a href="javascript: void 0" @click="cancelEdit(index)">取消</a>
-              </div>
-              <div v-else>
-                <a href="javascript: void 0" @click="submitAdd(item)">提交</a>
-                <span class="icon-cutting_line"></span>
-                <a href="javascript: void 0" @click="cancelAdd">取消</a>
               </div>
             </td>
           </tr>
@@ -123,6 +123,16 @@ export default {
   data() {
     return {
       items: [],
+      category: {
+        '1': '普通',
+        '2': '带电',
+        '3': '带磁',
+        '4': '超尺寸'
+      },
+      local: {
+        '1': 'Ebay',
+        '2': 'Amazon'
+      },
       busy: false,
       msg: '',
       deleteIds: [],
@@ -148,7 +158,7 @@ export default {
       this.items = []
       this.msg = '加载中...'
       // ajax
-      this.axios(api.zone.query()).then(res => {
+      this.axios(api.product.query()).then(res => {
         let data = res.data
         console.log(data)
         if (data.code === 200) {
@@ -185,30 +195,6 @@ export default {
       this.items[index].type = 1
       this.getItems()
     },
-    // add
-    addItem() {
-      if (this.isBusy()) {
-        return
-      }
-      this.busy = true
-      this.items.push({
-        type: 3,
-        sort: '1',
-        name: '',
-        currency_symbol: '',
-        exchange_rate: '',
-        price_air: '',
-        price_air_em: '',
-        price_sea: ''
-      })
-    },
-    cancelAdd() {
-      this.busy = false
-      this.items.pop()
-    },
-    submitAdd(item) {
-      this.submitChange(item)
-    },
     submitChange(item, type) {
       if (!this.verify(item)) {
         return
@@ -216,7 +202,7 @@ export default {
       type = type || 'insert'
       let text = type === 'insert' ? '添加' : '修改'
       util.toast.show(this.toast, `正在${text}...`, 'upload')
-      this.axios(api.zone[type](item)).then(res => {
+      this.axios(api.product[type](item)).then(res => {
         // console.log(res)
         let code = res.data.code
         if (code === 200) {
@@ -225,7 +211,7 @@ export default {
           util.toast.fade(this.toast, `${text}成功`, 'appreciate')
           this.getItems()
         } else if (code === 400) {
-          util.toast.fade(this.toast, '地区名称已存在', 'close')
+          util.toast.fade(this.toast, 'SKU已存在', 'close')
         } else {
           util.req.changeError(this.toast)
         }
@@ -237,7 +223,7 @@ export default {
         return
       }
       this.deleteIds = []
-      this.pop.text = '确定删除[' + item.name + ']'
+      this.pop.text = '确定删除[' + item.sku + ']'
       this.pop.show = true
       this.deleteIds.push(item.id)
     },
@@ -247,7 +233,7 @@ export default {
     confirmPop() {
       this.pop.show = false
       util.toast.show(this.toast, '正在删除...', 'upload')
-      this.axios(api.zone.delete(this.deleteIds)).then(res => {
+      this.axios(api.product.delete(this.deleteIds)).then(res => {
         let data = res.data
         if (data.code === 200) {
           util.toast.fade(this.toast, '删除成功', 'check')
@@ -258,23 +244,47 @@ export default {
       })
     },
     verify(item) {
-      if (!item.name) {
-        util.toast.fade(this.toast, '地区名称不能为空')
+      let sku = item.sku
+      if (!sku) {
+        util.toast.fade(this.toast, 'SKU不能为空')
         return false
       }
-      if (!item.currency_symbol) {
-        util.toast.fade(this.toast, '货币符号不能为空')
+      let sellingPrice = item.selling_price
+      if (!sellingPrice) {
+        util.toast.fade(this.toast, '外币售价不能为空')
         return false
       }
-      if (!item.exchange_rate) {
-        util.toast.fade(this.toast, '汇率不能为空')
+      if (!util.isNum(sellingPrice)) {
+        util.toast.fade(this.toast, '外币售价必须为数字')
         return false
       }
-      if (item.sort && !util.isNum(item.sort)) {
-        util.toast.fade(this.toast, '顺序必须为整数')
+
+      let purchasePrice = item.purchase_price
+      if (!purchasePrice) {
+        util.toast.fade(this.toast, '采购价不能为空')
         return false
       }
-      item.sort = parseInt(item.sort) || 1
+      if (!util.isNum(purchasePrice)) {
+        util.toast.fade(this.toast, '采购价必须为数字')
+        return false
+      }
+
+      let weight = item.weight
+      if (!weight) {
+        util.toast.fade(this.toast, '重量不能为空')
+        return false
+      }
+      if (!util.isNum(weight)) {
+        util.toast.fade(this.toast, '重量必须为数字')
+        return false
+      }
+
+      let bulk = item.bulk
+      if (bulk && !util.isNum(bulk)) {
+        util.toast.fade(this.toast, '体积必须为数字')
+        return false
+      }
+
       return true
     },
     isBusy() {
@@ -283,9 +293,6 @@ export default {
         return true
       }
       return false
-    },
-    upperCase(item) {
-      item.name = item.name.toUpperCase()
     }
   },
   components: {

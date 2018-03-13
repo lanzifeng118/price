@@ -1,6 +1,10 @@
-let calUrl = '/price/calculation'
+let calUrl = '/binheng/api/calculation'
 let searchUrl = '/price/costinfo'
 let zoneUrl = '/binheng/api/zone'
+
+let productUrl = '/binheng/api/goods'
+
+let factorUrl = '/binheng/api/factor'
 
 let domesticUrl = '/binheng/api/domestic/change'
 let dInNormalUrl = '/binheng/api/domestic/in/normal'
@@ -33,18 +37,18 @@ let queryFun = (url, pageData) => {
     data: data
   }
 }
-// let queryByIdFun = (url, id) => {
-//   return {
-//     method: 'post',
-//     url: url,
-//     data: {
-//       method: 'queryById',
-//       data: {
-//         id: id
-//       }
-//     }
-//   }
-// }
+let queryBySkuFun = (url, sku) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'queryBySku',
+      data: {
+        sku: sku
+      }
+    }
+  }
+}
 
 let updateFun = (url, data) => {
   return {
@@ -52,6 +56,17 @@ let updateFun = (url, data) => {
     url: url,
     data: {
       method: 'update',
+      data: data
+    }
+  }
+}
+
+let updateBySkuFun = (url, data) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'updateBySku',
       data: data
     }
   }
@@ -66,16 +81,6 @@ let deleteFun = (url, ids) => {
       data: {
         ids: ids.toString()
       }
-    }
-  }
-}
-let saveFun = (url, data) => {
-  return {
-    method: 'post',
-    url: url,
-    data: {
-      method: 'save',
-      data: data
     }
   }
 }
@@ -100,14 +105,28 @@ let uploadFun = (url, data) => {
 
 let api = {
   cal: {
+    query(data) {
+      return queryFun(calUrl, data)
+    }
+  },
+  product: {
     query() {
-      return queryFun(calUrl)
+      return queryFun(productUrl)
     },
-    save(data) {
-      return saveFun(calUrl, data)
+    queryBySku(sku) {
+      return queryBySkuFun(productUrl, sku)
+    },
+    insert(data) {
+      return insertFun(productUrl, data)
+    },
+    delete(ids) {
+      return deleteFun(productUrl, ids)
     },
     update(data) {
-      return updateFun(calUrl, data)
+      return updateFun(productUrl, data)
+    },
+    updateBySku(data) {
+      return updateBySkuFun(productUrl, data)
     }
   },
   search: {
@@ -136,6 +155,14 @@ let api = {
     },
     update(data) {
       return updateFun(zoneUrl, data)
+    }
+  },
+  factor: {
+    query() {
+      return queryFun(factorUrl)
+    },
+    update(data) {
+      return updateFun(factorUrl, data)
     }
   },
   domestic: {

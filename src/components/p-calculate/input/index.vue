@@ -126,8 +126,8 @@ export default {
         this.note = '重量不能为空'
         return false
       }
-      if (!util.isInteger(weight)) {
-        this.note = '重量必须为整数'
+      if (!util.isNum(weight)) {
+        this.note = '重量必须为数字'
         return false
       }
 

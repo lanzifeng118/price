@@ -12,6 +12,12 @@ import Search from 'components/p-search/index'
 // zone
 import Zone from 'components/p-zone/index'
 
+// factor
+import Factor from 'components/p-factor/index'
+
+// product
+import Product from 'components/p-product/index'
+
 // Domestic 国内小包
 import Domestic from 'components/p-domestic/index'
 import DomesticNomal from 'components/p-domestic/normal/index'
@@ -76,12 +82,17 @@ export default new Router({
         // product
         {
           path: 'product',
-          component: Config
+          component: Product
         },
         // zone
         {
           path: 'zone',
           component: Zone
+        },
+        // factor
+        {
+          path: 'factor',
+          component: Factor
         },
         // domestic
         {

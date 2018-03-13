@@ -51,6 +51,10 @@ export default {
           name: '地区信息',
           style: 'map'
         }, {
+          src: '/admin/factor',
+          name: '公式系数',
+          style: 'evaluate'
+        }, {
           src: '/admin/domestic',
           name: '国内小包',
           style: 'truck'

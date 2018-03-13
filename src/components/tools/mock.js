@@ -1,4 +1,7 @@
 let cal = {
+  product: {
+
+  },
   zone: [
     {
       currency_symbol: '$',

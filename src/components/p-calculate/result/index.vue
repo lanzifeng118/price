@@ -6,7 +6,7 @@
     </div>
     <div v-if="msg" class="cal-result-msg">{{msg}}</div>
     <div v-else class="cal-result-box">
-      <button class="cal-result-save button" @click="save">保存</button>
+      <button class="cal-result-save button" @click="insert">保存</button>
       <result v-if="info" :product="input" :info="info"></result>
     </div>
     <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop">
@@ -22,7 +22,6 @@ import pop from 'components/pop/pop'
 import util from 'components/tools/util'
 import result from 'components/c-result/index'
 import api from 'components/tools/api'
-import mock from 'components/tools/mock'
 
 export default {
   data() {
@@ -69,6 +68,11 @@ export default {
   },
   methods: {
     cal() {
+      if (!this.verify()) {
+        util.toast.fade(this.toast, '参数错误')
+        this.goBack()
+        return
+      }
       this.info = null
       this.msg = '计算中...'
       let input = this.input
@@ -78,35 +82,32 @@ export default {
         category: input.category,
         local: input.local
       }
-      console.log(sendData)
 
-      this.axios(api.cal.query()).then(res => {
+      this.axios(api.cal.query(sendData)).then(res => {
         let data = res.data
-        // console.log(data)
+        console.log(data)
         this.msg = ''
         if (data.code === 200) {
-          let mockCal = mock.cal
-          console.log(mockCal)
-          this.info = mockCal
+          this.info = data.data
         } else {
           util.req.queryError(this.toast)
         }
       })
     },
-    save() {
-      console.log(this.result)
-      if (!this.result.sku.trim()) {
+    insert() {
+      console.log(this.input)
+      if (!this.input.sku.trim()) {
         util.toast.fade(this.toast, '保存失败，商品sku不能为空')
         return
       }
-      this.axios(api.cal.save(this.result)).then(res => {
+      this.axios(api.product.insert(this.input)).then(res => {
         let data = res.data
         console.log(data)
         if (data.code === 200) {
           util.toast.fade(this.toast, '保存成功', 'appreciate')
-        } else if (data.code === 201) {
+        } else if (data.code === 400) {
           // 已存在
-          this.pop.text = `sku为${this.result.sku}的数据已存在，确定要覆盖吗？`
+          this.pop.text = `sku为${this.input.sku}的数据已存在，确定要覆盖吗？`
           this.pop.show = true
         } else {
           util.req.queryError(this.toast)
@@ -117,7 +118,7 @@ export default {
       this.pop.show = false
     },
     confirmPop() {
-      this.axios(api.cal.update(this.result)).then(res => {
+      this.axios(api.product.updateBySku(this.input)).then(res => {
         let data = res.data
         if (data.code === 200) {
           util.toast.fade(this.toast, '保存成功', 'check')
@@ -126,6 +127,23 @@ export default {
         }
         this.closePop()
       })
+    },
+    verify() {
+      // 参数不合格
+      let input = this.input
+      let l = input.local
+      let c = input.category
+      return (l === '1' || l === '2') &&
+        (c === '1' || c === '2' || c === '3' || c === '4') &&
+        util.isNum(input.weight) &&
+        (!input.bulk || input.bulk && util.isNum(input.bulk)) &&
+        util.isNum(input.purchase_price) &&
+        util.isNum(input.selling_price)
+    },
+    goBack() {
+      setTimeout(() => {
+        this.$router.push('/admin/calculate')
+      }, 700)
     }
   },
   components: {

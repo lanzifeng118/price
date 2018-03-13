@@ -211,7 +211,7 @@ table {
   border: 1px solid #e5e5e5;
   text-align: center;
   vertical-align: middle;
-  padding: 5px 8px;
+  padding: 6px 8px;
   line-height: 1.5em;
 }
 .list-table-wrap td.zone {
@@ -225,7 +225,8 @@ table {
   color: #ffba1f;
 }
 /* .list-table-wrap edit */
-.list-table-wrap input {
+.list-table-wrap input,
+.list-table-wrap select {
   display: block;
   width: 100%;
   text-align: center;
@@ -250,61 +251,5 @@ table {
   color: #ffba1f;
 }
 
-
-/*edit-table*/
-.edit-table-wrap {
-
-}
-.edit-table-wrap td{
-  padding: 10px 0;
-}
-.edit-table-wrap td:first-child {
-  text-align: right;
-  padding-right: 20px;
-}
-.edit-table-wrap td.show {
-  cursor: pointer;
-  font-size: 18px;
-  color: #ccc;
-}
-.edit-table-wrap td.show .icon-square_check_fill {
-  color: #00d0bc;
-}
-.edit-table-wrap td.pdf .pdf-box {
-  border-radius: 3px;
-  position: relative;
-  margin-top: 8px;
-  border: 1px solid #eee;
-  padding: 0 20px 0 5px;
-  line-height: 25px;
-  max-width: 250px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.edit-table-wrap td.pdf span.icon-round_close_fill {
-  transition: all 0.2s;
-  cursor: pointer;
-  font-size: 20px;
-  position: absolute;
-  right: 2px;
-  top: 2px;
-}
-.edit-table-wrap td.pdf span.icon-round_close_fill:hover {
-  color: #07efd9;
-}
-.content-detail {
-  padding: 30px;
-  overflow: auto;
-  border-radius: 3px;
-  min-height: 535px;
-  background-color: #fff;
-}
-
-/* title */
-.title {
-  color: #aaa;
-
-}
 /*baseColor  black: 363f46  green: 07efd9  dark-green 00d0bc*/
 /*waring e29800  error d24900*/
