@@ -1,4 +1,3 @@
-<script>
 let calUrl = '/price/calculation'
 let searchUrl = '/price/costinfo'
 let zoneUrl = '/binheng/api/zone'
@@ -187,4 +186,3 @@ let api = {
   }
 }
 export default api
-</script>

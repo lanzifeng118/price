@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import { winHeigth } from 'components/tools/global'
+import global from 'components/tools/global'
 
 export default {
   data() {
     return {
-      height: winHeigth - 50,
+      height: global.winHeigth - 50,
       avatar: './static/images/avatar.png'
     }
   },

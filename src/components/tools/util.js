@@ -1,4 +1,3 @@
-<script>
 function isNum(str) {
   return /^\d+.{0,1}\d*$/.test(str)
 }
@@ -53,4 +52,3 @@ export default {
   req,
   getCookie
 }
-</script>

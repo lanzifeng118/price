@@ -1,4 +1,3 @@
-<script>
 let winWidth = 0
 let winHeigth = 0
 let detailHeigth = 0
@@ -27,4 +26,3 @@ export default {
   winHeigth,
   detailHeigth
 }
-</script>

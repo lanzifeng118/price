@@ -6,7 +6,7 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
-import { getCookie } from 'components/tools/util'
+import util from 'components/tools/util'
 
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
@@ -43,7 +43,7 @@ const store = new Vuex.Store({
 })
 let hasLogin = false
 router.beforeEach((to, from, next) => {
-  let cookie = getCookie()
+  let cookie = util.getCookie()
   if (cookie.admin) {
     hasLogin = true
     store.state.user.name = 'admin'
@@ -58,7 +58,7 @@ router.beforeEach((to, from, next) => {
     from.name ? next({ name: from.name }) : next('/admin/calculate')
     return
   }
-  // console.log(getCookie())
+  // console.log(util.getCookie())
   if (to.matched.some(record => record.meta.requiresAuth)) {
     goPage(hasLogin, '/login')
   } else if (to.meta.loginPage) {

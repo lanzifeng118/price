@@ -22,7 +22,7 @@ import vNav from 'components/c-nav/nav'
 import toast from 'components/toast/toast'
 // import util from 'components/tools/util'
 // import api from 'components/tools/api'
-import { winHeigth } from 'components/tools/global'
+import global from 'components/tools/global'
 
 export default {
   data() {
@@ -33,7 +33,7 @@ export default {
         text: '',
         icon: ''
       },
-      height: winHeigth - 50
+      height: global.winHeigth - 50
     }
   },
   created() {

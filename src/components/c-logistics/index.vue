@@ -6,7 +6,19 @@
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
-          <tr>
+          <tr v-if="apiKey === 'local'">
+            <th>收费分区</th>
+            <th width="10%">开始重量段(Kg)</th>
+            <th width="10%">截止重量段(Kg)</th>
+            <th width="10%">价格（重量）</th>
+            <th width="10%">当地价格（重量）</th>
+            <th width="10%">价格（件）</th>
+            <th width="10%">当地价格（件）</th>
+            <th width="10%">附加处理费</th>
+            <th width="10%">当地附加处理费</th>            
+            <th width="10%">操作</th>
+          </tr>
+          <tr v-else>
             <th>收费分区</th>
             <th width="15%">开始重量段(Kg)</th>
             <th width="15%">截止重量段(Kg)</th>
@@ -26,6 +38,9 @@
             <td>-</td>
             <td>-</td>
             <td>-</td>
+            <td v-if="apiKey === 'local'">-</td>
+            <td v-if="apiKey === 'local'">-</td>
+            <td v-if="apiKey === 'local'">-</td>
             <td>无数据</td>
           </tr>
           <tr v-else v-for="(item, index) in itemS.list" :class="{edit: item.doType === 2, add: item.doType === 3}">
@@ -50,14 +65,22 @@
                 <input type="text" v-model.trim.number.lazy="item.end_weight">
               </div>
             </td>
+            <!-- price_weight 人民币 -->
+            <td v-if="apiKey === 'local'">
+              {{ item.price_weight_rmb ? '¥ ' + item.price_weight_rmb : '-'}}
+            </td>
             <!-- price_weight -->
             <td>
               <div v-if="!item.doType || item.doType === 1">
-                {{item.price_weight || '-'}}
+                {{ item.price_weight || '-'}}
               </div>
               <div v-else>
                 <input type="text" v-model.trim.number.lazy="item.price_weight">
               </div>
+            </td>
+            <!-- price_unit 人民币 -->
+            <td v-if="apiKey === 'local'">
+              {{ item.price_unit_rmb ? '¥ ' + item.price_unit_rmb : '-'}}
             </td>
             <!-- price_unit -->
             <td>
@@ -67,6 +90,10 @@
               <div v-else>
                 <input type="text" v-model.trim.number.lazy="item.price_unit">
               </div>
+            </td>
+            <!-- extra_charge 人民币 -->
+            <td v-if="apiKey === 'local'">
+              {{ item.extra_charge_rmb ? '¥ ' + item.extra_charge_rmb : '-'}}
             </td>
             <!-- extra_charge -->
             <td>
@@ -108,7 +135,7 @@
       <i>kg</i>
       <input placeholder="体积" type="text" v-model.trim.number.lazy="test.bulk">
       <i>m³</i>
-      <button class="button" @click="calTest">计算邮费</button> 
+      <button class="button" @click="calTest">计算邮费</button>
       <div v-if="test.result.ok">
         <p>实重：{{test.result.weight}}kg {{test.result.symbol}} 体积重：{{test.result.bulkWeight}}kg</p>
         <p>邮费：{{test.result.total}}</p>
@@ -190,10 +217,31 @@ export default {
       this.items = []
       this.msg = '加载中...'
       // ajax
-      this.axios(api[this.apiKey].query({type: this.type})).then(res => {
+      this.axios(api[this.apiKey].query({ type: this.type })).then(res => {
         let data = res.data
         console.log(data)
         if (data.code === 200) {
+          if (this.apiKey === 'local') {
+            const DIGITS = 3
+            data.data.forEach(v => {
+              v.list.forEach(vL => {
+                let priceU = parseFloat(vL.price_unit)
+                vL.price_unit_rmb = priceU
+                  ? (priceU * v.exchange_rate).toFixed(DIGITS)
+                  : ''
+
+                let priceW = parseFloat(vL.price_weight)
+                vL.price_weight_rmb = priceW
+                  ? (priceW * v.exchange_rate).toFixed(DIGITS)
+                  : ''
+
+                let extraC = parseFloat(vL.extra_charge)
+                vL.extra_charge_rmb = extraC
+                  ? (extraC * v.exchange_rate).toFixed(DIGITS)
+                  : ''
+              })
+            })
+          }
           this.items = data.data
           this.msg = ''
         } else {
@@ -312,7 +360,11 @@ export default {
         util.toast.fade(this.toast, '请填写价格值或单件价格')
         return false
       }
-      if (item.start_weight && item.end_weight && parseFloat(item.end_weight) < parseFloat(item.start_weight)) {
+      if (
+        item.start_weight &&
+        item.end_weight &&
+        parseFloat(item.end_weight) < parseFloat(item.start_weight)
+      ) {
         util.toast.fade(this.toast, '截止重量要大于开始重量')
         return false
       }
@@ -341,7 +393,8 @@ export default {
         result.total = '无数据'
         return
       }
-      let weight = result.weight >= result.bulkWeight ? result.weight : result.bulkWeight
+      let weight =
+        result.weight >= result.bulkWeight ? result.weight : result.bulkWeight
       for (let i = 0; i < list.length; i++) {
         let item = list[i]
         let sw = parseFloat(item.start_weight) || 0

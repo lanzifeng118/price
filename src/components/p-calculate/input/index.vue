@@ -150,7 +150,7 @@ export default {
   position: relative;
   left: 50%;
   width: 400px;
-  margin-top: 80px;
+  margin-top: 50px;
   margin-left: -276px;
   /* transition: all 0.2s; */
   padding: 30px 50px 30px 30px;
