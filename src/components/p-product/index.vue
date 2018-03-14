@@ -1,19 +1,27 @@
 <template>
-  <div class="p-zone">
+  <div class="product">
+    <div class="f-clearfix">
+      <button class="f-left button yellow list-btn-add" @click="addItem">
+        <span class="icon icon-round_add"></span>添加商品
+      </button>
+      <upload class="f-right" @update="getItems" apiInKey="inProduct" dowloadUrl="/binheng/api/goods/download" name="商品"></upload>
+    </div>
+    <div class="product-tips">商品种类：<b>普通</b>、<b>带电</b>、<b>带磁</b>、<b>超尺寸</b>，当地配送：<b>Ebay</b>，<b>Amazon</b>，不合格数据将被过滤</div>
     <div class="list-table-wrap">
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th>SKU</th>
-            <th width="12.5%">外币售价</th>
-            <th width="12.5%">采购价</th>
-            <th width="12.5%">重量 g</th>
-            <th width="12.5%">体积 m³</th>
-            <th width="12.5%">商品种类</th>
-            <th width="12.5%">当地配送</th>
-            <th width="12.5%">操作</th>
+            <th><span class="icon-nessisary"></span>SKU</th>
+            <th width="11%"><span class="icon-nessisary"></span>预设利润率</th>
+            <th width="11%"><span class="icon-nessisary"></span>外币售价</th>
+            <th width="11%"><span class="icon-nessisary"></span>采购价</th>
+            <th width="11%"><span class="icon-nessisary"></span>重量 g</th>
+            <th width="11%">体积 m³</th>
+            <th width="11%"><span class="icon-nessisary"></span>商品种类</th>
+            <th width="11%"><span class="icon-nessisary"></span>当地配送</th>
+            <th width="11%">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -25,6 +33,15 @@
               </div>
               <div v-else>
                 <input type="text" v-model.trim.lazy="item.sku">
+              </div>
+            </td>
+            <!-- profit_rate -->
+            <td>
+              <div v-if="item.type === 1">
+                {{item.profit_rate}}
+              </div>
+              <div v-else>
+                <input type="text" v-model.trim.number.lazy="item.profit_rate">
               </div>
             </td>
             <!-- selling_price -->
@@ -51,7 +68,7 @@
                 {{item.weight}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.number.lazy.number="item.weight">
+                <input type="text" v-model.trim.number.lazy="item.weight">
               </div>
             </td>
             <!-- bulk -->
@@ -60,34 +77,30 @@
                 {{item.bulk}}
               </div>
               <div v-else>
-                <input type="text" v-model.trim.number.lazy.number="item.bulk">
+                <input type="text" v-model.trim.number.lazy="item.bulk">
               </div>
             </td>
             <!-- category -->
             <td>
               <div v-if="item.type === 1">
-                {{category[item.category]}}
+                {{categoryMap[item.category]}}
               </div>
               <div v-else>
                 <select v-model="item.category">
                   <option disabled value="">选择种类</option>
-                  <option value="1">普通</option>
-                  <option value="2">带电</option>
-                  <option value="3">带磁</option>
-                  <option value="4">超尺寸</option>
+                  <option v-for="item in category" :value="item.type">{{item.name}}</option>
                 </select>
               </div>
             </td>
             <!-- local -->
             <td>
               <div v-if="item.type === 1">
-                {{local[item.local]}}
+                {{localMap[item.local]}}
               </div>
               <div v-else>
                 <select v-model="item.local">
                   <option disabled value="">选择类型</option>
-                  <option value="1">Ebay</option>
-                  <option value="2">Amazon</option>
+                  <option v-for="item in local" :value="item.type">{{item.name}}</option>
                 </select>
               </div>
             </td>
@@ -98,10 +111,15 @@
                 <span class="icon-cutting_line"></span>
                 <a href="javascript: void 0" @click="deleteItem(item)">删除</a>
               </div>
-              <div v-else>
+              <div v-else-if="item.type === 2">
                 <a href="javascript: void 0" @click="submitEdit(item)">提交</a>
                 <span class="icon-cutting_line"></span>
                 <a href="javascript: void 0" @click="cancelEdit(index)">取消</a>
+              </div>
+              <div v-else>
+                <a href="javascript: void 0" @click="submitAdd(item)">提交</a>
+                <span class="icon-cutting_line"></span>
+                <a href="javascript: void 0" @click="cancelAdd">取消</a>
               </div>
             </td>
           </tr>
@@ -118,21 +136,12 @@ import pop from 'components/pop/pop'
 import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
+import upload from 'components/c-upload/index'
 
 export default {
   data() {
     return {
       items: [],
-      category: {
-        '1': '普通',
-        '2': '带电',
-        '3': '带磁',
-        '4': '超尺寸'
-      },
-      local: {
-        '1': 'Ebay',
-        '2': 'Amazon'
-      },
       busy: false,
       msg: '',
       deleteIds: [],
@@ -147,6 +156,20 @@ export default {
         text: '',
         show: false
       }
+    }
+  },
+  computed: {
+    categoryMap() {
+      return this.$store.state.categoryMap
+    },
+    category() {
+      return this.$store.state.category
+    },
+    localMap() {
+      return this.$store.state.localMap
+    },
+    local() {
+      return this.$store.state.local
     }
   },
   created() {
@@ -194,6 +217,31 @@ export default {
       this.busy = false
       this.items[index].type = 1
       this.getItems()
+    },
+     // add
+    addItem() {
+      if (this.isBusy()) {
+        return
+      }
+      this.busy = true
+      this.items.unshift({
+        type: 3,
+        sku: '',
+        profit_rate: '',
+        purchase_price: '',
+        selling_price: '',
+        weight: '',
+        bulk: '',
+        category: '1',
+        local: '1'
+      })
+    },
+    cancelAdd() {
+      this.busy = false
+      this.items.shift()
+    },
+    submitAdd(item) {
+      this.submitChange(item)
     },
     submitChange(item, type) {
       if (!this.verify(item)) {
@@ -244,47 +292,11 @@ export default {
       })
     },
     verify(item) {
-      let sku = item.sku
-      if (!sku) {
-        util.toast.fade(this.toast, 'SKU不能为空')
+      let verify = util.verifyProduct(item, 2)
+      if (verify) {
+        util.toast.fade(this.toast, verify)
         return false
       }
-      let sellingPrice = item.selling_price
-      if (!sellingPrice) {
-        util.toast.fade(this.toast, '外币售价不能为空')
-        return false
-      }
-      if (!util.isNum(sellingPrice)) {
-        util.toast.fade(this.toast, '外币售价必须为数字')
-        return false
-      }
-
-      let purchasePrice = item.purchase_price
-      if (!purchasePrice) {
-        util.toast.fade(this.toast, '采购价不能为空')
-        return false
-      }
-      if (!util.isNum(purchasePrice)) {
-        util.toast.fade(this.toast, '采购价必须为数字')
-        return false
-      }
-
-      let weight = item.weight
-      if (!weight) {
-        util.toast.fade(this.toast, '重量不能为空')
-        return false
-      }
-      if (!util.isNum(weight)) {
-        util.toast.fade(this.toast, '重量必须为数字')
-        return false
-      }
-
-      let bulk = item.bulk
-      if (bulk && !util.isNum(bulk)) {
-        util.toast.fade(this.toast, '体积必须为数字')
-        return false
-      }
-
       return true
     },
     isBusy() {
@@ -297,13 +309,23 @@ export default {
   },
   components: {
     toast,
-    pop
+    pop,
+    upload
   }
 }
 </script>
 
 <style>
-.p-zone {
+.product {
   padding: 20px 30px;
+}
+.product-tips {
+  margin-top: 10px;
+  text-align: right;
+  font-size: 12px;
+  color: #aaa;
+}
+.product-tips b {
+  font-weight: bold;
 }
 </style>

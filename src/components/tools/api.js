@@ -3,6 +3,7 @@ let searchUrl = '/price/costinfo'
 let zoneUrl = '/binheng/api/zone'
 
 let productUrl = '/binheng/api/goods'
+let inGoodsUrl = '/binheng/api/goods/in'
 
 let factorUrl = '/binheng/api/factor'
 
@@ -128,6 +129,9 @@ let api = {
     updateBySku(data) {
       return updateBySkuFun(productUrl, data)
     }
+  },
+  inProduct(data) {
+    return uploadFun(inGoodsUrl, data)
   },
   search: {
     query(sku) {

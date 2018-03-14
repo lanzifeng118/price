@@ -57,13 +57,14 @@ export default new Router({
     {
       path: '/admin',
       name: 'admin',
-      meta: { requiresAuth: true }, // 需要登录
+      meta: { hasLogin: true }, // 需要登录
       component: Admin,
       redirect: { name: 'calculate' },
       children: [
         {
           path: 'calculate',
           name: 'calculate',
+          meta: { level1: true },
           component: Calculate,
           redirect: { name: 'calculateInput' },
           children: [
@@ -77,31 +78,32 @@ export default new Router({
         {
           path: 'search',
           name: 'search',
+          meta: { level1: true },
           component: Search
         },
         // product
         {
           path: 'product',
           component: Product,
-          meta: { requiresManager: true }
+          meta: { level2: true }
         },
         // zone
         {
           path: 'zone',
           component: Zone,
-          meta: { requiresManager: true }
+          meta: { level3: true }
         },
         // factor
         {
           path: 'factor',
           component: Factor,
-          meta: { requiresManager: true }
+          meta: { level4: true }
         },
         // domestic
         {
           path: 'domestic',
           component: Domestic,
-          meta: { requiresManager: true },
+          meta: { level4: true },
           children: [
             { path: '/', component: DomesticNomal },
             { path: 'electric', component: DomesticElectric },
@@ -113,7 +115,7 @@ export default new Router({
         {
           path: 'local',
           component: Local,
-          meta: { requiresManager: true },
+          meta: { level4: true },
           children: [
             { path: '/', component: LocalEbay },
             { path: 'amazon', component: LocalAmazon }
@@ -123,7 +125,7 @@ export default new Router({
         {
           path: 'config',
           component: Config,
-          meta: { requiresManager: true },
+          meta: { level5: true },
           children: [
             // 中文
             { path: '/', component: ConfigList },

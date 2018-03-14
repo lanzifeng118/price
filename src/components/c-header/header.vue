@@ -34,7 +34,7 @@
       logout() {
         this.axios({
           method: 'post',
-          url: '/price/logout',
+          url: '/binheng/api/logout',
           data: {
             username: this.userName
           }

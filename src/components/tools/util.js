@@ -50,11 +50,59 @@ function getCookie() {
   return obj
 }
 
+function verifyProduct(item, type) {
+  type = type || 1 // 1: 计算 2：商品信息
+
+  let sku = item.sku
+  if (type === 2 && !sku) {
+    return 'SKU不能为空'
+  }
+
+  let rate = item.profit_rate
+  if (!rate) {
+    return '预设利润率不能为空'
+  }
+  if (rate && !isNumAll(rate)) {
+    return '预设利润率必须为数字'
+  }
+
+  let sellingPrice = item.selling_price
+  if (!sellingPrice) {
+    return '外币售价不能为空'
+  }
+  if (!isNum(sellingPrice)) {
+    return '外币售价必须为数字'
+  }
+
+  let purchasePrice = item.purchase_price
+  if (!purchasePrice) {
+    return '采购价不能为空'
+  }
+  if (!isNum(purchasePrice)) {
+    return '采购价必须为数字'
+  }
+
+  let weight = item.weight
+  if (!weight) {
+    return '重量不能为空'
+  }
+  if (!isNum(weight)) {
+    return '重量必须为数字'
+  }
+
+  let bulk = item.bulk
+  if (bulk && !isNum(bulk)) {
+    return '体积必须为数字'
+  }
+  return ''
+}
+
 export default {
   isNumAll,
   isNum,
   isInteger,
   toast,
   req,
-  getCookie
+  getCookie,
+  verifyProduct
 }

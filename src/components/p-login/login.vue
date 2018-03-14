@@ -88,7 +88,7 @@
         this.login.text = '登录中...'
         this.axios({
           method: 'post',
-          url: '/price/login',
+          url: '/binheng/api/login',
           data: this.user
         }).then((res) => {
           let data = res.data

@@ -32,7 +32,8 @@ export default {
   },
   computed: {
     items() {
-      let items = [{
+      let user = this.$store.state.user
+      let navs = [{
         src: '/admin/calculate',
         name: '计算',
         style: 'calculate'
@@ -40,33 +41,52 @@ export default {
         src: '/admin/search',
         name: '查询SKU',
         style: 'barcode-scan'
+      }, {
+        src: '/admin/product',
+        name: '商品信息',
+        style: 'cart'
+      }, {
+        src: '/admin/zone',
+        name: '地区信息',
+        style: 'map'
+      }, {
+        src: '/admin/factor',
+        name: '公式系数',
+        style: 'evaluate'
+      }, {
+        src: '/admin/domestic',
+        name: '国内小包',
+        style: 'truck'
+      }, {
+        src: '/admin/local',
+        name: '当地配送',
+        style: 'courier'
+      }, {
+        src: '/admin/config',
+        name: '系统设置',
+        style: 'config'
       }]
-      if (this.$store.state.user === 'admin') {
-        items = items.concat([{
-          src: '/admin/product',
-          name: '商品信息',
-          style: 'cart'
-        }, {
-          src: '/admin/zone',
-          name: '地区信息',
-          style: 'map'
-        }, {
-          src: '/admin/factor',
-          name: '公式系数',
-          style: 'evaluate'
-        }, {
-          src: '/admin/domestic',
-          name: '国内小包',
-          style: 'truck'
-        }, {
-          src: '/admin/local',
-          name: '当地配送',
-          style: 'courier'
-        }, {
-          src: '/admin/config',
-          name: '系统设置',
-          style: 'config'
-        }])
+      let order = []
+      switch (user) {
+        case 'xs002':
+          order = [0, 1]
+          break
+        case 'xs001':
+          order = [0, 1, 2, 3]
+          break
+        case 'w1001':
+          order = [3, 4, 5, 6]
+          break
+        default:
+          break
+      }
+      let items = []
+      if (user !== 'admin') {
+        order.forEach(v => {
+          items.push(navs[v])
+        })
+      } else {
+        items = navs
       }
       return items
     }

@@ -1,9 +1,9 @@
 <template>
   <div class="p-zone">
-    <div class="f-clearfix">
-      <a href="javascript: void 0" class="f-left button yellow list-btn-add" @click="addItem">
+    <div v-if="user !== 'xs001'" class="f-clearfix">
+      <button class="f-left button yellow list-btn-add" @click="addItem">
         <span class="icon icon-round_add"></span>添加地区
-      </a>
+      </button>
     </div>
     <div class="list-table-wrap">
       <!-- msg -->
@@ -18,7 +18,7 @@
             <th width="13%"><span class="icon icon-plane"></span>空运单价 / ¥</th>
             <th width="16%"><span class="icon icon-plane"></span>空运单价（带电、磁） / ¥</th>
             <th width="13%"><span class="icon icon-ship"></span>海运单价 / ¥</th>
-            <th width="13%">操作</th>
+            <th v-if="user !== 'xs001'" width="13%">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -87,7 +87,7 @@
               </div>
             </td>
             <!-- 操作 -->
-            <td class="operate">
+            <td v-if="user !== 'xs001'" class="operate">
               <div v-if="item.type === 1">
                 <a href="javascript: void 0" @click="editItem(index)">修改</a>
                 <span class="icon-cutting_line"></span>
@@ -137,6 +137,11 @@ export default {
         text: '',
         show: false
       }
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user
     }
   },
   created() {

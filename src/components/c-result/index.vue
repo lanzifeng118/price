@@ -1,31 +1,31 @@
 <template>
   <div class="c-result">
     <h3 class="c-result-title">
-      商品sku：{{product.sku}}，预设利润率：{{product.profit_rate}}%，外币售价：{{product.selling_price}}，采购价：¥{{product.purchase_price}}，重量：{{product.weight}}g，体积：{{product.bulk}}m³，种类：{{category[product.category]}}，当地配送：{{local[product.local]}}
+      商品sku：{{product.sku}}，预设利润率：{{product.profit_rate}}%，外币售价：{{product.selling_price}}，<span v-if="!limit">采购价：¥{{product.purchase_price}}，</span>重量：{{product.weight}}g，体积：{{product.bulk  || '?'}}m³，种类：{{category[product.category]}}，当地配送：{{local[product.local]}}
     </h3>
     <div class="list-table-wrap">
       <table>
         <thead>
           <!-- cn -->
           <tr>
-            <th width="5.4%">国家</th>
+            <th :width="width">国家</th>
             <th width="7%">物流方式</th>
-            <th width="5.4%">售价(当地货币）</th>
-            <th width="5.4%">采购成本¥</th>
-            <th width="5.4%">头程成本¥</th>
-            <th width="5.4%">二程成本¥</th>
-            <th width="5.4%">销售成本¥</th>
-            <th width="5.4%">总成本¥</th>
-            <th width="5.4%">毛利润¥</th>
+            <th :width="width">售价(当地货币）</th>
+            <th v-if="!limit" :width="width">采购成本¥</th>
+            <th :width="width">头程成本¥</th>
+            <th :width="width">二程成本¥</th>
+            <th :width="width">销售成本¥</th>
+            <th :width="width">总成本¥</th>
+            <th :width="width">毛利润¥</th>
             <th>当前利润率</th>
-            <th width="5.4%">{{product.profit_rate}}%利润率售价</th>
-            <th width="5.4%">0%利润率售价</th>
-            <th width="5.4%">5%利润率售价</th>
-            <th width="5.4%">10%利润率售价</th>
-            <th width="5.4%">15%利润率售价</th>
-            <th width="5.4%">20%利润率售价</th>
-            <th width="5.4%">25%利润率售价</th>
-            <th width="5.4%">30%利润率售价</th>
+            <th :width="width">{{product.profit_rate}}%利润率售价</th>
+            <th :width="width">0%利润率售价</th>
+            <th :width="width">5%利润率售价</th>
+            <th :width="width">10%利润率售价</th>
+            <th :width="width">15%利润率售价</th>
+            <th :width="width">20%利润率售价</th>
+            <th :width="width">25%利润率售价</th>
+            <th :width="width">30%利润率售价</th>
           </tr>
         </thead>
         <tbody v-for="itemZ in items">
@@ -36,7 +36,7 @@
             <!-- 售价 -->
             <td>{{itemZ.currency_symbol}} {{item.sPrice}}</td>
             <!-- 采购成本 -->
-            <td>¥ {{item.pPrice}}</td>
+            <td v-if="!limit">¥ {{item.pPrice}}</td>
             <!-- 头程成本 -->
             <td>{{item.logFirst ? '¥ ' + item.logFirst : '-'}}</td>
             <!-- 二程成本 -->
@@ -69,6 +69,10 @@
 <script>
 export default {
   props: {
+    search: {
+      type: Boolean,
+      defalut: false
+    },
     info: {
       type: Object,
       required: true
@@ -80,20 +84,22 @@ export default {
   },
   data() {
     return {
-      logOrder: ['国内小包', '海运小包', '空运小包'],
-      category: {
-        '1': '普通',
-        '2': '带电',
-        '3': '带磁',
-        '4': '超尺寸'
-      },
-      local: {
-        '1': 'Ebay',
-        '2': 'Amazon'
-      }
+      logOrder: ['国内小包', '海运小包', '空运小包']
     }
   },
   computed: {
+    limit() {
+      return this.search && this.$store.state.user === 'xs002'
+    },
+    width() {
+      return this.limit ? '5.7%' : '5.4%'
+    },
+    category() {
+      return this.$store.state.categoryMap
+    },
+    local() {
+      return this.$store.state.localMap
+    },
     weight() {
       let product = this.product
       let factorW = this.info.factor.weight_1
@@ -122,14 +128,17 @@ export default {
        * cost 总成本 = 采购成本 + 物流成本 + 销售成本
        * profit 毛利润 = 销售价格 - 总成本
        * profitRate 利润率 = 毛利润 / 销售价格
-       * （采购成本+物流成本）/汇率/(1 - 0.18 - 0.1)
+       * 售价 =（采购成本+物流成本）/汇率/(1 - 0.18 - 0.1)
        */
       zone.forEach(v => {
         v.list = []
         let zoneLow = v.name.toLowerCase()
-        let exRate = v.exchange_rate
-        let pPrice = parseFloat(product.purchase_price) || 0
-        let sPrice = parseFloat(product.selling_price) || 0
+        let exRate = parseFloat(v.exchange_rate)
+        let pPrice = parseFloat(product.purchase_price)
+        let sPrice = parseFloat(product.selling_price)
+        let priceSea = parseFloat(v.price_sea)
+        let priceAir = parseFloat(v.price_air)
+        let priceAirEm = parseFloat(v.price_air_em)
 
         this.logOrder.forEach((vL, iL) => {
           let item = {}
@@ -141,15 +150,15 @@ export default {
           } else {
             if (iL === 1) {
               // 海运小包
-              item.logFirst = v.price_sea * this.weight
+              item.logFirst = priceSea * this.weight
             } else if (iL === 2) {
               // 空运小包
               let category = product.category
               if (category === '2' || category === '3') {
                 // 带电带磁
-                item.logFirst = v.price_air_em * this.weight
+                item.logFirst = priceAirEm * this.weight
               } else {
-                item.logFirst = v.price_air * this.weight
+                item.logFirst = priceAir * this.weight
               }
             }
             item.logSecond = this.calLog(this.weightLocal, info.local[zoneLow])
@@ -238,11 +247,12 @@ export default {
           } else if (priceWeight) {
             total = weight * priceWeight + extraCharge
           } else {
-            // result.total = '价格有误'
+            // 价格有误
             total = NaN
           }
           break
         }
+        // 不在区间
         if (i === list.length - 1) {
           total = NaN
         }

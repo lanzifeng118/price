@@ -6,7 +6,7 @@
     </div>
     <div class="search-note">{{note}}</div>
     <h3 class="serach-ing">{{msg}}</h3>
-    <result v-if="info" :product="product" :info="info"></result>
+    <result v-if="info" :product="product" :info="info" :search="true"></result>
   </div>
 </template>
 

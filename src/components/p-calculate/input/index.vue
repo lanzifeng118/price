@@ -6,7 +6,7 @@
           <span class="cal-form-item-name">商品sku</span><input type="text" class="input" v-model.trim="item.sku">
         </li>
         <li>
-          <span class="cal-form-item-name">预设利润率</span><input type="text" class="input" v-model.trim.number="item.profit_rate">
+          <span class="cal-form-item-name"><span class="icon-nessisary"></span>预设利润率</span><input type="text" class="input" v-model.trim.number="item.profit_rate">
           <i>%</i>
         </li>
         <li>
@@ -32,10 +32,7 @@
             <span class="icon-nessisary"></span>商品种类</span>
           <select v-model="item.category">
             <option disabled value="">选择种类</option>
-            <option value="1">普通</option>
-            <option value="2">带电</option>
-            <option value="3">带磁</option>
-            <option value="4">超尺寸</option>
+            <option v-for="item in category" :value="item.type">{{item.name}}</option>
           </select>
         </li>
         <li>
@@ -43,8 +40,7 @@
             <span class="icon-nessisary"></span>当地配送</span>
           <select v-model="item.local">
             <option disabled value="">选择类型</option>
-            <option value="1">Ebay</option>
-            <option value="2">Amazon</option>
+            <option v-for="item in local" :value="item.type">{{item.name}}</option>
           </select>
         </li>
       </ul>
@@ -84,6 +80,14 @@ export default {
       }
     }
   },
+  computed: {
+    category() {
+      return this.$store.state.category
+    },
+    local() {
+      return this.$store.state.local
+    }
+  },
   mounted() {
     window.addEventListener('keyup', this.enter)
   },
@@ -109,50 +113,11 @@ export default {
       this.$router.push(url)
     },
     verify() {
-      let item = this.item
-
-      let rate = item.profit_rate
-      if (rate && !util.isNumAll(rate)) {
-        this.note = '预设利润率必须为数字'
+      let verify = util.verifyProduct(this.item)
+      if (verify) {
+        this.note = verify
         return false
       }
-
-      let sellingPrice = item.selling_price
-      if (!sellingPrice) {
-        this.note = '外币售价不能为空'
-        return false
-      }
-      if (!util.isNum(sellingPrice)) {
-        this.note = '外币售价必须为数字'
-        return false
-      }
-
-      let purchasePrice = item.purchase_price
-      if (!purchasePrice) {
-        this.note = '采购价不能为空'
-        return false
-      }
-      if (!util.isNum(purchasePrice)) {
-        this.note = '采购价必须为数字'
-        return false
-      }
-
-      let weight = item.weight
-      if (!weight) {
-        this.note = '重量不能为空'
-        return false
-      }
-      if (!util.isNum(weight)) {
-        this.note = '重量必须为数字'
-        return false
-      }
-
-      let bulk = item.bulk
-      if (bulk && !util.isNum(bulk)) {
-        this.note = '体积必须为数字'
-        return false
-      }
-
       return true
     }
   },
@@ -182,14 +147,14 @@ export default {
 }
 .cal-form-item-name {
   display: inline-block;
-  width: 80px;
+  width: 85px;
   text-align: right;
   margin-right: 10px;
 }
 .cal-form-ul li > input,
 .cal-form-ul li > select {
   background-color: #fff;
-  width: calc(100% - 95px);
+  width: calc(100% - 100px);
   padding-right: 24px;
 }
 .cal-form-ul li > i {
