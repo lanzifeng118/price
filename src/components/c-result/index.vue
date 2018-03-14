@@ -1,7 +1,7 @@
 <template>
   <div class="c-result">
     <h3 class="c-result-title">
-      商品sku：{{product.sku}}，外币售价：{{product.selling_price}}，采购价：¥{{product.purchase_price}}，重量：{{product.weight}}g，体积：{{product.bulk}}m³，种类：{{category[product.category]}}，当地配送：{{local[product.local]}}
+      商品sku：{{product.sku}}，预设利润率：{{product.profit_rate}}%，外币售价：{{product.selling_price}}，采购价：¥{{product.purchase_price}}，重量：{{product.weight}}g，体积：{{product.bulk}}m³，种类：{{category[product.category]}}，当地配送：{{local[product.local]}}
     </h3>
     <div class="list-table-wrap">
       <table>
@@ -14,11 +14,11 @@
             <th width="5.4%">采购成本¥</th>
             <th width="5.4%">头程成本¥</th>
             <th width="5.4%">二程成本¥</th>
-            <th width="5.4%">二程成本(当地货币)</th>
             <th width="5.4%">销售成本¥</th>
             <th width="5.4%">总成本¥</th>
             <th width="5.4%">毛利润¥</th>
             <th>当前利润率</th>
+            <th width="5.4%">{{product.profit_rate}}%利润率售价</th>
             <th width="5.4%">0%利润率售价</th>
             <th width="5.4%">5%利润率售价</th>
             <th width="5.4%">10%利润率售价</th>
@@ -41,8 +41,6 @@
             <td>{{item.logFirst ? '¥ ' + item.logFirst : '-'}}</td>
             <!-- 二程成本 -->
             <td>{{item.logSecondRmb ? '¥ ' + item.logSecondRmb : '-'}}</td>
-            <!-- 二程成本(当地货币) -->
-            <td>{{item.logSecond ? itemZ.currency_symbol + ' ' + item.logSecond : '-'}}</td>
             <!-- 销售成本 -->
             <td>{{item.costSell ? '¥ ' + item.costSell : '-'}}</td>
             <!-- 总成本 -->
@@ -51,6 +49,8 @@
             <td>{{item.profit ? '¥ ' + item.profit : '-'}}</td>
             <!-- 当前利润率 -->
             <td :class="[item.earn ? 'ok' : 'warn']">{{item.profitRate ? item.profitRate + '%' : '-'}}</td>
+            <!-- 预设利润率售价 -->
+            <td>{{item.pRate_defalut ? itemZ.currency_symbol + ' ' + item.pRate_defalut : '-'}}</td>
             <!-- 0% -->
             <td>{{item.pRate_0 ? itemZ.currency_symbol + ' ' + item.pRate_0 : '-'}}</td>
             <td>{{item.pRate_5 ? itemZ.currency_symbol + ' ' + item.pRate_5 : '-'}}</td>
@@ -110,10 +110,10 @@ export default {
       let zone = info.zone
       let product = this.product
       const DIGITS = 2
-      console.log('this.info')
-      console.log('weight---' + this.weight)
-      console.log('weightLocal---' + this.weightLocal)
-      console.log(this.product)
+      // console.log('this.info')
+      // console.log('weight---' + this.weight)
+      // console.log('weightLocal---' + this.weightLocal)
+      // console.log(this.product)
       /**
        * logFirst 头程成本
        * logSecond 二程成本(当地货币)
@@ -137,7 +137,6 @@ export default {
           if (iL === 0) {
             // 国内小包
             item.logFirst = this.calLog(this.weight, info.domestic[zoneLow])
-            console.log(item.logFirst)
             item.logSecond = 0
           } else {
             if (iL === 1) {
@@ -174,7 +173,8 @@ export default {
           item.earn = item.profit > 0
           // 当前利润
           item.profitRate = item.profit / item.sPriceRmb * 100
-          // 10%利润
+          // 预设利润
+          item.pRate_defalut = calProfitRate(product.profit_rate / 100)
 
           for (let k = 0; k <= 30; k += 5) {
             item[`pRate_${k}`] = calProfitRate(k / 100)
@@ -201,7 +201,7 @@ export default {
           })
 
           v.list.push(item)
-          console.log(item)
+
           function calProfitRate(rate) {
             let f = item.logFirst
             let s = item.logSecondRmb
@@ -212,7 +212,7 @@ export default {
         })
         items.push(v)
       })
-      console.log(items)
+      // console.log(items)
       return items
     }
   },

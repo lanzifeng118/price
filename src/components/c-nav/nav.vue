@@ -41,7 +41,7 @@ export default {
         name: '查询SKU',
         style: 'barcode-scan'
       }]
-      if (this.$store.state.user.name === 'admin') {
+      if (this.$store.state.user === 'admin') {
         items = items.concat([{
           src: '/admin/product',
           name: '商品信息',

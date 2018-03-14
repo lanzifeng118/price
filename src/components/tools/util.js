@@ -1,6 +1,11 @@
 function isNum(str) {
   return /^\d+\.{0,1}\d*$/.test(str)
 }
+
+function isNumAll(str) {
+  return /^-{0,1}\d+\.{0,1}\d*$/.test(str)
+}
+
 function isInteger(str) {
   return /^\d+$/.test(str)
 }
@@ -46,6 +51,7 @@ function getCookie() {
 }
 
 export default {
+  isNumAll,
   isNum,
   isInteger,
   toast,

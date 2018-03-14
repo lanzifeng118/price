@@ -6,19 +6,30 @@
           <span class="cal-form-item-name">商品sku</span><input type="text" class="input" v-model.trim="item.sku">
         </li>
         <li>
-          <span class="cal-form-item-name"><span class="icon-nessisary"></span>外币售价</span><input type="text" class="input" v-model.trim.number="item.selling_price">
-        </li> 
-        <li>
-          <span class="cal-form-item-name"><span class="icon-nessisary"></span>采购价</span><input type="text" class="input" v-model.trim.number="item.purchase_price"><i>元</i>
+          <span class="cal-form-item-name">预设利润率</span><input type="text" class="input" v-model.trim.number="item.profit_rate">
+          <i>%</i>
         </li>
         <li>
-          <span class="cal-form-item-name"><span class="icon-nessisary"></span>重量</span><input type="text" class="input" v-model.trim.number="item.weight"><i>克</i>
+          <span class="cal-form-item-name">
+            <span class="icon-nessisary"></span>外币售价</span><input type="text" class="input" v-model.trim.number="item.selling_price">
         </li>
         <li>
-          <span class="cal-form-item-name">体积</span><input type="text" class="input" v-model.trim.number="item.bulk"><i>m³</i>
+          <span class="cal-form-item-name">
+            <span class="icon-nessisary"></span>采购价</span><input type="text" class="input" v-model.trim.number="item.purchase_price">
+          <i>元</i>
         </li>
         <li>
-          <span class="cal-form-item-name"><span class="icon-nessisary"></span>商品种类</span>
+          <span class="cal-form-item-name">
+            <span class="icon-nessisary"></span>重量</span><input type="text" class="input" v-model.trim.number="item.weight">
+          <i>克</i>
+        </li>
+        <li>
+          <span class="cal-form-item-name">体积</span><input type="text" class="input" v-model.trim.number="item.bulk">
+          <i>m³</i>
+        </li>
+        <li>
+          <span class="cal-form-item-name">
+            <span class="icon-nessisary"></span>商品种类</span>
           <select v-model="item.category">
             <option disabled value="">选择种类</option>
             <option value="1">普通</option>
@@ -28,7 +39,8 @@
           </select>
         </li>
         <li>
-          <span class="cal-form-item-name"><span class="icon-nessisary"></span>当地配送</span>
+          <span class="cal-form-item-name">
+            <span class="icon-nessisary"></span>当地配送</span>
           <select v-model="item.local">
             <option disabled value="">选择类型</option>
             <option value="1">Ebay</option>
@@ -41,11 +53,7 @@
         <button class="button" @click="cal">计算</button>
       </div>
     </div>
-    <toast
-      v-show="toast.show"
-      :text="toast.text"
-      :icon="toast.icon"
-    >
+    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon">
     </toast>
   </div>
 </template>
@@ -59,6 +67,7 @@ export default {
     return {
       item: {
         sku: '',
+        profit_rate: '',
         weight: '',
         purchase_price: '',
         selling_price: '',
@@ -75,10 +84,10 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     window.addEventListener('keyup', this.enter)
   },
-  destroyed () {
+  destroyed() {
     window.removeEventListener('keyup', this.enter)
   },
   methods: {
@@ -101,6 +110,13 @@ export default {
     },
     verify() {
       let item = this.item
+
+      let rate = item.profit_rate
+      if (rate && !util.isNumAll(rate)) {
+        this.note = '预设利润率必须为数字'
+        return false
+      }
+
       let sellingPrice = item.selling_price
       if (!sellingPrice) {
         this.note = '外币售价不能为空'
@@ -189,7 +205,7 @@ export default {
 }
 .cal-form-btns button {
   width: 100%;
-  line-height: 30px
+  line-height: 30px;
 }
 .cal-form-note {
   margin-bottom: 5px;

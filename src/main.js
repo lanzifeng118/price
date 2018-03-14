@@ -15,67 +15,52 @@ Vue.config.productionTip = false
 
 const store = new Vuex.Store({
   state: {
-    zone: [
-      {
-        name: 'us',
-        symbol: '$',
-        rate: '0.87'
-      },
-      {
-        name: 'uk',
-        symbol: '￡'
-      },
-      {
-        name: 'de',
-        symbol: '€'
-      },
-      {
-        name: 'au',
-        symbol: '$'
-      }
-    ],
-    user: {
-      name: '',
-      lastlogintime: '',
-      avatar: ''
-    }
+    user: ''
   }
 })
-let hasLogin = false
+
 router.beforeEach((to, from, next) => {
   let cookie = util.getCookie()
+  let state = store.state
+
   if (cookie.admin) {
-    hasLogin = true
-    store.state.user.name = 'admin'
+    state.user = 'admin'
   } else if (cookie.user) {
-    hasLogin = true
-    store.state.user.name = 'user'
+    state.user = 'user'
   } else {
-    hasLogin = false
+    state.user = ''
   }
 
-  if (to.matched.length === 0) {
-    from.name ? next({ name: from.name }) : next('/admin/calculate')
+  let matched = to.matched
+
+  if (matched.length === 0) {
+    from.name ? next({ name: from.name }) : next('/admin')
     return
   }
-  // console.log(util.getCookie())
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    goPage(hasLogin, '/login')
-  } else if (to.meta.loginPage) {
-    goPage(!hasLogin, '/admin/calculate')
-  } else {
-    next()
-  }
 
-  function goPage(hasLogin, path) {
-    if (hasLogin) {
-      next()
+  if (matched.some(v => v.meta.requiresManager)) {
+    if (state.user !== 'admin') {
+      next('/admin')
     } else {
+      next()
+    }
+  } else if (matched.some(v => v.meta.requiresAuth)) {
+    if (!state.user) {
       next({
-        path: path,
+        path: '/login',
         query: { redirect: to.fullPath }
       })
+    } else {
+      next()
     }
+  } else if (to.meta.loginPage) {
+    if (state.user) {
+      next('/admin')
+    } else {
+      next()
+    }
+  } else {
+    next()
   }
 })
 

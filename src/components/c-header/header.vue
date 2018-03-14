@@ -27,7 +27,7 @@
     },
     computed: {
       userName() {
-        return this.$store.state.user.name
+        return this.$store.state.user
       }
     },
     methods: {

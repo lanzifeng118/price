@@ -82,22 +82,26 @@ export default new Router({
         // product
         {
           path: 'product',
-          component: Product
+          component: Product,
+          meta: { requiresManager: true }
         },
         // zone
         {
           path: 'zone',
-          component: Zone
+          component: Zone,
+          meta: { requiresManager: true }
         },
         // factor
         {
           path: 'factor',
-          component: Factor
+          component: Factor,
+          meta: { requiresManager: true }
         },
         // domestic
         {
           path: 'domestic',
           component: Domestic,
+          meta: { requiresManager: true },
           children: [
             { path: '/', component: DomesticNomal },
             { path: 'electric', component: DomesticElectric },
@@ -109,6 +113,7 @@ export default new Router({
         {
           path: 'local',
           component: Local,
+          meta: { requiresManager: true },
           children: [
             { path: '/', component: LocalEbay },
             { path: 'amazon', component: LocalAmazon }
@@ -118,6 +123,7 @@ export default new Router({
         {
           path: 'config',
           component: Config,
+          meta: { requiresManager: true },
           children: [
             // 中文
             { path: '/', component: ConfigList },

@@ -47,12 +47,13 @@ export default {
       let query = this.$route.query
       let item = {
         sku: query.sku || '',
+        profit_rate: query.profit_rate,
         selling_price: query.selling_price,
         purchase_price: query.purchase_price,
         weight: query.weight,
         bulk: query.bulk,
-        category: query.category || '1',
-        local: query.local || '1'
+        category: query.category,
+        local: query.local
       }
       // console.log(item)
       return item
@@ -138,7 +139,8 @@ export default {
         util.isNum(input.weight) &&
         (!input.bulk || input.bulk && util.isNum(input.bulk)) &&
         util.isNum(input.purchase_price) &&
-        util.isNum(input.selling_price)
+        util.isNum(input.selling_price) &&
+        util.isNumAll(input.profit_rate)
     },
     goBack() {
       setTimeout(() => {
