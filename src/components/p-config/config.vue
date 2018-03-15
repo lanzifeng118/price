@@ -1,21 +1,20 @@
 <template>
-  <div class="support">
-    开发中...
-  </div>
+<div class="config">
+  开发中...
+</div>
 </template>
 
 <script>
-
-  export default {
-    data() {
-      return {
-      }
+export default {
+  data() {
+    return {
     }
   }
+}
 </script>
 
 <style>
-  .support {
-    padding: 30px;
-  }
+.config {
+  padding: 20px 30px;
+}
 </style>

@@ -42,6 +42,7 @@ export default {
         if (data.code === 200) {
           if (data.data) {
             let dataD = data.data
+            // dataD.product.weight = ''
             let verifyMsg = util.verifyProduct(dataD.product)
             if (verifyMsg) {
               this.msg = `商品参数有误，${verifyMsg}`
