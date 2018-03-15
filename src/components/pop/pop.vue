@@ -71,8 +71,13 @@ export default {
   color: #d24900;
 }
 .pop-text {
-  margin-top: 8px;
+  height: 48px;
+  overflow: hidden;
+  word-break: break-all;
+  padding: 0 10px;
   font-size: 16px;
+  line-height: 1.5em;
+  margin-top: 8px;
   text-align: center;
 }
 .pop-close {

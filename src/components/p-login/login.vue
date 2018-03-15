@@ -6,7 +6,7 @@
         <div class="login-username">
           <span class="icon-people"></span>
           <input type="text" placeholder="请输入用户名"
-            v-model="user.username" @keyup="checkUsername()">
+            v-model.trim="user.username" @keyup="checkUsername()">
           <i class="login-warn" v-show="usernameWarn">请输入用户名</i>
         </div>
         <div class="login-password">
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import api from 'components/tools/api'
   export default {
     data() {
       return {
@@ -43,9 +44,6 @@
         }
       }
     },
-    created() {
-      console.log(this.$route.query)
-    },
     mounted() {
       window.addEventListener('keyup', this.enterSubmit)
     },
@@ -54,17 +52,20 @@
     },
     methods: {
       checkUsername() {
-        this.user.username = this.user.username.trim()
-        if (this.user.username !== '') {
+        if (this.user.username) {
           this.usernameWarn = false
           return true
         }
+        this.usernameWarn = true
         return false
       },
       checkPassword() {
-        if (this.user.password !== '') {
+        if (this.user.password) {
           this.passwordWarn = false
+          return true
         }
+        this.passwordWarn = true
+        return false
       },
       enterSubmit(e) {
         let code = e.charCode || e.keyCode
@@ -73,24 +74,14 @@
         }
       },
       submit() {
-        let checkUsername = this.checkUsername()
-        if (!checkUsername) {
-          this.usernameWarn = true
-          return
-        }
-        if (this.user.password === '') {
-          this.passwordWarn = true
+        if (!this.verify()) {
           return
         }
         this.usernameWarn = false
         this.passwordWarn = false
         this.login.failure = false
         this.login.text = '登录中...'
-        this.axios({
-          method: 'post',
-          url: '/binheng/api/login',
-          data: this.user
-        }).then((res) => {
+        this.axios(api.login(this.user)).then(res => {
           let data = res.data
           if (data.code === 200) {
             this.login.text = '登录成功！'
@@ -111,6 +102,15 @@
             this.$router.push('/error')
           }
         })
+      },
+      verify() {
+        if (!this.checkUsername()) {
+          return false
+        }
+        if (!this.checkPassword()) {
+          return false
+        }
+        return true
       }
     }
   }

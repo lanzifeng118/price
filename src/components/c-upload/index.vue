@@ -1,9 +1,11 @@
 <template>
   <div class="upload">
     <div class="upload-btns">
-      <label for="excel" class="button button-second">
+      <label v-if="input" for="excel" class="button button-second">
         <span class="icon icon-excel"></span>导入{{name}}</label>
-      <input type="file" id="excel" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseFile">
+      <input v-if="input" type="file" id="excel" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseFile">
+      <button v-else class="button button-second">
+        <span class="icon icon-excel"></span>导入{{name}}</button>
       <button class="button yellow" @click="download">
         <span class="icon icon-excel"></span>导出{{name}}</button>
     </div>
@@ -32,6 +34,7 @@ export default {
   },
   data() {
     return {
+      input: true,
       file: null,
       // toast
       toast: {
@@ -60,15 +63,18 @@ export default {
     confirmPop() {
       this.pop.show = false
       if (this.file) {
+        this.input = false
         util.toast.show(this.toast, '正在上传', 'upload')
         this.uploadFile(
           data => {
             console.log(data)
             this.$emit('update')
-            util.toast.fade(this.toast, '更新成功', 'appreciate')
+            this.input = true
+            util.toast.fade(this.toast, '导入成功', 'appreciate')
           },
           () => {
-            util.req.changeError(this.toast)
+            this.input = true
+            util.toast.fade(this.toast, '导入失败', 'sad')
           }
         )
       }

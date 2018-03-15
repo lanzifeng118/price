@@ -1,9 +1,11 @@
 let calUrl = '/binheng/api/calculation'
-let searchUrl = '/price/costinfo'
-let zoneUrl = '/binheng/api/zone'
-
 let productUrl = '/binheng/api/goods'
 let inGoodsUrl = '/binheng/api/goods/in'
+
+let loginUrl = '/binheng/api/login'
+let logoutUrl = '/binheng/api/logout'
+
+let zoneUrl = '/binheng/api/zone'
 
 let factorUrl = '/binheng/api/factor'
 
@@ -105,6 +107,20 @@ let uploadFun = (url, data) => {
 }
 
 let api = {
+  login(data) {
+    return {
+      method: 'post',
+      url: loginUrl,
+      data: data
+    }
+  },
+  logout(data) {
+    return {
+      method: 'post',
+      url: logoutUrl,
+      data: data
+    }
+  },
   cal: {
     query(data) {
       return queryFun(calUrl, data)
@@ -132,20 +148,6 @@ let api = {
   },
   inProduct(data) {
     return uploadFun(inGoodsUrl, data)
-  },
-  search: {
-    query(sku) {
-      return {
-        method: 'post',
-        url: searchUrl,
-        data: {
-          method: 'query',
-          data: {
-            sku: sku
-          }
-        }
-      }
-    }
   },
   zone: {
     query() {

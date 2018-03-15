@@ -231,25 +231,6 @@ table {
   width: 100%;
   text-align: center;
 }
-.list-table-wrap tr.edit td.operate {
-  color: #00d0bc;
-}
-.list-table-wrap tr.edit td.operate a{
-  color: #00d0bc;
-}
-.list-table-wrap tr.edit td.operate a:hover {
-  color: #07efd9;
-}
-/* add */
-.list-table-wrap tr.add td.operate {
-  color: #f0a807;
-}
-.list-table-wrap tr.add td.operate a{
-  color: #f0a807;
-}
-.list-table-wrap tr.add td.operate a:hover {
-  color: #ffba1f;
-}
 
 /*baseColor  black: 363f46  green: 07efd9  dark-green 00d0bc*/
 /*waring e29800  error d24900*/

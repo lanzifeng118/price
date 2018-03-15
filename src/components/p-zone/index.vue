@@ -87,22 +87,16 @@
               </div>
             </td>
             <!-- 操作 -->
-            <td v-if="user !== 'xs001'" class="operate">
-              <div v-if="item.type === 1">
-                <a href="javascript: void 0" @click="editItem(index)">修改</a>
-                <span class="icon-cutting_line"></span>
-                <a href="javascript: void 0" @click="deleteItem(item)">删除</a>
-              </div>
-              <div v-else-if="item.type === 2">
-                <a href="javascript: void 0" @click="submitEdit(item)">提交</a>
-                <span class="icon-cutting_line"></span>
-                <a href="javascript: void 0" @click="cancelEdit(index)">取消</a>
-              </div>
-              <div v-else>
-                <a href="javascript: void 0" @click="submitAdd(item)">提交</a>
-                <span class="icon-cutting_line"></span>
-                <a href="javascript: void 0" @click="cancelAdd">取消</a>
-              </div>
+            <td v-if="user !== 'xs001'">
+              <operate 
+                :status="item.type" 
+                @editItem="editItem(item)"
+                @deleteItem="deleteItem(item)"
+                @submitEdit="submitEdit(item)"
+                @cancelEdit="cancelEdit(item)"
+                @submitAdd="submitAdd(item)"
+                @cancelAdd="cancelAdd"
+              ></operate>
             </td>
           </tr>
         </tbody>
@@ -114,6 +108,7 @@
 </template>
 
 <script>
+import operate from 'components/c-operate/index'
 import pop from 'components/pop/pop'
 import toast from 'components/toast/toast'
 import util from 'components/tools/util'
@@ -147,7 +142,6 @@ export default {
   created() {
     this.getItems()
   },
-  mounted() {},
   methods: {
     getItems() {
       this.items = []
@@ -174,20 +168,19 @@ export default {
       })
     },
     // type 1 初始化 2 edit 3 add
-    editItem(index) {
+    editItem(item) {
       if (this.isBusy()) {
         return
       }
       this.busy = true
-      let item = this.items[index]
       item.type = 2
     },
     submitEdit(item) {
       this.submitChange(item, 'update')
     },
-    cancelEdit(index) {
+    cancelEdit(item) {
       this.busy = false
-      this.items[index].type = 1
+      item.type = 1
       this.getItems()
     },
     // add
@@ -294,6 +287,7 @@ export default {
     }
   },
   components: {
+    operate,
     toast,
     pop
   }

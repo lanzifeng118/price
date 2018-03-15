@@ -16,7 +16,7 @@
             <th width="10%">当地价格（件）</th>
             <th width="10%">附加处理费</th>
             <th width="10%">当地附加处理费</th>            
-            <th width="10%">操作</th>
+            <th width="12%">操作</th>
           </tr>
           <tr v-else>
             <th>收费分区</th>
@@ -105,22 +105,16 @@
               </div>
             </td>
             <!-- 操作 -->
-            <td class="operate">
-              <div v-if="!item.doType || item.doType === 1">
-                <a href="javascript: void (0)" @click="editItem(indexS, index)">修改</a>
-                <span class="icon-cutting_line"></span>
-                <a href="javascript: void 0" @click="deleteItem(item)">删除</a>
-              </div>
-              <div v-else-if="item.doType === 2">
-                <a href="javascript: void 0" @click="submitEdit(item)">提交</a>
-                <span class="icon-cutting_line"></span>
-                <a href="javascript: void 0" @click="cancelEdit(indexS, index)">取消</a>
-              </div>
-              <div v-else>
-                <a href="javascript: void 0" @click="submitAdd(item)">添加</a>
-                <span class="icon-cutting_line"></span>
-                <a href="javascript: void 0" @click="cancelAdd(indexS)">取消</a>
-              </div>
+            <td>
+              <operate 
+                :status="item.doType" 
+                @editItem="editItem(item)"
+                @deleteItem="deleteItem(item)"
+                @submitEdit="submitEdit(item)"
+                @cancelEdit="cancelEdit(item)"
+                @submitAdd="submitAdd(item)"
+                @cancelAdd="cancelAdd(indexS)"
+              ></operate>
             </td>
           </tr>
         </tbody>
@@ -147,6 +141,7 @@
 </template>
 
 <script>
+import operate from 'components/c-operate/index'
 import upload from 'components/c-upload/index'
 import pop from 'components/pop/pop'
 import toast from 'components/toast/toast'
@@ -254,21 +249,19 @@ export default {
       this.getItems()
     },
     // type 1 初始化 2 edit 3 add
-    editItem(index1, index2) {
+    editItem(item) {
       if (this.isBusy()) {
         return
       }
       this.busy = true
-      let item = this.items[index1].list[index2]
       this.$set(item, 'doType', 2)
     },
     submitEdit(item) {
       this.submitChange(item, 'update')
     },
-    cancelEdit(index1, index2) {
+    cancelEdit(item) {
       this.busy = false
-      let item = this.items[index1].list[index2]
-      item.doType = 1
+      this.$set(item, 'doType', 1)
       this.getItems()
     },
     // add
@@ -421,6 +414,7 @@ export default {
     }
   },
   components: {
+    operate,
     toast,
     pop,
     upload

@@ -7,7 +7,7 @@
       </div>
       <ul class="header-operate f-right">
         <li class="header-operate-item">
-          您好，{{userName}}！
+          您好，{{username}}！
         </li>
         <li class="header-operate-item">
           <a href="javascrip: void 0" @click="logout"><span class="icon icon-exit"></span>退出登陆</a>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+  import api from 'components/tools/api'
   import logoSrc from 'src/common/images/logo.png'
   export default {
     data() {
@@ -26,19 +27,13 @@
       }
     },
     computed: {
-      userName() {
+      username() {
         return this.$store.state.user
       }
     },
     methods: {
       logout() {
-        this.axios({
-          method: 'post',
-          url: '/binheng/api/logout',
-          data: {
-            username: this.userName
-          }
-        }).then((res) => {
+        this.axios(api.logout({username: this.username})).then((res) => {
           if (res.data.code === 200) {
             this.$router.push({path: '/login', query: { redirect: this.$route.path }})
           }

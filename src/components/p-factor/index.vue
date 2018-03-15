@@ -42,15 +42,14 @@
               </div>
             </td>
             <!-- 操作 -->
-            <td class="operate">
-              <div v-if="item.type === 1">
-                <a href="javascript: void 0" @click="editItem(index)">修改</a>
-              </div>
-              <div v-else>
-                <a href="javascript: void 0" @click="submitEdit(item)">提交</a>
-                <span class="icon-cutting_line"></span>
-                <a href="javascript: void 0" @click="cancelEdit(index)">取消</a>
-              </div>
+            <td>
+              <operate 
+                :status="item.type" 
+                :editOnly="true"
+                @editItem="editItem(item)"
+                @submitEdit="submitEdit(item)"
+                @cancelEdit="cancelEdit(item)"
+              ></operate>
             </td>
           </tr>
         </tbody>
@@ -61,6 +60,7 @@
 </template>
 
 <script>
+import operate from 'components/c-operate/index'
 import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
@@ -102,15 +102,14 @@ export default {
       })
     },
     // type 1 初始化 2 edit
-    editItem(index) {
-      let item = this.items[index]
+    editItem(item) {
       item.type = 2
     },
     submitEdit(item) {
       this.submitChange(item, 'update')
     },
-    cancelEdit(index) {
-      this.items[index].type = 1
+    cancelEdit(item) {
+      item.type = 1
       this.getItems()
     },
     submitChange(item, type) {
@@ -161,6 +160,7 @@ export default {
     }
   },
   components: {
+    operate,
     toast
   }
 }
