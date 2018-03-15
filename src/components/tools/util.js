@@ -94,6 +94,17 @@ function verifyProduct(item, type) {
   if (bulk && !isNum(bulk)) {
     return '体积必须为数字'
   }
+
+  let category = item.category
+  if (category !== '1' && category !== '2' && category !== '3' && category !== '4') {
+    return '商品种类必须为普通、带电、带磁或超尺寸'
+  }
+
+  let local = item.local
+  if (local !== '1' && local !== '2') {
+    return '当地配送必须为Ebay或Amazon'
+  }
+
   return ''
 }
 

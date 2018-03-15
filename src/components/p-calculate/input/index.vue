@@ -106,11 +106,7 @@ export default {
       if (!this.verify()) {
         return
       }
-      let url = '/admin/calculate/result?'
-      for (const key in this.item) {
-        url += `${key}=${this.item[key]}&`
-      }
-      this.$router.push(url)
+      this.$router.push({path: '/admin/calculate/result', query: this.item})
     },
     verify() {
       let verify = util.verifyProduct(this.item)

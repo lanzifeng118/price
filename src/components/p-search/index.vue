@@ -12,6 +12,7 @@
 
 <script>
 import api from 'components/tools/api'
+import util from 'components/tools/util'
 import result from 'components/c-result/index'
 export default {
   data() {
@@ -41,8 +42,14 @@ export default {
         if (data.code === 200) {
           if (data.data) {
             let dataD = data.data
+            let verifyMsg = util.verifyProduct(dataD.product)
+            if (verifyMsg) {
+              this.msg = `商品参数有误，${verifyMsg}`
+              return
+            }
             this.msg = ''
             this.product = dataD.product
+
             this.info = dataD
           } else {
             this.msg = `无商品sku为${this.serachText}的数据`

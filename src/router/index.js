@@ -17,6 +17,8 @@ import Factor from 'components/p-factor/index'
 
 // product
 import Product from 'components/p-product/index'
+import ProductList from 'components/p-product/list/index'
+import ProductDetail from 'components/p-product/detail/index'
 
 // Domestic 国内小包
 import Domestic from 'components/p-domestic/index'
@@ -69,10 +71,7 @@ export default new Router({
           redirect: { name: 'calculateInput' },
           children: [
             { path: 'input', component: CalculateInput, name: 'calculateInput' },
-            {
-              path: 'result',
-              component: CalculateResult
-            }
+            { path: 'result', component: CalculateResult }
           ]
         },
         {
@@ -85,7 +84,12 @@ export default new Router({
         {
           path: 'product',
           component: Product,
-          meta: { level2: true }
+          meta: { level2: true },
+          redirect: { name: 'productList' },
+          children: [
+            { path: 'list', component: ProductList, name: 'productList' },
+            { path: 'detail', component: ProductDetail }
+          ]
         },
         // zone
         {

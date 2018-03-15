@@ -1,6 +1,6 @@
 <template>
   <div class="cal-result">
-    <detail></detail>
+    <detail from="product"></detail>
   </div>
 </template>
 
