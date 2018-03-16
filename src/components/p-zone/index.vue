@@ -18,7 +18,7 @@
             <th width="13%"><span class="icon icon-plane"></span>空运单价 / ¥</th>
             <th width="16%"><span class="icon icon-plane"></span>空运单价（带电、磁） / ¥</th>
             <th width="13%"><span class="icon icon-ship"></span>海运单价 / ¥</th>
-            <th v-if="user !== 'xs001'" width="13%">操作</th>
+            <th v-if="user !== 'xs001'" width="13%" class="list-table-wrap-th-operate">操作</th>
           </tr>
         </thead>
         <tbody>

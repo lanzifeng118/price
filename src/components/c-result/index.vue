@@ -9,7 +9,7 @@
           <!-- cn -->
           <tr>
             <th :width="width">国家</th>
-            <th width="7%">物流方式</th>
+            <th :width="width">物流方式</th>
             <th :width="width">售价(当地货币）</th>
             <th v-if="!limit" :width="width">采购成本¥</th>
             <th :width="width">头程成本¥</th>
@@ -92,7 +92,7 @@ export default {
       return this.search && this.$store.state.user === 'xs002'
     },
     width() {
-      return this.limit ? '5.7%' : '5.4%'
+      return this.limit ? '5.88%' : '5.55%'
     },
     category() {
       return this.$store.state.categoryMap
@@ -274,5 +274,9 @@ export default {
 .c-result .list-table-wrap td.ok {
   background-color: #32b514;
   color: #fff;
+}
+.c-result .list-table-wrap td {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 </style>

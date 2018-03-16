@@ -34,9 +34,8 @@ import LocalAmazon from 'components/p-local/amazon/index'
 
 // config
 import Config from 'components/p-config/config'
-import ConfigList from 'components/p-config/list/list'
-import ConfigEdit from 'components/p-config/edit/edit'
-import ConfigPassword from 'components/p-config/password/password'
+import ConfigList from 'components/p-config/list/index'
+import ConfigPassword from 'components/p-config/password/index'
 
 Vue.use(Router)
 
@@ -131,9 +130,7 @@ export default new Router({
           component: Config,
           meta: { level5: true },
           children: [
-            // 中文
             { path: '/', component: ConfigList },
-            { path: 'edit', component: ConfigEdit },
             { path: 'password', component: ConfigPassword }
           ]
         }

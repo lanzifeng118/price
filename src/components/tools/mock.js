@@ -122,6 +122,38 @@ let cal = {
     ]
   }
 }
+
+let user = [
+  {
+    role: '管理员',
+    username: 'admin',
+    permission: '全部',
+    last_login_time: '2018.11.13 12:49:50',
+    login_count: 2
+  },
+  {
+    role: '主管',
+    username: 'xs001',
+    permission: '计算、查询、商品信息、地区信息（仅查看）',
+    last_login_time: '2018.01.31 12:49:50',
+    login_count: 1
+  },
+  {
+    role: '专员',
+    username: 'xs002',
+    permission: '计算、查询（隐藏采购成本)',
+    last_login_time: '2018.11.04 12:49:50',
+    login_count: 3
+  },
+  {
+    role: '物流',
+    username: 'w1001',
+    permission: '地区信息、公式系数、国内小包、当地配送',
+    last_login_time: '2018.12.03 12:49:50',
+    login_count: 5
+  }
+]
 export default {
-  cal
+  cal,
+  user
 }

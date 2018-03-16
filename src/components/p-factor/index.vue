@@ -9,7 +9,7 @@
             <th width="25%"><span class="icon-nessisary"></span>头程体积重系数</th>
             <th width="25%"><span class="icon-nessisary"></span>二程体积重系数</th>
             <th width="25%"><span class="icon-nessisary"></span>销售成本系数</th>
-            <th width="25%">操作</th>
+            <th width="25%" class="list-table-wrap-th-operate">操作</th>
           </tr>
         </thead>
         <tbody>

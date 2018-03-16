@@ -200,8 +200,11 @@ table {
   background-color: #363f46;
   border: 1px solid #464f56;  
   color: #fff;
-  padding: 8px;
+  padding: 8px 2px;
   line-height: 1.5em;
+}
+.list-table-wrap-th-operate {
+  min-width: 130px;
 }
 /* .list-table-wrap th, */
 .list-table-wrap tbody:nth-child(odd) {
@@ -211,7 +214,7 @@ table {
   border: 1px solid #e5e5e5;
   text-align: center;
   vertical-align: middle;
-  padding: 6px 8px;
+  padding: 6px 5px;
   line-height: 1.5em;
 }
 .list-table-wrap td.zone {

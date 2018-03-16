@@ -21,7 +21,7 @@
             <th width="11%">体积 m³</th>
             <th width="11%"><span class="icon-nessisary"></span>商品种类</th>
             <th width="11%"><span class="icon-nessisary"></span>当地配送</th>
-            <th width="11%">操作</th>
+            <th width="11%" class="list-table-wrap-th-operate">操作</th>
           </tr>
         </thead>
         <tbody>

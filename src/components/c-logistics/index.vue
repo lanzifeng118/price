@@ -16,7 +16,7 @@
             <th width="10%">当地价格（件）</th>
             <th width="10%">附加处理费</th>
             <th width="10%">当地附加处理费</th>            
-            <th width="12%">操作</th>
+            <th width="12%" class="list-table-wrap-th-operate">操作</th>
           </tr>
           <tr v-else>
             <th>收费分区</th>
@@ -25,7 +25,7 @@
             <th width="15%">价格（重量）</th>
             <th width="15%">价格（件）</th>
             <th width="15%">附加处理费</th>
-            <th width="15%">操作</th>
+            <th width="15%" class="list-table-wrap-th-operate">操作</th>
           </tr>
         </thead>
         <tbody v-for="(itemS, indexS) in items">

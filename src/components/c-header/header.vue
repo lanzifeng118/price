@@ -10,7 +10,7 @@
           您好，{{username}}！
         </li>
         <li class="header-operate-item">
-          <a href="javascrip: void 0" @click="logout"><span class="icon icon-exit"></span>退出登陆</a>
+          <a href="javascript: void 0" @click="logout"><span class="icon icon-exit"></span>退出登陆</a>
         </li>
       </ul>
     </div>
