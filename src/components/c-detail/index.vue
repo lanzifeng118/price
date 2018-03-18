@@ -61,7 +61,7 @@ export default {
         category: query.category,
         local: query.local
       }
-      console.log(item)
+      // console.log(item)
       return item
     },
     backUrl() {
@@ -96,7 +96,7 @@ export default {
 
       this.axios(api.cal.query(sendData)).then(res => {
         let data = res.data
-        console.log(data)
+        // console.log(data)
         this.msg = ''
         if (data.code === 200) {
           this.info = data.data
@@ -106,14 +106,14 @@ export default {
       })
     },
     insert() {
-      console.log(this.item)
+      // console.log(this.item)
       if (!this.item.sku.trim()) {
         util.toast.fade(this.toast, '保存失败，商品sku不能为空')
         return
       }
       this.axios(api.product.insert(this.item)).then(res => {
         let data = res.data
-        console.log(data)
+        // console.log(data)
         if (data.code === 200) {
           util.toast.fade(this.toast, '保存成功', 'appreciate')
         } else if (data.code === 400) {

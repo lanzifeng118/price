@@ -70,7 +70,7 @@ const store = new Vuex.Store({
 router.beforeEach((to, from, next) => {
   let cookie = util.getCookie()
   let state = store.state
-  console.log(cookie.wl001)
+  // console.log(cookie.wl001)
   if (cookie.admin) {
     state.user = 'admin'
   } else if (cookie.xs001) {

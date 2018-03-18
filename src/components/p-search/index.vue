@@ -38,7 +38,7 @@ export default {
       // ajax
       this.axios(api.product.queryBySku(this.serachText)).then(res => {
         let data = res.data
-        console.log(data)
+        // console.log(data)
         if (data.code === 200) {
           if (data.data) {
             let dataD = data.data

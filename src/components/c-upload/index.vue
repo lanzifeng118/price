@@ -67,7 +67,7 @@ export default {
         util.toast.show(this.toast, '正在上传', 'upload')
         this.uploadFile(
           data => {
-            console.log(data)
+            // console.log(data)
             this.$emit('update')
             this.input = true
             util.toast.fade(this.toast, '导入成功', 'appreciate')

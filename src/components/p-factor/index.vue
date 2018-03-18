@@ -90,7 +90,7 @@ export default {
       // ajax
       this.axios(api.factor.query()).then(res => {
         let data = res.data
-        console.log(data)
+        // console.log(data)
         if (data.code === 200) {
           this.msg = ''
           let factor = data.data

@@ -214,7 +214,7 @@ export default {
       // ajax
       this.axios(api[this.apiKey].query({ type: this.type })).then(res => {
         let data = res.data
-        console.log(data)
+        // console.log(data)
         if (data.code === 200) {
           if (this.apiKey === 'local') {
             const DIGITS = 3
@@ -270,7 +270,7 @@ export default {
         return
       }
       this.busy = true
-      console.log(this.items[index])
+      // console.log(this.items[index])
       let data = this.items[index]
       data.list.push({
         type: this.type,
@@ -375,8 +375,8 @@ export default {
       result.symbol = result.weight >= result.bulkWeight ? '>=' : '<'
       // 物流成本=重量(kg)*87.56 + 附加费
       let zone = this.items[test.zone]
-      console.log('zone')
-      console.log(zone)
+      // console.log('zone')
+      // console.log(zone)
       if (!zone) {
         result.total = '请选择区间'
         return
@@ -393,7 +393,7 @@ export default {
         let sw = parseFloat(item.start_weight) || 0
         let ew = parseFloat(item.end_weight) || Infinity
         if (weight >= sw && weight < ew) {
-          console.log(item)
+          // console.log(item)
           let up = parseFloat(item.price_unit)
           let tp = parseFloat(item.price_weight)
           let ec = parseFloat(item.extra_charge) || 0

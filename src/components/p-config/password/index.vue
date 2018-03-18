@@ -75,7 +75,7 @@ export default {
       // ajax
       this.axios(api.users.query()).then(res => {
         let data = res.data
-        console.log(data)
+        // console.log(data)
         if (data.code === 200) {
           let list = data.data
           if (list.length > 0) {
