@@ -7,6 +7,8 @@ let logoutUrl = '/binheng/api/logout'
 
 let zoneUrl = '/binheng/api/zone'
 
+let usersUrl = '/binheng/api/users'
+
 let factorUrl = '/binheng/api/factor'
 
 let domesticUrl = '/binheng/api/domestic/change'
@@ -107,6 +109,14 @@ let uploadFun = (url, data) => {
 }
 
 let api = {
+  users: {
+    query() {
+      return queryFun(usersUrl)
+    },
+    update(data) {
+      return updateFun(usersUrl, data)
+    }
+  },
   login(data) {
     return {
       method: 'post',

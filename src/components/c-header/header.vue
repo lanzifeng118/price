@@ -3,7 +3,7 @@
     <div class="header-wrap f-clearfix">
       <div class="header-info f-left">
         <img :src="logoSrc" class="header-logo" alt="">
-        <span>广州缤恒定价查询系统</span>
+        <span>{{title}}</span>
       </div>
       <ul class="header-operate f-right">
         <li class="header-operate-item">
@@ -29,6 +29,9 @@
     computed: {
       username() {
         return this.$store.state.user
+      },
+      title() {
+        return this.$store.state.title
       }
     },
     methods: {

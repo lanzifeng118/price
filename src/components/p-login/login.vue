@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-box">
-      <h3 class="login-title">后台管理系统</h3>
+      <h3 class="login-title">{{title}}</h3>
       <div class="login-form">
         <div class="login-username">
           <span class="icon-people"></span>
@@ -42,6 +42,11 @@
           text: '登录',
           failure: false
         }
+      }
+    },
+    computed: {
+      title() {
+        return this.$store.state.title
       }
     },
     mounted() {

@@ -74,7 +74,7 @@ export default {
         case 'xs001':
           order = [0, 1, 2, 3]
           break
-        case 'w1001':
+        case 'wl001':
           order = [3, 4, 5, 6]
           break
         default:

@@ -147,7 +147,7 @@ let user = [
   },
   {
     role: '物流',
-    username: 'w1001',
+    username: 'wl001',
     permission: '地区信息、公式系数、国内小包、当地配送',
     last_login_time: '2018.12.03 12:49:50',
     login_count: 5

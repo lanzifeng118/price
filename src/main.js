@@ -47,6 +47,7 @@ let localMap = turnObj(local)
 const store = new Vuex.Store({
   state: {
     user: '',
+    title: '广州缤恒定价查询系统',
     category,
     categoryMap,
     local,
@@ -58,7 +59,7 @@ const store = new Vuex.Store({
  * admin 管理员 全部
  * xs001 主管   计算、查询、商品信息、地区信息（仅查看）
  * xs002 专员   计算、查询（隐藏采购成本）
- * w1001 物流   地区信息、公式系数、国内小包、当地配送
+ * wl001 物流   地区信息、公式系数、国内小包、当地配送
  * level1 计算、查询
  * level2 商品信息
  * level3 地区信息
@@ -69,20 +70,19 @@ const store = new Vuex.Store({
 router.beforeEach((to, from, next) => {
   let cookie = util.getCookie()
   let state = store.state
-
+  console.log(cookie.wl001)
   if (cookie.admin) {
     state.user = 'admin'
   } else if (cookie.xs001) {
     state.user = 'xs001'
   } else if (cookie.xs002) {
     state.user = 'xs002'
-  } else if (cookie.w1001) {
-    state.user = 'w1001'
+  } else if (cookie.wl001) {
+    state.user = 'wl001'
   } else {
     state.user = ''
   }
-
-  // state.user = 'w1001'
+  // state.user = 'wl001'
 
   let matched = to.matched
 
@@ -117,13 +117,13 @@ router.beforeEach((to, from, next) => {
         goNext()
       }
     } else if (matched.some(v => v.meta.level4)) {
-      if (state.user === 'admin' || state.user === 'w1001') {
+      if (state.user === 'admin' || state.user === 'wl001') {
         next()
       } else {
         goNext()
       }
     } else if (matched.some(v => v.meta.level3)) {
-      if (state.user === 'admin' || state.user === 'w1001' || state.user === 'xs001') {
+      if (state.user === 'admin' || state.user === 'wl001' || state.user === 'xs001') {
         next()
       } else {
         goNext()
@@ -144,7 +144,7 @@ router.beforeEach((to, from, next) => {
   }
 
   function goNext(params) {
-    state.user === 'w1001' ? next('/admin/zone') : next('/admin')
+    state.user === 'wl001' ? next('/admin/zone') : next('/admin')
   }
 })
 

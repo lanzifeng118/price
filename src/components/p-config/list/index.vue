@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import mock from 'components/tools/mock'
+// import mock from 'components/tools/mock'
 import api from 'components/tools/api'
 
 export default {
@@ -53,17 +53,17 @@ export default {
       this.items = []
       this.msg = '加载中...'
       // ajax
-      this.axios(api.zone.query()).then(res => {
+      this.axios(api.users.query()).then(res => {
         let data = res.data
         console.log(data)
         if (data.code === 200) {
-          let list = data.data.list
-          list = mock.user
+          let list = data.data
+          // list = mock.user
           if (list.length > 0) {
             this.msg = ''
             this.items = list
           } else {
-            this.msg = '还没有相关信息'
+            this.msg = '无相关信息'
           }
         } else {
           this.msg = '出错了，请稍后再试'

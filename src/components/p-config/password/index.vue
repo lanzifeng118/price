@@ -6,9 +6,9 @@
       <tr>
         <td width="120"><span class="icon-nessisary"></span>用户名</td>
         <td>
-          <select v-model="item.username">
+          <select v-model="item.id">
             <option disabled value="">选择用户名</option>
-            <option v-for="val in user" :value="val.username">{{val.username}}</option>
+            <option v-for="val in users" :value="val.id">{{val.username}}</option>
           </select>
         </td>
       </tr>
@@ -41,7 +41,7 @@
 import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
-import mock from 'components/tools/mock'
+
 export default {
   props: {
     page: String,
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       item: {
-        username: '',
+        id: '',
         new: '',
         newComfirm: ''
       },
@@ -63,19 +63,43 @@ export default {
         text: '',
         icon: ''
       },
-      user: mock.user
+      users: []
     }
   },
+  created() {
+    this.getUsers()
+  },
   methods: {
+    getUsers() {
+      this.users = []
+      // ajax
+      this.axios(api.users.query()).then(res => {
+        let data = res.data
+        console.log(data)
+        if (data.code === 200) {
+          let list = data.data
+          if (list.length > 0) {
+            this.users = list
+          }
+        } else {
+          util.req.queryError(this.toast)
+          this.goback()
+        }
+      })
+    },
     submit() {
       util.toast.show(this.toast, '正在提交', 'upload')
       if (!this.verify()) {
         return
       }
-      this.sendData()
+      this.update()
     },
     verify() {
       let item = this.item
+      if (!item.id) {
+        util.toast.fade(this.toast, '请选择用户名')
+        return false
+      }
       if (!item.new) {
         util.toast.fade(this.toast, '新密码不能为空')
         return false
@@ -86,14 +110,14 @@ export default {
       }
       return true
     },
-    sendData() {
+    update() {
       let sendData = {
-        username: this.item.username,
-        new_password: this.item.new
+        id: this.item.id,
+        password: this.item.new
       }
-      this.axios(api.user.updateByPassword(sendData)).then(res => {
+      this.axios(api.users.update(sendData)).then(res => {
         let data = res.data
-        if (data.code === '200') {
+        if (data.code === 200) {
           this.showSuccess()
         } else {
           util.req.changeError(this.toast)
