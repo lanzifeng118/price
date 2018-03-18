@@ -7,7 +7,7 @@
       </div>
       <ul class="header-operate f-right">
         <li class="header-operate-item">
-          您好，{{username}}！
+          您好，{{role}}！
         </li>
         <li class="header-operate-item">
           <a href="javascript: void 0" @click="logout"><span class="icon icon-exit"></span>退出登陆</a>
@@ -27,8 +27,8 @@
       }
     },
     computed: {
-      username() {
-        return this.$store.state.user
+      role() {
+        return this.$store.state.userRole
       },
       title() {
         return this.$store.state.title

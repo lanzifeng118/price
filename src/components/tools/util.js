@@ -45,7 +45,7 @@ function getCookie() {
   let obj = {}
   arr.forEach((v, i) => {
     let arrV = v.split('=')
-    obj[arrV[0]] = arrV[1]
+    obj[arrV[0]] = decodeURIComponent(arrV[1])
   })
   return obj
 }

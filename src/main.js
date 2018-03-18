@@ -47,6 +47,7 @@ let localMap = turnObj(local)
 const store = new Vuex.Store({
   state: {
     user: '',
+    userRole: '',
     title: '广州缤恒定价查询系统',
     category,
     categoryMap,
@@ -69,19 +70,12 @@ const store = new Vuex.Store({
 
 router.beforeEach((to, from, next) => {
   let cookie = util.getCookie()
+  // console.log(cookie)
+  let user = cookie.account
+
   let state = store.state
-  // console.log(cookie.wl001)
-  if (cookie.admin) {
-    state.user = 'admin'
-  } else if (cookie.xs001) {
-    state.user = 'xs001'
-  } else if (cookie.xs002) {
-    state.user = 'xs002'
-  } else if (cookie.wl001) {
-    state.user = 'wl001'
-  } else {
-    state.user = ''
-  }
+  state.user = user
+  state.userRole = cookie.role
   // state.user = 'wl001'
 
   let matched = to.matched
@@ -91,7 +85,7 @@ router.beforeEach((to, from, next) => {
     return
   }
   if (matched.some(v => v.meta.hasLogin)) {
-    if (!state.user) {
+    if (!user) {
       next({
         path: '/login',
         query: { redirect: to.fullPath }
@@ -100,7 +94,7 @@ router.beforeEach((to, from, next) => {
       afterLogin()
     }
   } else if (to.meta.loginPage) {
-    if (state.user) {
+    if (user) {
       goNext()
     } else {
       next()
@@ -111,31 +105,31 @@ router.beforeEach((to, from, next) => {
 
   function afterLogin() {
     if (matched.some(v => v.meta.level5)) {
-      if (state.user === 'admin') {
+      if (user === 'admin') {
         next()
       } else {
         goNext()
       }
     } else if (matched.some(v => v.meta.level4)) {
-      if (state.user === 'admin' || state.user === 'wl001') {
+      if (user === 'admin' || user === 'wl001') {
         next()
       } else {
         goNext()
       }
     } else if (matched.some(v => v.meta.level3)) {
-      if (state.user === 'admin' || state.user === 'wl001' || state.user === 'xs001') {
+      if (user === 'admin' || user === 'wl001' || user === 'xs001') {
         next()
       } else {
         goNext()
       }
     } else if (matched.some(v => v.meta.level2)) {
-      if (state.user === 'admin' || state.user === 'xs001') {
+      if (user === 'admin' || user === 'xs001') {
         next()
       } else {
         goNext()
       }
     } else if (matched.some(v => v.meta.level1)) {
-      if (state.user === 'admin' || state.user === 'xs001' || state.user === 'xs002') {
+      if (user === 'admin' || user === 'xs001' || user === 'xs002') {
         next()
       } else {
         goNext()
@@ -144,7 +138,7 @@ router.beforeEach((to, from, next) => {
   }
 
   function goNext(params) {
-    state.user === 'wl001' ? next('/admin/zone') : next('/admin')
+    user === 'wl001' ? next('/admin/zone') : next('/admin')
   }
 })
 
