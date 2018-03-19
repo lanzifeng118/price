@@ -88,11 +88,11 @@ export default {
 .serach-form {
   margin-bottom: 25px;
 }
-/* .search-input {
+.search-input {
   border-color: #ccc;
   width: 300px;
   padding-right: 30px;
-} */
+}
 .search-input:hover {
   border-color: #aaa;
 }
