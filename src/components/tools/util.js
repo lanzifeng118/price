@@ -50,9 +50,8 @@ function getCookie() {
   return obj
 }
 
-function verifyProduct(item, type) {
-  type = type || 1 // 1: 计算 2：商品信息
-
+function verifyProduct(item, type = 1) {
+  // type 1: 计算 2：商品信息
   let sku = item.sku
   if (type === 2 && !sku) {
     return 'SKU不能为空'

@@ -1,8 +1,13 @@
 <template>
   <div class="serach">
     <div class="serach-form">
-      <input type="text" class="search-input" v-model.trim.lazy="serachText" placeholder="请输入商品sku" @keyup.enter="submit">
-      <span class="search-icon icon-search" @click="submit"></span>
+      <input type="text" class="" v-model.trim.lazy="serachText" placeholder="请输入商品sku" @keyup.enter="submit">
+      <select name="" v-model="a">
+        <option disabled value="">选择当地配送类型</option>
+        <option disabled value="Ebay">Ebay</option>
+      </select>
+      <button class="button button-second">查询</button>
+      <!-- <span class="search-icon icon-search" @click="submit"></span> -->
     </div>
     <div class="search-note">{{note}}</div>
     <h3 class="serach-ing">{{msg}}</h3>
@@ -21,7 +26,8 @@ export default {
       msg: '',
       note: '',
       info: null,
-      product: null
+      product: null,
+      a: 'Ebay'
     }
   },
   methods: {
@@ -82,11 +88,11 @@ export default {
 .serach-form {
   margin-bottom: 25px;
 }
-.search-input {
+/* .search-input {
   border-color: #ccc;
   width: 300px;
   padding-right: 30px;
-}
+} */
 .search-input:hover {
   border-color: #aaa;
 }

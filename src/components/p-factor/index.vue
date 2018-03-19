@@ -112,11 +112,10 @@ export default {
       item.type = 1
       this.getItems()
     },
-    submitChange(item, type) {
+    submitChange(item, type = 'insert') {
       if (!this.verify(item)) {
         return
       }
-      type = type || 'insert'
       let text = type === 'insert' ? '添加' : '修改'
       util.toast.show(this.toast, `正在${text}...`, 'upload')
       this.axios(api.factor[type](item)).then(res => {
