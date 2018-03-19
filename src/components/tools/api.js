@@ -42,15 +42,13 @@ let queryFun = (url, pageData) => {
     data: data
   }
 }
-let queryBySkuFun = (url, sku) => {
+let queryBySkuFun = (url, data) => {
   return {
     method: 'post',
     url: url,
     data: {
       method: 'queryBySku',
-      data: {
-        sku: sku
-      }
+      data: data
     }
   }
 }
@@ -137,11 +135,21 @@ let api = {
     }
   },
   product: {
-    query() {
-      return queryFun(productUrl)
+    query(data) {
+      return queryFun(productUrl, data)
     },
     queryBySku(sku) {
       return queryBySkuFun(productUrl, sku)
+    },
+    queryForCalculate(data) {
+      return {
+        method: 'post',
+        url: productUrl,
+        data: {
+          method: 'queryForCalculate',
+          data: data
+        }
+      }
     },
     insert(data) {
       return insertFun(productUrl, data)

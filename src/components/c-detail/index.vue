@@ -6,8 +6,9 @@
     </div>
     <div v-if="msg" class="detail-msg">{{msg}}</div>
     <div v-else class="detail-box">
-      <button v-if="from === 'calculation'" class="detail-save button" @click="insert">保存</button>
-      <result v-if="info" :product="item" :info="info"></result>
+      <button v-if="from === 'calculation'" class="detail-save yellow button" @click="insert">保存</button>
+      <button v-else-if="from === 'product'" class="detail-save yellow button" @click="change">切换为{{item.local === '1' ? 'Amazon' : 'Ebay'}}</button>
+      <result v-if="info" :product="item" :info="info" :search="search"></result>
     </div>
     <pop v-if="from === 'calculation'" type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop">
     </pop>
@@ -66,6 +67,9 @@ export default {
     },
     backUrl() {
       return `/admin/${this.from}`
+    },
+    search() {
+      return this.from !== 'calculation'
     }
   },
   watch: {
@@ -78,6 +82,7 @@ export default {
   },
   methods: {
     cal() {
+      console.log(this.item)
       if (util.verifyProduct(this.item)) {
         this.msg = '参数错误'
         util.toast.fade(this.toast, '参数错误')
@@ -143,6 +148,11 @@ export default {
       setTimeout(() => {
         this.$router.push(this.backUrl)
       }, 700)
+    },
+    change() {
+      let item = this.item
+      item.local === '1' ? item.local = '2' : item.local = '1'
+      this.$router.push({path: '/admin/product/detail', query: item})
     }
   },
   components: {
@@ -173,8 +183,6 @@ export default {
   position: absolute;
   right: 0;
   top: -11px;
-  background-color: #efa807;
-  border-color: #efa807;
 }
 /* .has-result */
 </style>

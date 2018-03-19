@@ -28,7 +28,7 @@ let category = [
   },
   {
     type: '4',
-    name: '超尺寸'
+    name: '超U尺寸'
   }
 ]
 let local = [
@@ -52,7 +52,8 @@ const store = new Vuex.Store({
     category,
     categoryMap,
     local,
-    localMap
+    localMap,
+    logOrder: ['国内小包', '海运小包', '空运小包']
   }
 })
 

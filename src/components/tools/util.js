@@ -66,10 +66,10 @@ function verifyProduct(item, type = 1) {
   }
 
   let sellingPrice = item.selling_price
-  if (!sellingPrice) {
+  if (type === 2 && !sellingPrice) {
     return '外币售价不能为空'
   }
-  if (!isNum(sellingPrice)) {
+  if (type === 2 && !isNum(sellingPrice)) {
     return '外币售价必须为数字'
   }
 

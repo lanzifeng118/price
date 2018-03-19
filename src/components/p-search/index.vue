@@ -1,13 +1,12 @@
 <template>
   <div class="serach">
-    <div class="serach-form">
-      <input type="text" class="" v-model.trim.lazy="serachText" placeholder="请输入商品sku" @keyup.enter="submit">
-      <select name="" v-model="a">
-        <option disabled value="">选择当地配送类型</option>
-        <option disabled value="Ebay">Ebay</option>
+    <div class="serach-form f-clearfix">
+      <select v-model="serach.local" @change="submitSelect">
+        <option disabled value="">选择类型</option>
+        <option v-for="item in local" :value="item.type">{{item.name}}</option>
       </select>
-      <button class="button button-second">查询</button>
-      <!-- <span class="search-icon icon-search" @click="submit"></span> -->
+      <input type="text" v-model.trim.lazy="serach.sku" placeholder="请输入商品sku" @keyup.enter="submit">
+      <button class="button yellow" @click="submit"><span class="search-icon icon-search"></span></button>
     </div>
     <div class="search-note">{{note}}</div>
     <h3 class="serach-ing">{{msg}}</h3>
@@ -22,7 +21,10 @@ import result from 'components/c-result/index'
 export default {
   data() {
     return {
-      serachText: '',
+      serach: {
+        sku: '',
+        local: '1'
+      },
       msg: '',
       note: '',
       info: null,
@@ -30,9 +32,16 @@ export default {
       a: 'Ebay'
     }
   },
+  computed: {
+    local() {
+      return this.$store.state.local
+    }
+  },
   methods: {
-    enter() {
-      this.submit()
+    submitSelect() {
+      if (this.serach.sku) {
+        this.submit()
+      }
     },
     submit() {
       this.note = ''
@@ -42,13 +51,15 @@ export default {
       this.info = null
       this.msg = '查询中...'
       // ajax
-      this.axios(api.product.queryBySku(this.serachText)).then(res => {
+      this.axios(api.product.queryBySku(this.serach)).then(res => {
         let data = res.data
-        // console.log(data)
+        console.log(data)
         if (data.code === 200) {
           if (data.data) {
             let dataD = data.data
             // dataD.product.weight = ''
+            dataD.product.local = this.serach.local
+            console.log(dataD.product)
             let verifyMsg = util.verifyProduct(dataD.product)
             if (verifyMsg) {
               this.msg = `商品参数有误，${verifyMsg}`
@@ -59,7 +70,7 @@ export default {
 
             this.info = dataD
           } else {
-            this.msg = `无商品sku为${this.serachText}的数据`
+            this.msg = `无商品sku为${this.serach.sku}的数据`
           }
         } else {
           this.msg = '出错了，请稍后再试！'
@@ -67,7 +78,7 @@ export default {
       })
     },
     verify() {
-      if (!this.serachText) {
+      if (!this.serach.sku) {
         this.note = '商品sku不能为空'
         return false
       }
@@ -88,25 +99,21 @@ export default {
 .serach-form {
   margin-bottom: 25px;
 }
-.search-input {
-  border-color: #ccc;
-  width: 300px;
-  padding-right: 30px;
+.serach-form input,
+.serach-form button,
+.serach-form select {
+  float: left;
+  margin-right: 5px;
 }
-.search-input:hover {
-  border-color: #aaa;
+.serach-form select {
+  width: 100px;
 }
-.search-icon {
-  cursor: pointer;
-  display: inline-block;
-  color: #999;
-  padding: 0 8px;
-  line-height: 29px;
-  margin-left: -35px;
+.serach-form button {
+  line-height: 30px;
+  width: 50px;
+  min-width: 50px;
 }
-.search-icon:hover {
-  color: #00d0bc;
-}
+
 .serach-result {
   margin: 20px 0;
 }

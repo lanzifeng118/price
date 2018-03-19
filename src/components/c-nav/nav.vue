@@ -46,6 +46,10 @@ export default {
         name: '商品信息',
         style: 'cart'
       }, {
+        src: '/admin/lowest',
+        name: '最低售价',
+        style: 'cart'
+      }, {
         src: '/admin/zone',
         name: '地区信息',
         style: 'map'
@@ -72,10 +76,10 @@ export default {
           order = [0, 1]
           break
         case 'xs001':
-          order = [0, 1, 2, 3]
+          order = [0, 1, 2, 3, 4]
           break
         case 'wl001':
-          order = [3, 4, 5, 6]
+          order = [4, 5, 6, 7]
           break
         default:
           break

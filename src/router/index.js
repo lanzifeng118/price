@@ -20,6 +20,13 @@ import Product from 'components/p-product/index'
 import ProductList from 'components/p-product/list/index'
 import ProductDetail from 'components/p-product/detail/index'
 
+// lowest
+import Lowest from 'components/p-lowest/index'
+import LowestEbay10 from 'components/p-lowest/ebay-10/index'
+import LowestEbay15 from 'components/p-lowest/ebay-15/index'
+import LowestAmazon10 from 'components/p-lowest/amazon-10/index'
+import LowestAmazon15 from 'components/p-lowest/amazon-15/index'
+
 // Domestic 国内小包
 import Domestic from 'components/p-domestic/index'
 import DomesticNomal from 'components/p-domestic/normal/index'
@@ -88,6 +95,19 @@ export default new Router({
           children: [
             { path: 'list', component: ProductList, name: 'productList' },
             { path: 'detail', component: ProductDetail }
+          ]
+        },
+        // product
+        {
+          path: 'lowest',
+          component: Lowest,
+          meta: { level2: true },
+          redirect: { name: 'LowestEbay10' },
+          children: [
+            { path: '/', component: LowestEbay10, name: 'LowestEbay10' },
+            { path: 'ebay-15', component: LowestEbay15 },
+            { path: 'amazon-10', component: LowestAmazon10 },
+            { path: 'amazon-15', component: LowestAmazon15 }
           ]
         },
         // zone

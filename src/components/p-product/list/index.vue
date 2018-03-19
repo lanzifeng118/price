@@ -6,7 +6,7 @@
       </button>
       <upload class="f-right" @update="getItems" apiInKey="inProduct" dowloadUrl="/binheng/api/goods/download" name="商品"></upload>
     </div>
-    <div class="product-list-tips">商品种类：<b>普通</b>、<b>带电</b>、<b>带磁</b>、<b>超尺寸</b>，当地配送：<b>Ebay</b>，<b>Amazon</b>，不合格数据将被过滤</div>
+    <div class="product-list-tips">商品种类：<b>普通</b>、<b>带电</b>、<b>带磁</b>、<b>超尺寸</b>，不合格数据将被过滤</div>
     <div class="list-table-wrap">
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
@@ -14,14 +14,12 @@
         <thead>
           <tr>
             <th><span class="icon-nessisary"></span>SKU</th>
-            <th width="11%"><span class="icon-nessisary"></span>预设利润率</th>
-            <th width="11%"><span class="icon-nessisary"></span>外币售价</th>
-            <th width="11%"><span class="icon-nessisary"></span>采购价</th>
-            <th width="11%"><span class="icon-nessisary"></span>重量 g</th>
-            <th width="11%">体积 m³</th>
-            <th width="11%"><span class="icon-nessisary"></span>商品种类</th>
-            <th width="11%"><span class="icon-nessisary"></span>当地配送</th>
-            <th width="11%" class="list-table-wrap-th-operate">操作</th>
+            <th width="14.2%"><span class="icon-nessisary"></span>预设利润率</th>
+            <th width="14.2%"><span class="icon-nessisary"></span>采购价</th>
+            <th width="14.2%"><span class="icon-nessisary"></span>重量 g</th>
+            <th width="14.2%">体积 m³</th>
+            <th width="14.2%"><span class="icon-nessisary"></span>商品种类</th>
+            <th width="14.2%" class="list-table-wrap-th-operate">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -42,15 +40,6 @@
               </div>
               <div v-else>
                 <input type="text" v-model.trim.number.lazy="item.profit_rate">
-              </div>
-            </td>
-            <!-- selling_price -->
-            <td>
-              <div v-if="item.type === 1">
-                {{item.selling_price}}
-              </div>
-              <div v-else>
-                <input type="text" v-model.trim.number.lazy="item.selling_price">
               </div>
             </td>
             <!-- purchase_price -->
@@ -92,18 +81,6 @@
                 </select>
               </div>
             </td>
-            <!-- local -->
-            <td>
-              <div v-if="item.type === 1">
-                {{localMap[item.local]}}
-              </div>
-              <div v-else>
-                <select v-model="item.local">
-                  <option disabled value="">选择类型</option>
-                  <option v-for="item in local" :value="item.type">{{item.name}}</option>
-                </select>
-              </div>
-            </td>
             <!-- 操作 -->
             <td>
               <operate 
@@ -119,6 +96,8 @@
           </tr>
         </tbody>
       </table>
+      <paging v-show="items.length > 0" :paging="paging" @pagingNextClick="pagingNextClick"   @pagingPreClick="pagingPreClick" @pagingChange="pagingChange">
+      </paging>
     </div>
     <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
     <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
@@ -128,6 +107,7 @@
 <script>
 import operate from 'components/c-operate/index'
 import pop from 'components/pop/pop'
+import paging from 'components/c-paging/index'
 import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
@@ -140,6 +120,12 @@ export default {
       busy: false,
       msg: '',
       deleteIds: [],
+      // paging
+      paging: {
+        size: 20,
+        no: 0,
+        total: 0
+      },
       // toast
       toast: {
         show: false,
@@ -176,9 +162,13 @@ export default {
       this.items = []
       this.msg = '加载中...'
       // ajax
-      this.axios(api.product.query()).then(res => {
+      let page = {
+        page_size: this.paging.size,
+        page_no: this.paging.no
+      }
+      this.axios(api.product.query(page)).then(res => {
         let data = res.data
-        // console.log(data)
+        console.log(data)
         if (data.code === 200) {
           let list = data.data.list
           if (list.length > 0) {
@@ -187,6 +177,7 @@ export default {
               v.type = 1
             })
             this.items = list
+            this.paging.total = data.data.total
           } else {
             this.msg = '还没有相关信息，请添加'
           }
@@ -300,14 +291,28 @@ export default {
       return false
     },
     forDetail(item) {
+      item.local = '1'
       this.$router.push({path: '/admin/product/detail', query: item})
+    },
+    pagingPreClick() {
+      this.paging.no--
+      this.getItems()
+    },
+    pagingNextClick() {
+      this.paging.no++
+      this.getItems()
+    },
+    pagingChange(index) {
+      this.paging.no = index
+      this.getItems()
     }
   },
   components: {
     operate,
     toast,
     pop,
-    upload
+    upload,
+    paging
   }
 }
 </script>
