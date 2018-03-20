@@ -26,8 +26,22 @@ import global from 'components/tools/global'
 export default {
   data() {
     return {
-      height: global.winHeigth - 50,
+      height: 0,
       avatar: './static/images/avatar.png'
+    }
+  },
+  created () {
+    this.getHeight()
+  },
+  mounted () {
+    window.addEventListener('resize', this.getHeight)
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.getHeight)
+  },
+  methods: {
+    getHeight() {
+      this.height = global.getWinHeigth() - 50
     }
   },
   computed: {

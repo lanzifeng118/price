@@ -52,13 +52,13 @@ export default {
       // ajax
       this.axios(api.product.queryBySku(this.serach)).then(res => {
         let data = res.data
-        console.log(data)
+        // console.log(data)
         if (data.code === 200) {
           if (data.data) {
             let dataD = data.data
             // dataD.product.weight = ''
             dataD.product.local = this.serach.local
-            console.log(dataD.product)
+            // console.log(dataD.product)
             let verifyMsg = util.verifyProduct(dataD.product, 2)
             if (verifyMsg) {
               this.msg = `商品参数有误，${verifyMsg}`

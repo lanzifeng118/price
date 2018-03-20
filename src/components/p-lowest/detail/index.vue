@@ -41,8 +41,7 @@ export default {
         size: 20,
         no: 0,
         total: 0
-      },
-      dowloadUrl: ''
+      }
     }
   },
   created() {
@@ -51,6 +50,9 @@ export default {
   computed: {
     logOrder() {
       return this.$store.state.logOrder
+    },
+    dowloadUrl() {
+      return `/binheng/api/goods/download/calresult?local=${this.local}&profitRate=${this.profitRate}`
     }
   },
   methods: {
@@ -66,7 +68,7 @@ export default {
       }
       this.axios(api.product.queryForCalculate(page)).then(res => {
         let data = res.data
-        console.log(data)
+        // console.log(data)
         if (data.code === 200) {
           this.msg = ''
           let result = calPrice.lowest(data.data, this.profitRate, false)

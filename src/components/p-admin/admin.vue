@@ -20,8 +20,6 @@
 import vHeader from 'components/c-header/header'
 import vNav from 'components/c-nav/nav'
 import toast from 'components/toast/toast'
-// import util from 'components/tools/util'
-// import api from 'components/tools/api'
 import global from 'components/tools/global'
 
 export default {
@@ -33,26 +31,21 @@ export default {
         text: '',
         icon: ''
       },
-      height: global.winHeigth - 50
+      height: 0
     }
   },
-  created() {
-    this.getItems()
+  created () {
+    this.getHeight()
+  },
+  mounted () {
+    window.addEventListener('resize', this.getHeight)
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.getHeight)
   },
   methods: {
-    getItems() {
-      // this.axios(api.user.query()).then((res) => {
-      //   let data = res.data
-      //   if (data.code === '200') {
-      //     this.$store.state.user = data.data
-      //   } else {
-      //     util.req.queryError(this.toast)
-      //   }
-      // }).catch((err) => {
-      //   if (err) {
-      //     util.req.queryError(this.toast)
-      //   }
-      // })
+    getHeight() {
+      this.height = global.getWinHeigth() - 50
     }
   },
   components: {
