@@ -29,6 +29,17 @@ let lInAmazonUrl = '/binheng/api/local/in/amazon'
 /binheng/domestic/out/oversize
  */
 
+let methodFun = (method, url, data) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: method,
+      data: data
+    }
+  }
+}
+
 let queryFun = (url, pageData) => {
   let data = {
     method: 'query'
@@ -43,36 +54,15 @@ let queryFun = (url, pageData) => {
   }
 }
 let queryBySkuFun = (url, data) => {
-  return {
-    method: 'post',
-    url: url,
-    data: {
-      method: 'queryBySku',
-      data: data
-    }
-  }
+  return methodFun('queryBySku', url, data)
 }
 
 let updateFun = (url, data) => {
-  return {
-    method: 'post',
-    url: url,
-    data: {
-      method: 'update',
-      data: data
-    }
-  }
+  return methodFun('update', url, data)
 }
 
 let updateBySkuFun = (url, data) => {
-  return {
-    method: 'post',
-    url: url,
-    data: {
-      method: 'updateBySku',
-      data: data
-    }
-  }
+  return methodFun('updateBySku', url, data)
 }
 
 let deleteFun = (url, ids) => {
@@ -88,20 +78,13 @@ let deleteFun = (url, ids) => {
   }
 }
 let insertFun = (url, data) => {
-  return {
-    method: 'post',
-    url: url,
-    data: {
-      method: 'insert',
-      data: data
-    }
-  }
+  return methodFun('insert', url, data)
 }
 let uploadFun = (url, data) => {
   return {
     method: 'post',
     url: url,
-    headers: {'content-type': 'multipart/form-data'},
+    headers: { 'content-type': 'multipart/form-data' },
     data: data
   }
 }

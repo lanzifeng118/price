@@ -3,10 +3,10 @@
     <h3 class="c-result-title">
       商品sku：{{product.sku}}，
       预设利润率：{{product.profit_rate}}%，
-      <span v-if="!search">外币售价：{{product.selling_price}}，</span>
+      <span v-if="!lack">外币售价：{{product.selling_price}}，</span>
       <span v-if="!limit">采购价：¥{{product.purchase_price}}，</span>
       重量：{{product.weight}}g，
-      体积：{{product.bulk  || '?'}}m³，
+      体积：{{product.bulk  || '?'}}cm³，
       种类：{{category[product.category]}}，
       当地配送：{{local[product.local]}}
     </h3>
@@ -17,14 +17,14 @@
           <tr>
             <th>国家</th>
             <th :width="width">物流方式</th>
-            <th v-if="!search" :width="width">售价(当地货币）</th>
+            <th v-if="!lack" :width="width">售价(当地货币）</th>
             <th v-if="!limit" :width="width">采购成本¥</th>
             <th :width="width">头程成本¥</th>
             <th :width="width">二程成本¥</th>
-            <th v-if="!search" :width="width">销售成本¥</th>
-            <th v-if="!search" :width="width">总成本¥</th>
-            <th v-if="!search" :width="width">毛利润¥</th>
-            <th v-if="!search" :width="width">当前利润率</th>
+            <th v-if="!lack" :width="width">销售成本¥</th>
+            <th v-if="!lack" :width="width">总成本¥</th>
+            <th v-if="!lack" :width="width">毛利润¥</th>
+            <th v-if="!lack" :width="width">当前利润率</th>
             <th :width="width">{{product.profit_rate}}%利润率售价</th>
             <th :width="width">0%利润率售价</th>
             <th :width="width">5%利润率售价</th>
@@ -41,7 +41,7 @@
             <!-- 物流方式 -->
             <td>{{item.logType}}</td>
             <!-- 售价 -->
-            <td v-if="!search">{{itemZ.currency_symbol}} {{item.sPrice}}</td>
+            <td v-if="!lack">{{itemZ.currency_symbol}} {{item.sPrice}}</td>
             <!-- 采购成本 -->
             <td v-if="!limit">¥ {{item.pPrice}}</td>
             <!-- 头程成本 -->
@@ -49,15 +49,15 @@
             <!-- 二程成本 -->
             <td>{{item.logSecondRmb ? '¥ ' + item.logSecondRmb : '-'}}</td>
             <!-- 销售成本 -->
-            <td v-if="!search">{{item.costSell ? '¥ ' + item.costSell : '-'}}</td>
+            <td v-if="!lack">{{item.costSell ? '¥ ' + item.costSell : '-'}}</td>
             <!-- 总成本 -->
-            <td v-if="!search">{{item.cost ? '¥ ' + item.cost : '-'}}</td>
+            <td v-if="!lack">{{item.cost ? '¥ ' + item.cost : '-'}}</td>
             <!-- 毛利润 -->
-            <td v-if="!search">{{item.profit ? '¥ ' + item.profit : '-'}}</td>
+            <td v-if="!lack">{{item.profit ? '¥ ' + item.profit : '-'}}</td>
             <!-- 当前利润率 -->
-            <td v-if="!search" :class="[item.earn ? 'ok' : 'warn']">{{item.profitRate ? item.profitRate + '%' : '-'}}</td>
+            <td v-if="!lack" :class="[item.earn ? 'ok' : 'warn']">{{item.profitRate ? item.profitRate + '%' : '-'}}</td>
             <!-- 预设利润率售价 -->
-            <td>{{item.pRate_defalut ? itemZ.currency_symbol + ' ' + item.pRate_defalut : '-'}}</td>
+            <td :class="{ok: lack }">{{item.pRate_defalut ? itemZ.currency_symbol + ' ' + item.pRate_defalut : '-'}}</td>
             <!-- 0% -->
             <td>{{item.pRate_0 ? itemZ.currency_symbol + ' ' + item.pRate_0 : '-'}}</td>
             <td>{{item.pRate_5 ? itemZ.currency_symbol + ' ' + item.pRate_5 : '-'}}</td>
@@ -77,9 +77,10 @@
 import calPrice from 'components/tools/calPrice'
 export default {
   props: {
-    search: {
-      type: Boolean,
-      defalut: false
+    // 1、计算 2、商品信息 3、查询 权限限制
+    invoke: {
+      type: Number,
+      defalut: 1
     },
     info: {
       type: Object,
@@ -97,12 +98,15 @@ export default {
     logOrder() {
       return this.$store.state.logOrder
     },
+    lack() {
+      return this.invoke === 2 || this.invoke === 3
+    },
     limit() {
-      return this.search && this.$store.state.user === 'xs002'
+      return this.invoke === 3 && this.$store.state.user === 'xs002'
     },
     width() {
       // search 13 limit 12
-      return this.search ? (this.limit ? '8.3%' : '7.7%') : '5.55%'
+      return this.lack ? (this.limit ? '8.3%' : '7.7%') : '5.55%'
     },
     category() {
       return this.$store.state.categoryMap
@@ -116,7 +120,7 @@ export default {
       let info = this.info
       let zone = info.zone
       let product = this.product
-      items = calPrice.cal(product, zone, info.factor, info.domestic, info.local, 10, false)
+      items = calPrice.cal(product, zone, info.factor, info.domestic, info.local, product.profit_rate, false)
       return items
     }
   },

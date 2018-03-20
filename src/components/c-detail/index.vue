@@ -1,4 +1,5 @@
 <template>
+  <!-- 计算结果、商品详情 -->
   <div class="detail">
     <div class="detail-back">
       <router-link :to="backUrl">
@@ -6,11 +7,11 @@
     </div>
     <div v-if="msg" class="detail-msg">{{msg}}</div>
     <div v-else class="detail-box">
-      <button v-if="from === 'calculation'" class="detail-save yellow button" @click="insert">保存</button>
-      <button v-else-if="from === 'product'" class="detail-save yellow button" @click="change">切换为{{item.local === '1' ? 'Amazon' : 'Ebay'}}</button>
-      <result v-if="info" :product="item" :info="info" :search="search"></result>
+      <button v-if="invoke === 1" class="detail-save yellow button" @click="insert">保存</button>
+      <button v-else-if="invoke === 2" class="detail-save yellow button" @click="change">切换为{{item.local === '1' ? 'Amazon' : 'Ebay'}}</button>
+      <result v-if="info" :product="item" :info="info" :invoke="invoke"></result>
     </div>
-    <pop v-if="from === 'calculation'" type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop">
+    <pop v-if="invoke === 1" type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop">
     </pop>
     <toast v-show="toast.show" :text="toast.text" :icon="toast.icon">
     </toast>
@@ -26,9 +27,10 @@ import api from 'components/tools/api'
 
 export default {
   props: {
-    from: {
-      type: String,
-      default: 'calculation'
+    // 1、计算 2、商品信息
+    invoke: {
+      type: Number,
+      default: 1
     }
   },
   data() {
@@ -66,10 +68,8 @@ export default {
       return item
     },
     backUrl() {
-      return `/admin/${this.from}`
-    },
-    search() {
-      return this.from !== 'calculation'
+      let url = this.invoke === 1 ? 'calculate' : 'product'
+      return `/admin/${url}`
     }
   },
   watch: {
@@ -82,10 +82,10 @@ export default {
   },
   methods: {
     cal() {
-      console.log(this.item)
-      if (util.verifyProduct(this.item)) {
-        this.msg = '参数错误'
-        util.toast.fade(this.toast, '参数错误')
+      let msg = util.verifyProduct(this.item, this.invoke)
+      if (msg) {
+        this.msg = '参数错误，' + msg
+        util.toast.fade(this.toast, '参数错误，' + msg)
         this.goBack()
         return
       }
@@ -151,8 +151,8 @@ export default {
     },
     change() {
       let item = this.item
-      item.local === '1' ? item.local = '2' : item.local = '1'
-      this.$router.push({path: '/admin/product/detail', query: item})
+      item.local === '1' ? (item.local = '2') : (item.local = '1')
+      this.$router.push({ path: '/admin/product/detail', query: item })
     }
   },
   components: {

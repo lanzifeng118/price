@@ -48,7 +48,7 @@ export default {
       }, {
         src: '/admin/lowest',
         name: '最低售价',
-        style: 'cart'
+        style: 'tag'
       }, {
         src: '/admin/zone',
         name: '地区信息',
@@ -73,7 +73,7 @@ export default {
       let order = []
       switch (user) {
         case 'xs002':
-          order = [0, 1]
+          order = [0, 1, 3]
           break
         case 'xs001':
           order = [0, 1, 2, 3, 4]

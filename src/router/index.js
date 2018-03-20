@@ -101,7 +101,7 @@ export default new Router({
         {
           path: 'lowest',
           component: Lowest,
-          meta: { level2: true },
+          meta: { level1: true },
           redirect: { name: 'LowestEbay10' },
           children: [
             { path: '/', component: LowestEbay10, name: 'LowestEbay10' },

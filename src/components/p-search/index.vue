@@ -10,7 +10,7 @@
     </div>
     <div class="search-note">{{note}}</div>
     <h3 class="serach-ing">{{msg}}</h3>
-    <result v-if="info" :product="product" :info="info" :search="true"></result>
+    <result v-if="info" :product="product" :info="info" :invoke="3"></result>
   </div>
 </template>
 
@@ -28,8 +28,7 @@ export default {
       msg: '',
       note: '',
       info: null,
-      product: null,
-      a: 'Ebay'
+      product: null
     }
   },
   computed: {
@@ -60,7 +59,7 @@ export default {
             // dataD.product.weight = ''
             dataD.product.local = this.serach.local
             console.log(dataD.product)
-            let verifyMsg = util.verifyProduct(dataD.product)
+            let verifyMsg = util.verifyProduct(dataD.product, 2)
             if (verifyMsg) {
               this.msg = `商品参数有误，${verifyMsg}`
               return

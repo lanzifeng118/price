@@ -1,6 +1,6 @@
 <template>
   <div class="lowest-in">
-    <detail :profitRate="15" local="1"></detail>
+    <detail :profitRate="15" local="2"></detail>
   </div>
 </template>
 

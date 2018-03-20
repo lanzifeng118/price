@@ -1,6 +1,6 @@
 <template>
   <div class="cal-result">
-    <detail from="product"></detail>
+    <detail :invoke="2"></detail>
   </div>
 </template>
 

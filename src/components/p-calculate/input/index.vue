@@ -25,7 +25,7 @@
         </li>
         <li>
           <span class="cal-form-item-name">体积</span><input type="text" class="input" v-model.trim.number="item.bulk">
-          <i>m³</i>
+          <i>cm³</i>
         </li>
         <li>
           <span class="cal-form-item-name">

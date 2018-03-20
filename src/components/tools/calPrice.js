@@ -1,5 +1,44 @@
 const DIGITS = 2
 let logOrder = ['国内小包', '海运小包', '空运小包']
+
+/**
+ * data: 组合好返回给前端的数据,属性有：
+ *    product: total,list 下载时，list包含所有数据
+ *    zone: 地区信息
+ *    factor: 因子
+ *    local: 当地配送物流
+ *    domestic_1: 普通
+ *    domestic_2: 带电
+ *    domestic_3: 带磁
+ *    domestic_4: 超尺寸
+ * profitRate: 利润率，前端传入
+ * backend: 是否后端使用，默认是，返回数据不太一样，后端返回一个二维数组
+ */
+
+function lowest(data, profitRate, backend = true) {
+  // console.log(data)
+  // console.log(profitRate)
+  let product = data.product
+  let zone = data.zone
+  let factor = data.factor
+  let local = data.local
+
+  let items = []
+  let titles = ['SKU']
+  zone.forEach(v => {
+    logOrder.forEach(vL => {
+      titles.push(v.name + '-' + vL.slice(0, 2))
+    })
+  })
+  product.list.forEach(v => {
+    let arr = [v.sku]
+    let domestic = data[`domestic_${v.category}`]
+    arr = arr.concat(cal(v, zone, factor, domestic, local, profitRate))
+    items.push(arr)
+  })
+  return backend ? [titles].concat(items) : { titles, items }
+}
+
 /**
  * logFirst 头程成本
  * logSecond 二程成本(当地货币)
@@ -10,6 +49,7 @@ let logOrder = ['国内小包', '海运小包', '空运小包']
  * profitRate 利润率 = 毛利润 / 销售价格
  * 售价 =（采购成本+物流成本）/汇率/(1 - 0.18 - 0.1)
  */
+
 function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly = true) {
   // 计算重量
   let pWeight = product.weight
@@ -28,6 +68,7 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
     let priceSea = parseFloat(v.price_sea)
     let priceAir = parseFloat(v.price_air)
     let priceAirEm = parseFloat(v.price_air_em)
+    let currencySymbol = v.currency_symbol
 
     logOrder.forEach((vL, iL) => {
       let item = {}
@@ -54,18 +95,18 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
         item.logSecond = calLog(weightLocal, local[zoneLow])
       }
       let factorSC = factor.sell_cost
-      // 售价
-      item.sPrice = sPrice
       // 采购成本
       item.pPrice = pPrice
-      // 售价 人民币
-      item.sPriceRmb = sPrice * exRate
       // 二程成本(人民币）
       item.logSecondRmb = item.logSecond * exRate
       // 预设利润售价
       item.pRate_defalut = calProfitRate(profitRate / 100)
 
       if (!sellPriceOnly) {
+        // 售价
+        item.sPrice = sPrice
+        // 售价 人民币
+        item.sPriceRmb = sPrice * exRate
         // 销售成本
         item.costSell = item.sPriceRmb * factorSC
         // 总成本
@@ -74,8 +115,9 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
         item.profit = item.sPriceRmb - item.cost
         // 是否盈利
         item.earn = item.profit > 0
-        // 当前利润
+        // 当前利润售价
         item.profitRate = item.profit / item.sPriceRmb * 100
+        // 0 - 30利润率售价
         for (let k = 0; k <= 30; k += 5) {
           item[`pRate_${k}`] = calProfitRate(k / 100)
         }
@@ -83,15 +125,14 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
         v.list.push(item)
       } else {
         let prd = item.pRate_defalut
-        items.push(prd ? v.currency_symbol + ' ' + prd : prd)
+        items.push(prd ? currencySymbol + ' ' + prd : '-')
       }
 
       function calProfitRate(rate) {
         let f = item.logFirst
         let s = item.logSecondRmb
         let result = (pPrice + f + s) / exRate / (1 - factorSC - rate)
-        result = isNaN(result) ? result : result.toFixed(DIGITS)
-        return result
+        return isNaN(result) ? result : result.toFixed(DIGITS)
       }
     })
     if (!sellPriceOnly) {
@@ -159,9 +200,12 @@ function calLog(weight, list) {
 function calWeight(weight, bulk, rate) {
   let weightReal = weight / 1000 || 0
   let weightBulk = bulk / rate || 0
+  // console.log(weightReal + '---')
+  // console.log(weightBulk)
   return Math.round(Math.max(weightReal, weightBulk) * 100000) / 100000
 }
 
 export default {
-  cal
+  cal,
+  lowest
 }

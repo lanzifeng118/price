@@ -51,7 +51,7 @@ function getCookie() {
 }
 
 function verifyProduct(item, type = 1) {
-  // type 1: 计算 2：商品信息
+  // type 1: 计算 2：商品信息、查询
   let sku = item.sku
   if (type === 2 && !sku) {
     return 'SKU不能为空'
@@ -66,10 +66,10 @@ function verifyProduct(item, type = 1) {
   }
 
   let sellingPrice = item.selling_price
-  if (type === 2 && !sellingPrice) {
+  if (type === 1 && !sellingPrice) {
     return '外币售价不能为空'
   }
-  if (type === 2 && !isNum(sellingPrice)) {
+  if (type === 1 && !isNum(sellingPrice)) {
     return '外币售价必须为数字'
   }
 
@@ -100,7 +100,7 @@ function verifyProduct(item, type = 1) {
   }
 
   let local = item.local
-  if (local !== '1' && local !== '2') {
+  if (type === 1 && local !== '1' && local !== '2') {
     return '当地配送必须为Ebay或Amazon'
   }
 

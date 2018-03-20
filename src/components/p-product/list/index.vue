@@ -17,7 +17,7 @@
             <th width="14.2%"><span class="icon-nessisary"></span>预设利润率</th>
             <th width="14.2%"><span class="icon-nessisary"></span>采购价</th>
             <th width="14.2%"><span class="icon-nessisary"></span>重量 g</th>
-            <th width="14.2%">体积 m³</th>
+            <th width="14.2%">体积 cm³</th>
             <th width="14.2%"><span class="icon-nessisary"></span>商品种类</th>
             <th width="14.2%" class="list-table-wrap-th-operate">操作</th>
           </tr>

@@ -128,7 +128,7 @@
       <input placeholder="重量" type="text" v-model.trim.number.lazy="test.weight">
       <i>kg</i>
       <input placeholder="体积" type="text" v-model.trim.number.lazy="test.bulk">
-      <i>m³</i>
+      <i>cm³</i>
       <button class="button" @click="calTest">计算邮费</button>
       <div v-if="test.result.ok">
         <p>实重：{{test.result.weight}}kg {{test.result.symbol}} 体积重：{{test.result.bulkWeight}}kg</p>

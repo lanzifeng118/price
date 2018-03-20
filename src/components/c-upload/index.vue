@@ -1,11 +1,14 @@
 <template>
   <div class="upload">
     <div class="upload-btns">
-      <label v-if="input" for="excel" class="button button-second">
-        <span class="icon icon-excel"></span>导入{{name}}</label>
-      <input v-if="input" type="file" id="excel" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseFile">
-      <button v-else class="button button-second">
-        <span class="icon icon-excel"></span>导入{{name}}</button>
+      <span v-if="!downloadOnly">
+        <label v-if="input" for="excel" class="button button-second">
+          <span class="icon icon-excel"></span>导入{{name}}</label>
+        <input v-if="input" type="file" id="excel" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseFile">
+        <button v-else class="button button-second">
+          <span class="icon icon-excel"></span>导入{{name}}</button>
+      </span>
+
       <button class="button yellow" @click="download">
         <span class="icon icon-excel"></span>导出{{name}}</button>
     </div>
@@ -22,9 +25,12 @@ import api from 'components/tools/api'
 
 export default {
   props: {
+    downloadOnly: {
+      type: Boolean,
+      default: false
+    },
     apiInKey: {
-      type: String,
-      required: true
+      type: String
     },
     dowloadUrl: {
       type: String,
@@ -83,24 +89,43 @@ export default {
       let formData = new FormData()
       formData.append('upload', this.file)
       this.axios(api[this.apiInKey](formData))
-        .then((res) => {
+        .then(res => {
           let data = res.data
           if (data.code === 200) {
             success(data)
           } else {
             error()
           }
-        }).catch((err) => {
+        })
+        .catch(err => {
           console.log(err)
           error()
         })
     },
     download() {
-      // this.axios({
-      //   method: 'get',
-      //   url: '',
-      //   pr
+      // this.axios.get(this.dowloadUrl, { params: data }).then(res => {
+      //   // console.log(res.data)
+      //   if (res.status === 200) {
+      //     let blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
+      //     console.log(blob)
+      //     let fileName = '文件名称.xls'
+      //     downFile(blob, fileName)
+      //   } else {
+      //     console.log('fail')
+      //   }
       // })
+      // function downFile(blob, fileName) {
+      //   if (window.navigator.msSaveOrOpenBlob) {
+      //     navigator.msSaveBlob(blob, fileName)
+      //   } else {
+      //     let link = document.createElement('a')
+      //     link.href = window.URL.createObjectURL(blob)
+      //     console.log(link.href)
+      //     link.download = fileName
+      //     link.click()
+      //     window.URL.revokeObjectURL(link.href)
+      //   }
+      // }
       window.location.assign(this.dowloadUrl)
     }
   },
