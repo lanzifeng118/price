@@ -435,8 +435,8 @@ export default {
 }
 .test i {
   display: inline-block;
-  width: 30px;
-  margin-left: -25px;
+  width: 35px;
+  margin-left: -32px;
 }
 .test p {
   margin-top: 10px;
