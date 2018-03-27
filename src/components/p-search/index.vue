@@ -44,10 +44,10 @@ export default {
     },
     submit() {
       this.note = ''
+      this.info = null
       if (!this.verify()) {
         return
       }
-      this.info = null
       this.msg = '查询中...'
       // ajax
       this.axios(api.product.queryBySku(this.serach)).then(res => {

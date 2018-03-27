@@ -4,7 +4,7 @@
       商品sku：{{product.sku}}，
       预设利润率：{{product.profit_rate}}%，
       <span v-if="!lack">外币售价：{{product.selling_price}}，</span>
-      <span v-if="!limit">采购价：¥{{product.purchase_price}}，</span>
+      <span>采购价：¥{{product.purchase_price}}，</span>
       重量：{{product.weight}}g，
       体积：{{product.bulk  || '?'}}cm³，
       种类：{{category[product.category]}}，
@@ -18,7 +18,7 @@
             <th>国家</th>
             <th :width="width">物流方式</th>
             <th v-if="!lack" :width="width">售价(当地货币）</th>
-            <th v-if="!limit" :width="width">采购成本¥</th>
+            <th :width="width">采购成本¥</th>
             <th :width="width">头程成本¥</th>
             <th :width="width">二程成本¥</th>
             <th v-if="!lack" :width="width">销售成本¥</th>
@@ -43,7 +43,7 @@
             <!-- 售价 -->
             <td v-if="!lack">{{itemZ.currency_symbol}} {{item.sPrice}}</td>
             <!-- 采购成本 -->
-            <td v-if="!limit">¥ {{item.pPrice}}</td>
+            <td>¥ {{item.pPrice}}</td>
             <!-- 头程成本 -->
             <td>{{item.logFirst ? '¥ ' + item.logFirst : '-'}}</td>
             <!-- 二程成本 -->
@@ -106,7 +106,7 @@ export default {
     },
     width() {
       // search 13 limit 12
-      return this.lack ? (this.limit ? '8.3%' : '7.7%') : '5.55%'
+      return this.lack ? '7.7%' : '5.55%'
     },
     category() {
       return this.$store.state.categoryMap
