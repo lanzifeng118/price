@@ -139,7 +139,7 @@
   left: 50%;
   margin-top: -250px;
   margin-left: -200px;
-  padding: 40px 0;
+  padding: 40px 0 28px;
   width: 400px;
   border-radius: 2px;
   background-color: #fff;
@@ -175,6 +175,7 @@
 }
 .login-submit {
   width: 300px;
+  height: 54px;
   margin: 25px auto 0 auto;
 }
 .login-submit button {
