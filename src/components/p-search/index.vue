@@ -6,7 +6,7 @@
         <option v-for="item in local" :value="item.type">{{item.name}}</option>
       </select>
       <input type="text" v-model.trim.lazy="serach.sku" placeholder="请输入商品sku" @keyup.enter="submit">
-      <button class="button yellow" @click="submit"><span class="search-icon icon-search"></span></button>
+      <button class="button primary" @click="submit"><span class="search-icon icon-search"></span></button>
     </div>
     <div class="search-note">{{note}}</div>
     <h3 class="serach-ing">{{msg}}</h3>

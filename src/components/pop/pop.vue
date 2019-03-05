@@ -89,7 +89,7 @@ export default {
   transition: color 0.2s;
 }
 .pop-close:hover {
-  color: #00d0bc;
+  color: #2d8cf0;
 }
 .pop-button {
   position: absolute;

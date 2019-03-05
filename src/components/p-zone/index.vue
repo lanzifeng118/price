@@ -1,7 +1,7 @@
 <template>
   <div class="p-zone">
     <div v-if="user !== 'xs001'" class="f-clearfix">
-      <button class="f-left button yellow list-btn-add" @click="addItem">
+      <button class="f-left button list-btn-add" @click="addItem">
         <span class="icon icon-round_add"></span>添加地区
       </button>
     </div>

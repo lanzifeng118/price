@@ -125,13 +125,11 @@ export default {
 <style>
 .cal-form {
   position: relative;
-  left: 50%;
   width: 400px;
-  margin-top: 50px;
-  margin-left: -276px;
   /* transition: all 0.2s; */
   padding: 30px 50px 30px 30px;
-  background-color: #eee;
+  /* background-color: #eee; */
+  margin: 0 auto;
   border-radius: 2px;
 }
 .cal-form-ul {
@@ -161,7 +159,6 @@ export default {
   right: 15px;
 }
 .cal-form-btns {
-  margin-top: 5px;
   padding-left: 15px;
 }
 .cal-form-btns button {
@@ -169,6 +166,7 @@ export default {
   line-height: 30px;
 }
 .cal-form-note {
+  height: 14px;
   margin-bottom: 5px;
   color: #ff1717;
 }

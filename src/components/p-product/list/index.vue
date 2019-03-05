@@ -1,7 +1,7 @@
 <template>
   <div class="product-list">
     <div class="f-clearfix">
-      <button class="f-left button yellow list-btn-add" @click="addItem">
+      <button class="f-left button list-btn-add" @click="addItem">
         <span class="icon icon-round_add"></span>添加商品
       </button>
       <upload class="f-right" @update="getItems" apiInKey="inProduct" dowloadUrl="/binheng/api/goods/download" name="商品"></upload>
@@ -333,6 +333,6 @@ export default {
   cursor: pointer;
 }
 .product-list-sku:hover {
-  color: #00d0bc;
+  color: #2d8cf0;
 }
 </style>

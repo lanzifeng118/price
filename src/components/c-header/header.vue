@@ -2,7 +2,7 @@
   <div class="header">
     <div class="header-wrap f-clearfix">
       <div class="header-info f-left">
-        <img :src="logoSrc" class="header-logo" alt="">
+        <!-- <img :src="logoSrc" class="header-logo" alt=""> -->
         <span>{{title}}</span>
       </div>
       <ul class="header-operate f-right">
@@ -49,11 +49,11 @@
 <style>
   .header {
     height: 50px;
-    background-color: #363f46;
-    color: #fff;
+    background-color: #515a6e;
+    color: #eaeaea;
   }
   .header-wrap {
-    width: 92%;
+    padding: 0 50px;
     margin: 0 auto;
   }
   .header-info {
@@ -65,9 +65,8 @@
   }
   .header-info span {
     line-height: 50px;
-    margin-left: 15px;
     display: inline-block;
-    font-size: 14px;
+    font-size: 16px;
     vertical-align: top;
   }
   .header-operate-item {
@@ -79,9 +78,9 @@
   .header-operate-item a {
     display: inline-block;
     transition: all 0.2s;
-    color: #fff;
+    color: #eaeaea;
   }
   .header-operate-item a:hover {
-    color: #07efd9;
+    color: #fff;
   }
 </style>

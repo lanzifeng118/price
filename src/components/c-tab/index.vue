@@ -37,10 +37,10 @@
     border-bottom: 1px solid #efefef;
   }
   .tab-item a.router-link-exact-active {
-    color: #00d0bc;
-    border-bottom: 1px solid #00d0bc;
+    color: #2d8cf0;
+    border-bottom: 1px solid #2d8cf0;
   }
   .tab-item a:hover {
-    color: #00d0bc;
+    color: #2d8cf0;
   }
 </style>

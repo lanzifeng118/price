@@ -64,7 +64,7 @@ export default {
   margin-right: 10px;
 }
 .operate .icon {
-  color: #00d0bc;
+  color: #2d8cf0;
   vertical-align: -3px;
   font-size: 18px;
 }

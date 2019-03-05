@@ -107,7 +107,7 @@ export default {
   transition: all 0.2s;
 }
 .paging-ul li:hover {
-  color: #00d0bc;
+  color: #2d8cf0;
 }
 .paging-ul li.grey {
   color: #ccc;
@@ -115,8 +115,8 @@ export default {
 }
 .paging-ul li.active {
   cursor: default;
-  background-color: #00d0bc;
-  border-color: #00d0bc;
+  background-color: #2d8cf0;
+  border-color: #2d8cf0;
   color: #fff;
 }
 </style>

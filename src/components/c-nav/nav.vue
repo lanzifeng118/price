@@ -1,8 +1,8 @@
 <template>
 <div class="nav" :style="{height: height + 'px'}">
-  <div class="nav-avatar">
+  <!-- <div class="nav-avatar">
     <img :src="avatar"/>
-  </div>
+  </div> -->
   <ul class="nav-ul">
     <li
       class="nav-item"
@@ -114,10 +114,26 @@ export default {
 
 <style>
 .nav {
+  position: relative;
   width: 150px;
   float: left;
   overflow: hidden;
-  background-color: #363f46;
+  background: #fff;
+}
+.nav::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 100%;
+  background: #dcdee2;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+}
+.nav-ul {
+  padding-top: 20px;
 }
 .nav .icon {
   margin-right: 10px;
@@ -133,22 +149,35 @@ export default {
   max-height: 150px;
 }
 .nav-item {
-  height: 45px;
-  line-height: 45px;
-  border-bottom: 1px solid #4a4a4a;
+  height: 50px;
+  line-height: 50px;
 }
 
 .nav-item a {
   display: block;
-  color: #fff;
+  color: #515a6e;
   padding-left: 20px;
   transition: all 0.2s;
 }
 .nav-item a:hover {
-  color: #07efd9;
+  color: #2d8cf0;
 }
 .nav-item a.active {
-  background: #07efd9;
-  color: #363f46;
+  position: relative;
+  color: #2d8cf0;
+  background: #f0faff;
 }
+
+.nav-item a.active::after {
+  content: '';
+  z-index: 10;
+  display: block;
+  width: 2px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #2d8cf0;
+}
+
 </style>
