@@ -116,12 +116,9 @@ export default {
     },
     items() {
       // console.log(this.search)
-      let items = []
-      let info = this.info
-      let zone = info.zone
-      let product = this.product
-      items = calPrice.cal(product, zone, info.factor, info.domestic, info.local, product.profit_rate, false)
-      return items
+      const { info, product } = this
+      const { zone } = info
+      return calPrice.cal(product, zone, info.factor, info.domestic, info.local, product.profit_rate, false)
     }
   },
   components: {}

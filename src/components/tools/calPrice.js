@@ -50,6 +50,14 @@ function lowest(data, profitRate, backend = true) {
  * 售价 =（采购成本+物流成本）/汇率/(1 - 0.18 - 0.1)
  */
 
+/**
+ * product 商品信息
+ * zone 地区信息
+ * factor 公式系数
+ * domestic 国内小包
+ * local 当地配送
+ * profitRate 商品预设利润率
+ */
 function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly = true) {
   // 计算重量
   let pWeight = product.weight
@@ -58,7 +66,6 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
   let weightLocal = calWeight(pWeight, pBule, factor.weight_2)
 
   let items = []
-
   zone.forEach(v => {
     v.list = []
     let zoneLow = v.name.toLowerCase()
