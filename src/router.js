@@ -1,21 +1,8 @@
-import ErrorPage from 'components/p-error/error'
-import Admin from 'components/p-admin/admin'
-
-import Calculate from 'components/p-calculate/index'
-import CalculateInput from 'components/p-calculate/input/index'
-import CalculateResult from 'components/p-calculate/result/index'
-
-import Search from 'components/p-search/index'
 // zone
 import Zone from 'components/p-zone/index'
 
 // factor
 import Factor from 'components/p-factor/index'
-
-// product
-import Product from 'components/p-product/index'
-import ProductList from 'components/p-product/list/index'
-import ProductDetail from 'components/p-product/detail/index'
 
 // lowest
 import Lowest from 'components/p-lowest/index'
@@ -45,37 +32,45 @@ export default [
   {
     path: '/',
     meta: { hasLogin: true }, // 需要登录
-    component: Admin,
+    component: () => import('views/admin.vue'),
     redirect: { name: 'calculate' },
     children: [
       {
         path: 'calculate',
         name: 'calculate',
         meta: { level1: true },
-        component: Calculate,
+        component: () => import('views/calculate/index.vue'),
         children: [
           {
             path: '/',
-            component: CalculateInput,
-            name: 'calculateInput'
+            component: () => import('views/calculate/input.vue')
           },
-          { path: 'result', component: CalculateResult }
+          {
+            path: 'result',
+            component: () => import('views/calculate/result.vue')
+          }
         ]
       },
       {
         path: 'search',
         name: 'search',
         meta: { level1: true },
-        component: Search
+        component: () => import('views/search.vue')
       },
       // product
       {
         path: 'product',
-        component: Product,
+        component: () => import('views/product/index.vue'),
         meta: { level2: true },
         children: [
-          { path: '/', component: ProductList, name: 'productList' },
-          { path: 'detail', component: ProductDetail }
+          {
+            path: '/',
+            component: () => import('views/product/list.vue'),
+          },
+          { 
+            path: 'detail', 
+            component: () => import('views/product/detail.vue') 
+          }
         ]
       },
       // product
@@ -144,6 +139,6 @@ export default [
   },
   {
     path: '/error',
-    component: ErrorPage
+    component: () => import('views/error.vue')
   }
 ]

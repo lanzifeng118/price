@@ -1,19 +1,22 @@
 <template>
-<div class="admin">
-  <v-header></v-header>
-  <div class="f-clearfix">
-    <v-nav></v-nav>
-    <div class="content-right" :style="{height: height + 'px'}">
-      <router-view></router-view>
+  <div class="admin">
+    <v-header></v-header>
+    <div class="f-clearfix">
+      <v-nav></v-nav>
+      <div
+        class="content-right"
+        :style="{height: height + 'px'}"
+      >
+        <router-view></router-view>
+      </div>
     </div>
+    <toast
+      v-show="toast.show"
+      :text="toast.text"
+      :icon="toast.icon"
+    >
+    </toast>
   </div>
-  <toast
-    v-show="toast.show"
-    :text="toast.text"
-    :icon="toast.icon"
-  >
-  </toast>
-</div>
 </template>
 
 <script>
@@ -34,13 +37,13 @@ export default {
       height: 0
     }
   },
-  created () {
+  created() {
     this.getHeight()
   },
-  mounted () {
+  mounted() {
     window.addEventListener('resize', this.getHeight)
   },
-  destroyed () {
+  destroyed() {
     window.removeEventListener('resize', this.getHeight)
   },
   methods: {
@@ -57,7 +60,6 @@ export default {
 </script>
 
 <style>
-
 .content-right {
   overflow: auto;
   /* padding: 30px; */

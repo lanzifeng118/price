@@ -37,7 +37,7 @@
   width: 100%;
   left: 0;
   top: 0;
-  background: #cdf5ff url(../../common/images/login-bg.png) no-repeat center bottom ;
+  background: #cdf5ff url(../common/images/login-bg.png) no-repeat center bottom ;
 }
 .error-box {
   position: absolute;
