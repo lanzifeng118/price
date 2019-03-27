@@ -1,11 +1,11 @@
 <template>
   <div class="lowest-in">
-    <detail :profitRate="15" local="1"></detail>
+    <detail :profitRate="10" local="2"></detail>
   </div>
 </template>
 
 <script>
-import detail from 'components/p-lowest/detail'
+import detail from './components/detail'
 
 export default {
   data() {

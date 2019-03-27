@@ -1,33 +1,3 @@
-// zone
-import Zone from 'components/p-zone/index'
-
-// factor
-import Factor from 'components/p-factor/index'
-
-// lowest
-import Lowest from 'components/p-lowest/index'
-import LowestEbay10 from 'components/p-lowest/ebay-10/index'
-import LowestEbay15 from 'components/p-lowest/ebay-15/index'
-import LowestAmazon10 from 'components/p-lowest/amazon-10/index'
-import LowestAmazon15 from 'components/p-lowest/amazon-15/index'
-
-// Domestic 国内小包
-import Domestic from 'components/p-domestic/index'
-import DomesticNomal from 'components/p-domestic/normal/index'
-import DomesticElectric from 'components/p-domestic/electric/index'
-import DomesticMagnetism from 'components/p-domestic/magnetism/index'
-import DomesticOversize from 'components/p-domestic/oversize/index'
-
-// local 当地配送
-import Local from 'components/p-local/index'
-import LocalEbay from 'components/p-local/ebay/index'
-import LocalAmazon from 'components/p-local/amazon/index'
-
-// config
-import Config from 'components/p-config/config'
-import ConfigList from 'components/p-config/list/index'
-import ConfigPassword from 'components/p-config/password/index'
-
 export default [
   {
     path: '/',
@@ -65,69 +35,98 @@ export default [
         children: [
           {
             path: '/',
-            component: () => import('views/product/list.vue'),
+            component: () => import('views/product/list.vue')
           },
-          { 
-            path: 'detail', 
-            component: () => import('views/product/detail.vue') 
+          {
+            path: 'detail',
+            component: () => import('views/product/detail.vue')
           }
         ]
       },
       // product
       {
         path: 'lowest',
-        component: Lowest,
+        component: () => import('views/lowest/index.vue'),
         meta: { level1: true },
-        redirect: { name: 'LowestEbay10' },
         children: [
-          { path: '/', component: LowestEbay10, name: 'LowestEbay10' },
-          { path: 'ebay-15', component: LowestEbay15 },
-          { path: 'amazon-10', component: LowestAmazon10 },
-          { path: 'amazon-15', component: LowestAmazon15 }
+          {
+            path: '/',
+            component: () => import('views/lowest/ebay-10.vue')
+          },
+          {
+            path: 'ebay-15',
+            component: () => import('views/lowest/ebay-15.vue')
+          },
+          {
+            path: 'amazon-10',
+            component: () => import('views/lowest/amazon-10.vue')
+          },
+          {
+            path: 'amazon-15',
+            component: () => import('views/lowest/amazon-15.vue')
+          }
         ]
       },
       // zone
       {
         path: 'zone',
-        component: Zone,
+        component: () => import('views/zone.vue'),
         meta: { level3: true }
       },
       // factor
       {
         path: 'factor',
-        component: Factor,
+        component: () => import('views/factor.vue'),
         meta: { level4: true }
       },
       // domestic
       {
         path: 'domestic',
-        component: Domestic,
+        component: () => import('views/domestic/index.vue'),
         meta: { level4: true },
         children: [
-          { path: '/', component: DomesticNomal },
-          { path: 'electric', component: DomesticElectric },
-          { path: 'magnetism', component: DomesticMagnetism },
-          { path: 'oversize', component: DomesticOversize }
+          {
+            path: '/',
+            component: () => import('views/domestic/normal.vue')
+          },
+          {
+            path: 'electric',
+            component: () => import('views/domestic/electric.vue')
+          },
+          {
+            path: 'magnetism',
+            component: () => import('views/domestic/magnetism.vue')
+          },
+          {
+            path: 'oversize',
+            component: () => import('views/domestic/oversize.vue')
+          }
         ]
       },
       // local
       {
         path: 'local',
-        component: Local,
+        component: () => import('views/local/index.vue'),
         meta: { level4: true },
         children: [
-          { path: '/', component: LocalEbay },
-          { path: 'amazon', component: LocalAmazon }
+          { path: '/', component: () => import('views/local/ebay.vue') },
+          { path: 'amazon', component: () => import('views/local/amazon.vue') }
         ]
       },
       // config
       {
         path: 'config',
-        component: Config,
+        component: () => import('views/config/index.vue'),
         meta: { level5: true },
         children: [
-          { path: '/', component: ConfigList },
-          { path: 'password', component: ConfigPassword }
+          {
+            path: '/',
+            component: () => import('views/config/list.vue')
+          },
+          {
+            path: 'password',
+            component: () => import('views/config/password.vue')
+          }
         ]
       }
     ]
