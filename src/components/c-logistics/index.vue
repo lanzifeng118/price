@@ -135,7 +135,6 @@
         <p>邮费：{{test.result.total}}</p>
       </div>
     </div>
-    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
     <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
   </div>
 </template>
@@ -144,7 +143,6 @@
 import operate from 'components/c-operate/index'
 import upload from 'components/c-upload/index'
 import pop from 'components/pop/pop'
-import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 
@@ -177,12 +175,6 @@ export default {
       msg: '',
       busy: false,
       deleteIds: [],
-      // toast
-      toast: {
-        show: false,
-        text: '',
-        icon: ''
-      },
       // pop
       pop: {
         text: '',
@@ -241,7 +233,7 @@ export default {
           this.msg = ''
         } else {
           this.msg = '出错了，请稍后再试'
-          util.req.queryError(this.toast)
+          this.$toast.error('出错了，请稍后再试')
         }
       })
     },
@@ -297,17 +289,16 @@ export default {
         return
       }
       let text = type === 'insert' ? '添加' : '修改'
-      util.toast.show(this.toast, `正在${text}...`, 'upload')
       this.axios(api[this.apiKey][type](item)).then(res => {
         // console.log(res)
         let code = res.data.code
         if (code === 200) {
           this.busy = false
           this.$set(item, 'doType', 1)
-          util.toast.fade(this.toast, `${text}成功`, 'appreciate')
+          this.$toast.success(`${text}成功`)
           this.getItems()
         } else {
-          util.req.changeError(this.toast)
+          this.$toast.error(`出错了，请稍后再试`)
         }
       })
     },
@@ -329,27 +320,26 @@ export default {
     },
     confirmPop() {
       this.pop.show = false
-      util.toast.show(this.toast, '正在删除...', 'upload')
       this.axios(api[this.apiKey].delete(this.deleteIds)).then(res => {
         let data = res.data
         if (data.code === 200) {
-          util.toast.fade(this.toast, '删除成功', 'check')
+          this.$toast.success('删除成功')
           this.getItems()
         } else {
-          util.req.changeError(this.toast)
+          this.$toast.error()
         }
       })
     },
     isBusy() {
       if (this.busy) {
-        util.toast.fade(this.toast, '请先提交编辑中的数据!')
+        this.$toast.warn('请先提交编辑中的数据')
         return true
       }
       return false
     },
     verify(item) {
       if (!item.price_weight && !item.price_unit) {
-        util.toast.fade(this.toast, '请填写价格值或单件价格')
+        this.$toast.warn('请填写价格值或单件价格')
         return false
       }
       if (
@@ -357,7 +347,7 @@ export default {
         item.end_weight &&
         parseFloat(item.end_weight) < parseFloat(item.start_weight)
       ) {
-        util.toast.fade(this.toast, '截止重量要大于开始重量')
+        this.$toast.warn('截止重量要大于开始重量')
         return false
       }
       return true
@@ -414,7 +404,6 @@ export default {
   },
   components: {
     operate,
-    toast,
     pop,
     upload
   }

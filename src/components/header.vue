@@ -17,18 +17,17 @@
 </template>
 
 <script>
-  import { API_user } from '../../model/user'
+  import { API_user } from '../model/user'
   import { mapState } from 'vuex'
+  
   export default {
     data() {
       return {}
     },
-    computed: {
-      ...mapState({
-        title: state => state.title,
-        role: state => state.userRole
-      })
-    },
+    computed: mapState({
+      title: state => state.title,
+      role: state => state.userRole
+    }),
     methods: {
       logout() {
         API_user.logout({ username: this.username })

@@ -1,5 +1,5 @@
 <template>
-<div class="toast">
+<div class="toast" :class="[show ? 'show' : 'hide']">
   <div class="toast-box">
     <div class="toast-icon">
       <span :class="'icon-'+icon"></span>
@@ -11,22 +11,6 @@
 </div>
 </template>
 
-<script>
-export default {
-  props: {
-    text: String,
-    icon: {
-      type: String,
-      default: 'warn'
-    }
-  },
-  data() {
-    return {
-    }
-  }
-}
-</script>
-
 <style>
 .toast {
   position: fixed;
@@ -35,7 +19,27 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 999;
+  pointer-events: none;
+  transition: opacity 0.2s;
 }
+.toast.show {
+  animation: fadeIn 0.2s;
+}
+.toast.hide {
+  opacity: 0;
+  animation: fadeOut 0.2s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 .toast-box {
   position: absolute;
   top: 50%;

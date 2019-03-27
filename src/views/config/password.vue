@@ -28,17 +28,10 @@
       </tr>
     </tbody>
   </table>
-  <toast
-    v-show="toast.show"
-    :text="toast.text"
-    :icon="toast.icon"
-  >
-  </toast>
 </div>
 </template>
 
 <script>
-import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 
@@ -56,12 +49,6 @@ export default {
         id: '',
         new: '',
         newComfirm: ''
-      },
-
-      toast: {
-        show: false,
-        text: '',
-        icon: ''
       },
       users: []
     }
@@ -82,13 +69,13 @@ export default {
             this.users = list
           }
         } else {
-          util.req.queryError(this.toast)
+          this.$toast.error()
           this.goback()
         }
       })
     },
     submit() {
-      util.toast.show(this.toast, '正在提交', 'upload')
+      // this.$toast.upload('正在提交')
       if (!this.verify()) {
         return
       }
@@ -97,15 +84,15 @@ export default {
     verify() {
       let item = this.item
       if (!item.id) {
-        util.toast.fade(this.toast, '请选择用户名')
+        this.$toast.warn('请选择用户名')        
         return false
       }
       if (!item.new) {
-        util.toast.fade(this.toast, '新密码不能为空')
+        this.$toast.warn('新密码不能为空')        
         return false
       }
       if (item.new !== item.newComfirm) {
-        util.toast.fade(this.toast, '新密码两次输入不一致')
+        this.$toast.warn('新密码两次输入不一致')        
         return false
       }
       return true
@@ -120,16 +107,16 @@ export default {
         if (data.code === 200) {
           this.showSuccess()
         } else {
-          util.req.changeError(this.toast)
+          this.$toast.error()
         }
       }).catch(err => {
         if (err) {
-          util.req.changeError(this.toast)
+          this.$toast.error()
         }
       })
     },
     showSuccess() {
-      util.toast.show(this.toast, '修改成功！', 'appreciate')
+      this.$toast.success('修改成功！')
       this.goback()
     },
     goback() {
@@ -139,7 +126,6 @@ export default {
     }
   },
   components: {
-    toast
   }
 }
 </script>

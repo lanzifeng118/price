@@ -102,7 +102,6 @@
         </tbody>
       </table>
     </div>
-    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
     <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
   </div>
 </template>
@@ -110,7 +109,6 @@
 <script>
 import operate from 'components/c-operate/index'
 import pop from 'components/pop/pop'
-import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 
@@ -121,12 +119,6 @@ export default {
       busy: false,
       msg: '',
       deleteIds: [],
-      // toast
-      toast: {
-        show: false,
-        text: '',
-        icon: ''
-      },
       // pop
       pop: {
         text: '',
@@ -163,7 +155,7 @@ export default {
           }
         } else {
           this.msg = '出错了，请稍后再试'
-          util.req.queryError(this.toast)
+          this.$toast.err()
         }
       })
     },
@@ -212,19 +204,17 @@ export default {
         return
       }
       let text = type === 'insert' ? '添加' : '修改'
-      util.toast.show(this.toast, `正在${text}...`, 'upload')
       this.axios(api.zone[type](item)).then(res => {
-        // console.log(res)
         let code = res.data.code
         if (code === 200) {
           this.busy = false
           item.type = 1
-          util.toast.fade(this.toast, `${text}成功`, 'appreciate')
+          this.$toast.success(`${text}成功`)
           this.getItems()
         } else if (code === 400) {
-          util.toast.fade(this.toast, '地区名称已存在', 'close')
+          this.$toast.error('地区名称已存在')
         } else {
-          util.req.changeError(this.toast)
+          this.$toast.error()
         }
       })
     },
@@ -243,32 +233,31 @@ export default {
     },
     confirmPop() {
       this.pop.show = false
-      util.toast.show(this.toast, '正在删除...', 'upload')
       this.axios(api.zone.delete(this.deleteIds)).then(res => {
         let data = res.data
         if (data.code === 200) {
-          util.toast.fade(this.toast, '删除成功', 'check')
+          this.$toast.success('删除成功')
           this.getItems()
         } else {
-          util.req.changeError(this.toast)
+          this.$toast.error()
         }
       })
     },
     verify(item) {
       if (!item.name) {
-        util.toast.fade(this.toast, '地区名称不能为空')
+        this.$toast.warn('地区名称不能为空')
         return false
       }
       if (!item.currency_symbol) {
-        util.toast.fade(this.toast, '货币符号不能为空')
+        this.$toast.warn('货币符号不能为空')
         return false
       }
       if (!item.exchange_rate) {
-        util.toast.fade(this.toast, '汇率不能为空')
+        this.$toast.warn('汇率不能为空')
         return false
       }
       if (item.sort && !util.isNum(item.sort)) {
-        util.toast.fade(this.toast, '顺序必须为整数')
+        this.$toast.warn('顺序必须为整数')
         return false
       }
       item.sort = parseInt(item.sort) || 1
@@ -276,7 +265,7 @@ export default {
     },
     isBusy() {
       if (this.busy) {
-        util.toast.fade(this.toast, '请先提交编辑中的数据!')
+        this.$toast.warn('请先提交编辑中的数据')
         return true
       }
       return false
@@ -287,7 +276,6 @@ export default {
   },
   components: {
     operate,
-    toast,
     pop
   }
 }

@@ -49,13 +49,10 @@
         <button class="button" @click="cal">计算</button>
       </div>
     </div>
-    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon">
-    </toast>
   </div>
 </template>
 
 <script>
-import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 
 export default {
@@ -118,7 +115,6 @@ export default {
     }
   },
   components: {
-    toast
   }
 }
 </script>

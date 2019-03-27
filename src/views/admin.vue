@@ -10,30 +10,17 @@
         <router-view></router-view>
       </div>
     </div>
-    <toast
-      v-show="toast.show"
-      :text="toast.text"
-      :icon="toast.icon"
-    >
-    </toast>
   </div>
 </template>
 
 <script>
-import vHeader from 'components/c-header/header'
+import vHeader from 'components/header'
 import vNav from 'components/c-nav/nav'
-import toast from 'components/toast/toast'
 import global from 'components/tools/global'
 
 export default {
   data() {
     return {
-      // toast
-      toast: {
-        show: false,
-        text: '',
-        icon: ''
-      },
       height: 0
     }
   },
@@ -53,8 +40,7 @@ export default {
   },
   components: {
     vHeader,
-    vNav,
-    toast
+    vNav
   }
 }
 </script>

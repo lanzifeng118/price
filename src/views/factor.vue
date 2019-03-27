@@ -55,13 +55,11 @@
         </tbody>
       </table>
     </div>
-    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
   </div>
 </template>
 
 <script>
 import operate from 'components/c-operate/index'
-import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 
@@ -70,13 +68,7 @@ export default {
     return {
       items: [],
       msg: '',
-      deleteIds: [],
-      // toast
-      toast: {
-        show: false,
-        text: '',
-        icon: ''
-      }
+      deleteIds: []
     }
   },
   created() {
@@ -117,50 +109,49 @@ export default {
         return
       }
       let text = type === 'insert' ? '添加' : '修改'
-      util.toast.show(this.toast, `正在${text}...`, 'upload')
+      this.$toast.upload(`正在${text}...`)
       this.axios(api.factor[type](item)).then(res => {
         // console.log(res)
         let code = res.data.code
         if (code === 200) {
           item.type = 1
-          util.toast.fade(this.toast, `${text}成功`, 'appreciate')
+          this.$toast.success(`${text}成功`)
           this.getItems()
         } else {
-          util.req.changeError(this.toast)
+          this.$toast.error()
         }
       })
     },
     verify(item) {
       if (!item.weight_1) {
-        util.toast.fade(this.toast, '头程体积重系数不能为空')
+        this.$toast.warn('头程体积重系数不能为空')
         return false
       }
       if (!util.isNum(item.weight_1)) {
-        util.toast.fade(this.toast, '头程体积重系数必须为数字')
+        this.$toast.warn('头程体积重系数必须为数字')
         return false
       }
       if (!item.weight_2) {
-        util.toast.fade(this.toast, '二程体积重系数不能为空')
+        this.$toast.warn('二程体积重系数不能为空')
         return false
       }
       if (!util.isNum(item.weight_2)) {
-        util.toast.fade(this.toast, '二程体积重系数必须为数字')
+        this.$toast.warn('二程体积重系数必须为数字')
         return false
       }
       if (!item.sell_cost) {
-        util.toast.fade(this.toast, '销售成本系数系数不能为空')
+        this.$toast.warn('销售成本系数系数不能为空')
         return false
       }
       if (!util.isNum(item.sell_cost)) {
-        util.toast.fade(this.toast, '销售成本系数系数必须为数字')
+        this.$toast.warn('销售成本系数系数必须为数字')
         return false
       }
       return true
     }
   },
   components: {
-    operate,
-    toast
+    operate
   }
 }
 </script>

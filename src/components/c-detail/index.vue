@@ -13,13 +13,10 @@
     </div>
     <pop v-if="invoke === 1" type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop">
     </pop>
-    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon">
-    </toast>
   </div>
 </template>
 
 <script>
-import toast from 'components/toast/toast'
 import pop from 'components/pop/pop'
 import util from 'components/tools/util'
 import result from 'components/c-result/index'
@@ -38,12 +35,6 @@ export default {
       msg: '正在查询...',
       note: '',
       info: null,
-      // toast
-      toast: {
-        show: false,
-        text: '',
-        icon: ''
-      },
       // pop
       pop: {
         text: '',
@@ -84,8 +75,8 @@ export default {
     cal() {
       let msg = util.verifyProduct(this.item, this.invoke)
       if (msg) {
-        this.msg = '参数错误，' + msg
-        util.toast.fade(this.toast, '参数错误，' + msg)
+        this.msg = `参数错误，${msg}`
+        this.$toast.warn(this.msg)
         this.goBack()
         return
       }
@@ -106,27 +97,26 @@ export default {
         if (data.code === 200) {
           this.info = data.data
         } else {
-          util.req.queryError(this.toast)
+          this.$toast.error()
         }
       })
     },
     insert() {
       // console.log(this.item)
       if (!this.item.sku.trim()) {
-        util.toast.fade(this.toast, '保存失败，商品sku不能为空')
-        return
+        return this.$toast.error('保存失败，商品sku不能为空')
       }
       this.axios(api.product.insert(this.item)).then(res => {
         let data = res.data
         // console.log(data)
         if (data.code === 200) {
-          util.toast.fade(this.toast, '保存成功', 'appreciate')
+          this.$toast.success('保存成功')
         } else if (data.code === 400) {
           // 已存在
           this.pop.text = `sku为${this.item.sku}的数据已存在，确定要覆盖吗？`
           this.pop.show = true
         } else {
-          util.req.queryError(this.toast)
+          this.$toast.error()
         }
       })
     },
@@ -137,9 +127,9 @@ export default {
       this.axios(api.product.updateBySku(this.item)).then(res => {
         let data = res.data
         if (data.code === 200) {
-          util.toast.fade(this.toast, '保存成功', 'check')
+          this.$toast.success('保存成功')
         } else {
-          util.toast.fade(this.toast, '保存失败，出错了', 'sad')
+          this.$toast.error('保存失败，出错了')
         }
         this.closePop()
       })
@@ -157,8 +147,7 @@ export default {
   },
   components: {
     result,
-    pop,
-    toast
+    pop
   }
 }
 </script>

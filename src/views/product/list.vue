@@ -99,7 +99,6 @@
       <paging v-show="items.length > 0" :paging="paging" @pagingNextClick="pagingNextClick"   @pagingPreClick="pagingPreClick" @pagingChange="pagingChange">
       </paging>
     </div>
-    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
     <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
   </div>
 </template>
@@ -108,7 +107,6 @@
 import operate from 'components/c-operate/index'
 import pop from 'components/pop/pop'
 import paging from 'components/c-paging/index'
-import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 import upload from 'components/c-upload/index'
@@ -183,7 +181,7 @@ export default {
           }
         } else {
           this.msg = '出错了，请稍后再试'
-          util.req.queryError(this.toast)
+          this.$toast.error()          
         }
       })
     },
@@ -233,19 +231,19 @@ export default {
         return
       }
       let text = type === 'insert' ? '添加' : '修改'
-      util.toast.show(this.toast, `正在${text}...`, 'upload')
+
       this.axios(api.product[type](item)).then(res => {
         // console.log(res)
         let code = res.data.code
         if (code === 200) {
           this.busy = false
           item.type = 1
-          util.toast.fade(this.toast, `${text}成功`, 'appreciate')
+          this.$toast.success(`${text}成功`)
           this.getItems()
         } else if (code === 400) {
-          util.toast.fade(this.toast, 'SKU已存在', 'close')
+          this.$toast.error('SKU已存在')
         } else {
-          util.req.changeError(this.toast)
+          this.$toast.error()
         }
       })
     },
@@ -264,28 +262,27 @@ export default {
     },
     confirmPop() {
       this.pop.show = false
-      util.toast.show(this.toast, '正在删除...', 'upload')
       this.axios(api.product.delete(this.deleteIds)).then(res => {
         let data = res.data
         if (data.code === 200) {
-          util.toast.fade(this.toast, '删除成功', 'check')
+          this.$toast.success('删除成功')
           this.getItems()
         } else {
-          util.req.changeError(this.toast)
+          this.$toast.error()
         }
       })
     },
     verify(item) {
       let verify = util.verifyProduct(item, 2)
       if (verify) {
-        util.toast.fade(this.toast, verify)
+        this.$toast.warn(verify)
         return false
       }
       return true
     },
     isBusy() {
       if (this.busy) {
-        util.toast.fade(this.toast, '请先提交编辑中的数据!')
+        this.$toast.warn('请先提交编辑中的数据')
         return true
       }
       return false
@@ -309,7 +306,6 @@ export default {
   },
   components: {
     operate,
-    toast,
     pop,
     upload,
     paging

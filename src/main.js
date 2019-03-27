@@ -9,9 +9,13 @@ import Vuex from 'vuex'
 import util from 'components/tools/util'
 import Router from 'vue-router'
 
+import registryToast from 'components/toast'
+
 Vue.use(Router)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
+Vue.use(registryToast)
+
 
 const router = new Router({
   linkActiveClass: 'active',

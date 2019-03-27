@@ -12,14 +12,12 @@
       <button class="button yellow" @click="download">
         <span class="icon icon-excel"></span>导出{{name}}</button>
     </div>
-    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon"></toast>
     <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
   </div>
 </template>
 
 <script>
 import pop from 'components/pop/pop'
-import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 
@@ -70,17 +68,17 @@ export default {
       this.pop.show = false
       if (this.file) {
         this.input = false
-        util.toast.show(this.toast, '正在上传', 'upload')
+        this.$toast.upload('正在上传')
         this.uploadFile(
           data => {
             // console.log(data)
             this.$emit('update')
             this.input = true
-            util.toast.fade(this.toast, '导入成功', 'appreciate')
+            this.$toast.success('导入成功')
           },
           () => {
             this.input = true
-            util.toast.fade(this.toast, '导入失败', 'sad')
+            this.$toast.error('导入失败')
           }
         )
       }
@@ -130,7 +128,6 @@ export default {
     }
   },
   components: {
-    toast,
     pop
   }
 }
