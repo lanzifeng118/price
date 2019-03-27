@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import util from 'components/tools/util'
 
 export default {
@@ -77,14 +78,7 @@ export default {
       }
     }
   },
-  computed: {
-    category() {
-      return this.$store.state.category
-    },
-    local() {
-      return this.$store.state.local
-    }
-  },
+  computed: mapState(['category', 'local']),
   mounted() {
     window.addEventListener('keyup', this.enter)
   },

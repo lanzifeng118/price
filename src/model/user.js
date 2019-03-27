@@ -1,6 +1,10 @@
-import { myAxios } from '../libs/myAxios'
+import { post } from '../libs/post'
+
+const URL = '/users'
 
 export const API_user = {
-  logout: myAxios('/logout'),
-  login: myAxios('/login')
+  logout: post('/logout'),
+  login: post('/login'),
+  query: post(URL, 'query'),
+  update: post(URL, 'update')
 }

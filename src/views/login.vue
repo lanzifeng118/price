@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import api from 'components/tools/api'
 import { API_user } from '../model/user'
 import { mapState } from 'vuex'
 export default {
@@ -67,9 +66,7 @@ export default {
       }
     }
   },
-  computed: mapState({
-    title: state => state.title
-  }),
+  computed: mapState(['title']),
   mounted() {
     window.addEventListener('keyup', this.enterSubmit)
   },

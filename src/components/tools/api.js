@@ -1,14 +1,4 @@
-let calUrl = '/binheng/api/calculation'
-let productUrl = '/binheng/api/goods'
 let inGoodsUrl = '/binheng/api/goods/in'
-
-let loginUrl = '/binheng/api/login'
-
-let zoneUrl = '/binheng/api/zone'
-
-let usersUrl = '/binheng/api/users'
-
-let factorUrl = '/binheng/api/factor'
 
 let domesticUrl = '/binheng/api/domestic/change'
 let dInNormalUrl = '/binheng/api/domestic/in/normal'
@@ -89,80 +79,8 @@ let uploadFun = (url, data) => {
 }
 
 let api = {
-  users: {
-    query() {
-      return queryFun(usersUrl)
-    },
-    update(data) {
-      return updateFun(usersUrl, data)
-    }
-  },
-  login(data) {
-    return {
-      method: 'post',
-      url: loginUrl,
-      data: data
-    }
-  },
-  cal: {
-    query(data) {
-      return queryFun(calUrl, data)
-    }
-  },
-  product: {
-    query(data) {
-      return queryFun(productUrl, data)
-    },
-    queryBySku(sku) {
-      return queryBySkuFun(productUrl, sku)
-    },
-    queryForCalculate(data) {
-      return {
-        method: 'post',
-        url: productUrl,
-        data: {
-          method: 'queryForCalculate',
-          data: data
-        }
-      }
-    },
-    insert(data) {
-      return insertFun(productUrl, data)
-    },
-    delete(ids) {
-      return deleteFun(productUrl, ids)
-    },
-    update(data) {
-      return updateFun(productUrl, data)
-    },
-    updateBySku(data) {
-      return updateBySkuFun(productUrl, data)
-    }
-  },
   inProduct(data) {
     return uploadFun(inGoodsUrl, data)
-  },
-  zone: {
-    query() {
-      return queryFun(zoneUrl)
-    },
-    insert(data) {
-      return insertFun(zoneUrl, data)
-    },
-    delete(ids) {
-      return deleteFun(zoneUrl, ids)
-    },
-    update(data) {
-      return updateFun(zoneUrl, data)
-    }
-  },
-  factor: {
-    query() {
-      return queryFun(factorUrl)
-    },
-    update(data) {
-      return updateFun(factorUrl, data)
-    }
   },
   domestic: {
     query(data) {

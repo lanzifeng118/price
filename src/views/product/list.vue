@@ -104,11 +104,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { API_product } from '../../model/product'
+
 import operate from 'components/c-operate/index'
 import pop from 'components/pop/pop'
 import paging from 'components/c-paging/index'
 import util from 'components/tools/util'
-import api from 'components/tools/api'
 import upload from 'components/c-upload/index'
 
 export default {
@@ -137,20 +139,7 @@ export default {
       }
     }
   },
-  computed: {
-    categoryMap() {
-      return this.$store.state.categoryMap
-    },
-    category() {
-      return this.$store.state.category
-    },
-    localMap() {
-      return this.$store.state.localMap
-    },
-    local() {
-      return this.$store.state.local
-    }
-  },
+  computed: mapState(['categoryMap', 'category', 'localMap', 'local']),
   created() {
     this.getItems()
   },
@@ -164,26 +153,25 @@ export default {
         page_size: this.paging.size,
         page_no: this.paging.no
       }
-      this.axios(api.product.query(page)).then(res => {
-        let data = res.data
-        // console.log(data)
-        if (data.code === 200) {
-          let list = data.data.list
+      API_product.query(page)
+        .then(data => {
+          const { list, total }  = data
           if (list.length > 0) {
             this.msg = ''
             list.forEach(v => {
               v.type = 1
             })
             this.items = list
-            this.paging.total = data.data.total
+            this.paging.total = total
           } else {
             this.msg = '还没有相关信息，请添加'
           }
-        } else {
+        })
+        .catch(err => {
+          console.warn(err)
           this.msg = '出错了，请稍后再试'
-          this.$toast.error()          
-        }
-      })
+          this.$toast.error()   
+        })
     },
     // type 1 初始化 2 edit 3 add
     editItem(item) {
@@ -230,22 +218,22 @@ export default {
       if (!this.verify(item)) {
         return
       }
-      let text = type === 'insert' ? '添加' : '修改'
+      const text = type === 'insert' ? '添加' : '修改'
 
-      this.axios(api.product[type](item)).then(res => {
-        // console.log(res)
-        let code = res.data.code
-        if (code === 200) {
+      API_product[type](item)
+        .then(data => {
           this.busy = false
           item.type = 1
           this.$toast.success(`${text}成功`)
           this.getItems()
-        } else if (code === 400) {
-          this.$toast.error('SKU已存在')
-        } else {
-          this.$toast.error()
-        }
-      })
+        })
+        .catch(({ code }) => {
+          if (code === 400) {
+            this.$toast.error('SKU已存在')
+          } else {
+            this.$toast.error()
+          }
+        })
     },
     // delete
     deleteItem(item) {
@@ -262,15 +250,14 @@ export default {
     },
     confirmPop() {
       this.pop.show = false
-      this.axios(api.product.delete(this.deleteIds)).then(res => {
-        let data = res.data
-        if (data.code === 200) {
+      API_product.delete({ ids: this.deleteIds.toString() })
+        .then(data => {
           this.$toast.success('删除成功')
           this.getItems()
-        } else {
+        })
+        .catch(err => {
           this.$toast.error()
-        }
-      })
+        })
     },
     verify(item) {
       let verify = util.verifyProduct(item, 2)

@@ -23,10 +23,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { API_product } from '../../../model/product'
+
 import paging from 'components/c-paging/index'
 import upload from 'components/c-upload/index'
 import calPrice from 'components/tools/calPrice'
-import api from 'components/tools/api'
 
 export default {
   props: ['profitRate', 'local'],
@@ -48,12 +50,10 @@ export default {
     this.getItems()
   },
   computed: {
-    logOrder() {
-      return this.$store.state.logOrder
-    },
     dowloadUrl() {
       return `/binheng/api/goods/download/calresult?local=${this.local}&profitRate=${this.profitRate}`
-    }
+    },
+    ...mapState(['logOrder'])
   },
   methods: {
     getItems() {
@@ -61,26 +61,23 @@ export default {
       this.titles = []
       this.msg = '加载中...'
       // ajax
-      let page = {
+      const page = {
         page_size: this.paging.size,
         page_no: this.paging.no,
         local: this.local
       }
-      this.axios(api.product.queryForCalculate(page)).then(res => {
-        let data = res.data
-        // console.log(data)
-        if (data.code === 200) {
+
+      API_product.queryForCalculate(page)
+        .then(data => {
           this.msg = ''
-          let result = calPrice.lowest(data.data, this.profitRate, false)
-          // console.log('lowest')
-          // console.log(result)
+          let result = calPrice.lowest(data, this.profitRate, false)
           this.titles = result.titles
           this.items = result.items
-          this.paging.total = data.data.product.total
-        } else {
+          this.paging.total = data.product.total
+        })
+        .catch(err => {
           this.msg = '出错了，请稍后再试'
-        }
-      })
+        })
     },
     download() {
       // 1

@@ -34,8 +34,7 @@
 </template>
 
 <script>
-// import mock from 'components/tools/mock'
-import api from 'components/tools/api'
+import { API_user } from '../../model/user'
 
 export default {
   data() {
@@ -53,22 +52,19 @@ export default {
       this.items = []
       this.msg = '加载中...'
       // ajax
-      this.axios(api.users.query()).then(res => {
-        let data = res.data
-        // console.log(data)
-        if (data.code === 200) {
-          let list = data.data
-          // list = mock.user
-          if (list.length > 0) {
+      API_user.query()
+        .then(data => {
+          if (data.length > 0) {
             this.msg = ''
-            this.items = list
+            this.items = data
           } else {
             this.msg = '无相关信息'
           }
-        } else {
+        })
+        .catch(err => {
+          console.warn(err)
           this.msg = '出错了，请稍后再试'
-        }
-      })
+        })
     }
   },
   components: {}
@@ -76,5 +72,4 @@ export default {
 </script>
 
 <style>
-
 </style>

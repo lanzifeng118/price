@@ -5,13 +5,39 @@
       <router-link :to="backUrl">
         <span class="icon-back"></span>返回</router-link>
     </div>
-    <div v-if="msg" class="detail-msg">{{msg}}</div>
-    <div v-else class="detail-box">
-      <button v-if="invoke === 1" class="detail-save yellow button" @click="insert">保存</button>
-      <button v-else-if="invoke === 2" class="detail-save yellow button" @click="change">切换为{{item.local === '1' ? 'Amazon' : 'Ebay'}}</button>
-      <result v-if="info" :product="item" :info="info" :invoke="invoke"></result>
+    <div
+      v-if="msg"
+      class="detail-msg"
+    >{{msg}}</div>
+    <div
+      v-else
+      class="detail-box"
+    >
+      <button
+        v-if="invoke === 1"
+        class="detail-save yellow button"
+        @click="insert"
+      >保存</button>
+      <button
+        v-else-if="invoke === 2"
+        class="detail-save yellow button"
+        @click="change"
+      >切换为{{item.local === '1' ? 'Amazon' : 'Ebay'}}</button>
+      <result
+        v-if="info"
+        :product="item"
+        :info="info"
+        :invoke="invoke"
+      ></result>
     </div>
-    <pop v-if="invoke === 1" type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop">
+    <pop
+      v-if="invoke === 1"
+      type="warning"
+      :text="pop.text"
+      v-show="pop.show"
+      @confirm="confirmPop"
+      @close="closePop"
+    >
     </pop>
   </div>
 </template>
@@ -20,7 +46,8 @@
 import pop from 'components/pop/pop'
 import util from 'components/tools/util'
 import result from 'components/c-result/index'
-import api from 'components/tools/api'
+import { API_calculation } from '../model/calculation'
+import { API_product } from '../model/product'
 
 export default {
   props: {
@@ -90,49 +117,47 @@ export default {
         local: item.local
       }
 
-      this.axios(api.cal.query(sendData)).then(res => {
-        let data = res.data
-        // console.log(data)
-        this.msg = ''
-        if (data.code === 200) {
-          this.info = data.data
-        } else {
+      API_calculation.query(sendData)
+        .then(data => {
+          this.msg = ''
+          this.info = data
+        })
+        .catch(err => {
+          this.msg = '出错了...'
           this.$toast.error()
-        }
-      })
+        })
     },
     insert() {
       // console.log(this.item)
       if (!this.item.sku.trim()) {
         return this.$toast.error('保存失败，商品sku不能为空')
       }
-      this.axios(api.product.insert(this.item)).then(res => {
-        let data = res.data
-        // console.log(data)
-        if (data.code === 200) {
+      API_product.insert(this.item)
+        .then(data => {
           this.$toast.success('保存成功')
-        } else if (data.code === 400) {
-          // 已存在
-          this.pop.text = `sku为${this.item.sku}的数据已存在，确定要覆盖吗？`
-          this.pop.show = true
-        } else {
-          this.$toast.error()
-        }
-      })
+        })
+        .catch(({ code, message }) => {
+          if (code === 400) {
+            this.pop.text = `sku为${this.item.sku}的数据已存在，确定要覆盖吗？`
+            this.pop.show = true
+          } else {
+            this.$toast.error()
+          }
+        }) 
     },
     closePop() {
       this.pop.show = false
     },
     confirmPop() {
-      this.axios(api.product.updateBySku(this.item)).then(res => {
-        let data = res.data
-        if (data.code === 200) {
+      API_product.updateBySku(this.item)
+        .then(data => {
+          this.closePop()
           this.$toast.success('保存成功')
-        } else {
+        })
+        .catch(err => {
           this.$toast.error('保存失败，出错了')
-        }
-        this.closePop()
-      })
+          this.closePop()
+        })
     },
     goBack() {
       setTimeout(() => {
@@ -173,5 +198,4 @@ export default {
   right: 0;
   top: -11px;
 }
-/* .has-result */
 </style>

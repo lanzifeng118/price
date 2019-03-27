@@ -1,11 +1,11 @@
 <template>
   <div class="cal-result">
-    <detail :invoke="2"></detail>
+    <v-detail :invoke="2"></v-detail>
   </div>
 </template>
 
 <script>
-import detail from 'components/c-detail/index'
+import vDetail from 'components/productDetail'
 
 export default {
   data() {
@@ -13,7 +13,7 @@ export default {
   },
   methods: {},
   components: {
-    detail
+    vDetail
   }
 }
 </script>

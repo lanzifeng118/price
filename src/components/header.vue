@@ -6,7 +6,7 @@
       </div>
       <ul class="header-operate f-right">
         <li class="header-operate-item">
-          您好，{{role}}！
+          您好，{{userRole}}！
         </li>
         <li class="header-operate-item">
           <a href="javascript: void 0" @click="logout"><span class="icon icon-exit"></span>退出登陆</a>
@@ -19,15 +19,12 @@
 <script>
   import { API_user } from '../model/user'
   import { mapState } from 'vuex'
-  
+
   export default {
     data() {
       return {}
     },
-    computed: mapState({
-      title: state => state.title,
-      role: state => state.userRole
-    }),
+    computed: mapState(['title', 'userRole']),
     methods: {
       logout() {
         API_user.logout({ username: this.username })

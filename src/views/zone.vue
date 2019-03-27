@@ -107,6 +107,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { API_zone } from '../model/zone'
+
 import operate from 'components/c-operate/index'
 import pop from 'components/pop/pop'
 import util from 'components/tools/util'
@@ -126,11 +129,7 @@ export default {
       }
     }
   },
-  computed: {
-    user() {
-      return this.$store.state.user
-    }
-  },
+  computed: mapState(['user']),
   created() {
     this.getItems()
   },
@@ -139,11 +138,9 @@ export default {
       this.items = []
       this.msg = '加载中...'
       // ajax
-      this.axios(api.zone.query()).then(res => {
-        let data = res.data
-        // console.log(data)
-        if (data.code === 200) {
-          let list = data.data.list
+      API_zone.query()
+        .then(data => {
+          const { list } = data
           if (list.length > 0) {
             this.msg = ''
             list.forEach(v => {
@@ -153,11 +150,10 @@ export default {
           } else {
             this.msg = '还没有相关信息，请添加'
           }
-        } else {
+        })
+        .catch(err => {
           this.msg = '出错了，请稍后再试'
-          this.$toast.err()
-        }
-      })
+        })
     },
     // type 1 初始化 2 edit 3 add
     editItem(item) {
@@ -203,20 +199,22 @@ export default {
       if (!this.verify(item)) {
         return
       }
-      let text = type === 'insert' ? '添加' : '修改'
-      this.axios(api.zone[type](item)).then(res => {
-        let code = res.data.code
-        if (code === 200) {
+      const text = type === 'insert' ? '添加' : '修改'
+
+      API_zone[type](item)
+        .then(data => {
           this.busy = false
           item.type = 1
           this.$toast.success(`${text}成功`)
           this.getItems()
-        } else if (code === 400) {
-          this.$toast.error('地区名称已存在')
-        } else {
-          this.$toast.error()
-        }
-      })
+        })
+        .catch(({ code }) => {
+          if (code === 400) {
+            this.$toast.error('地区名称已存在')
+          } else {
+            this.$toast.error()
+          }
+        })
     },
     // delete
     deleteItem(item) {
@@ -233,15 +231,14 @@ export default {
     },
     confirmPop() {
       this.pop.show = false
-      this.axios(api.zone.delete(this.deleteIds)).then(res => {
-        let data = res.data
-        if (data.code === 200) {
+      API_zone.delete({ ids: this.deleteIds.toString() })
+        .then(data => {
           this.$toast.success('删除成功')
           this.getItems()
-        } else {
+        })
+        .catch(err => {
           this.$toast.error()
-        }
-      })
+        })
     },
     verify(item) {
       if (!item.name) {

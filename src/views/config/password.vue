@@ -32,8 +32,7 @@
 </template>
 
 <script>
-import util from 'components/tools/util'
-import api from 'components/tools/api'
+import { API_user } from '../../model/user'
 
 export default {
   props: {
@@ -60,18 +59,13 @@ export default {
     getUsers() {
       this.users = []
       // ajax
-      this.axios(api.users.query()).then(res => {
-        let data = res.data
-        // console.log(data)
-        if (data.code === 200) {
-          let list = data.data
-          if (list.length > 0) {
-            this.users = list
-          }
-        } else {
-          this.$toast.error()
-          this.goback()
+      API_user.query().then(data => {
+        if (data.length > 0) {
+          this.users = data
         }
+      }).catch(err => {
+        this.$toast.error()
+        this.goback()
       })
     },
     submit() {
@@ -98,22 +92,13 @@ export default {
       return true
     },
     update() {
-      let sendData = {
-        id: this.item.id,
-        password: this.item.new
-      }
-      this.axios(api.users.update(sendData)).then(res => {
-        let data = res.data
-        if (data.code === 200) {
+      const { id, new: password } = this.item
+      API_user.update({ id, password })
+        .then(res => {
           this.showSuccess()
-        } else {
+        }).catch(err => {
           this.$toast.error()
-        }
-      }).catch(err => {
-        if (err) {
-          this.$toast.error()
-        }
-      })
+        })
     },
     showSuccess() {
       this.$toast.success('修改成功！')

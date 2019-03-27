@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import logistics from 'components/c-logistics/index'
+import logistics from './components/logistics'
 
 export default {
   data() {

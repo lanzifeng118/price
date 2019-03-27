@@ -59,3 +59,5 @@ export default registryToast
 // this.$toast.success()
 // this.$toast.error()
 // this.$toast.warn()
+// import { mapState } from 'vuex'
+// count: state => state.count

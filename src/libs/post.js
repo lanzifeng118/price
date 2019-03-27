@@ -1,19 +1,19 @@
 import axios from 'axios'
 
-export function myAxios(url, method = 'post') {
+export function post(url, method) {
   return function(data) {
     return new Promise((resolve, reject) => {
       const params = {
-        method,
-          url: '/binheng/api' + url
+        method: 'post',
+        url: '/binheng/api' + url
       }
-      switch (method) {
-        case 'post':
-          params.data = data
-          break
-        default:
-          params.params = data
-          break
+      if (method) {
+        params.data = {
+          method,
+          data
+        }
+      } else {
+        params.data = data
       }
       axios(params)
         .then(res => {

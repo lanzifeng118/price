@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import { API_factor } from '../model/factor'
+
 import operate from 'components/c-operate/index'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
@@ -80,47 +82,38 @@ export default {
       this.items = []
       this.msg = '加载中...'
       // ajax
-      this.axios(api.factor.query()).then(res => {
-        let data = res.data
-        // console.log(data)
-        if (data.code === 200) {
+      API_factor.query()
+        .then(data => {
           this.msg = ''
-          let factor = data.data
+          let factor = data
           factor.type = 1
           this.items.push(factor)
-        } else {
+        })
+        .catch(err => {
           this.msg = '出错了，请稍后再试'
-        }
-      })
+        })
     },
     // type 1 初始化 2 edit
     editItem(item) {
       item.type = 2
     },
     submitEdit(item) {
-      this.submitChange(item, 'update')
+      if (!this.verify(item)) {
+        return
+      }
+      API_factor.update(item)
+        .then(data => {
+          item.type = 1
+          this.$toast.success(`修改成功`)
+          this.getItems()
+        })
+        .catch(err => {
+          this.$toast.error()
+        })
     },
     cancelEdit(item) {
       item.type = 1
       this.getItems()
-    },
-    submitChange(item, type = 'insert') {
-      if (!this.verify(item)) {
-        return
-      }
-      let text = type === 'insert' ? '添加' : '修改'
-      this.$toast.upload(`正在${text}...`)
-      this.axios(api.factor[type](item)).then(res => {
-        // console.log(res)
-        let code = res.data.code
-        if (code === 200) {
-          item.type = 1
-          this.$toast.success(`${text}成功`)
-          this.getItems()
-        } else {
-          this.$toast.error()
-        }
-      })
     },
     verify(item) {
       if (!item.weight_1) {
