@@ -2,7 +2,6 @@
   <div class="header">
     <div class="header-wrap f-clearfix">
       <div class="header-info f-left">
-        <!-- <img :src="logoSrc" class="header-logo" alt=""> -->
         <span>{{title}}</span>
       </div>
       <ul class="header-operate f-right">
@@ -18,29 +17,24 @@
 </template>
 
 <script>
-  import api from 'components/tools/api'
-  import logoSrc from 'src/common/images/logo.png'
+  import { API_user } from '../../model/user'
+  import { mapState } from 'vuex'
   export default {
     data() {
-      return {
-        logoSrc
-      }
+      return {}
     },
     computed: {
-      role() {
-        return this.$store.state.userRole
-      },
-      title() {
-        return this.$store.state.title
-      }
+      ...mapState({
+        title: state => state.title,
+        role: state => state.userRole
+      })
     },
     methods: {
       logout() {
-        this.axios(api.logout({username: this.username})).then((res) => {
-          if (res.data.code === 200) {
-            this.$router.push({path: '/login', query: { redirect: this.$route.path }})
-          }
-        })
+        API_user.logout({ username: this.username })
+          .then(data => {
+            this.$router.push({ path: '/login', query: { redirect: this.$route.path }})
+          })
       }
     }
   }

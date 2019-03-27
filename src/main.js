@@ -2,14 +2,21 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
+import routes from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
 import util from 'components/tools/util'
+import Router from 'vue-router'
 
+Vue.use(Router)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
+
+const router = new Router({
+  linkActiveClass: 'active',
+  routes
+})
 
 Vue.config.productionTip = false
 

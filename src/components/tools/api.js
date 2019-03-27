@@ -3,7 +3,6 @@ let productUrl = '/binheng/api/goods'
 let inGoodsUrl = '/binheng/api/goods/in'
 
 let loginUrl = '/binheng/api/login'
-let logoutUrl = '/binheng/api/logout'
 
 let zoneUrl = '/binheng/api/zone'
 
@@ -102,13 +101,6 @@ let api = {
     return {
       method: 'post',
       url: loginUrl,
-      data: data
-    }
-  },
-  logout(data) {
-    return {
-      method: 'post',
-      url: logoutUrl,
       data: data
     }
   },
