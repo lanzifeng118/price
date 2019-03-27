@@ -48,39 +48,39 @@ export default {
     items() {
       let user = this.$store.state.user
       let navs = [{
-        src: '/admin/calculate',
+        src: '/calculate',
         name: '计算',
         style: 'calculate'
       }, {
-        src: '/admin/search',
+        src: '/search',
         name: '查询SKU',
         style: 'barcode-scan'
       }, {
-        src: '/admin/product',
+        src: '/product',
         name: '商品信息',
         style: 'cart'
       }, {
-        src: '/admin/lowest',
+        src: '/lowest',
         name: '最低售价',
         style: 'tag'
       }, {
-        src: '/admin/zone',
+        src: '/zone',
         name: '地区信息',
         style: 'map'
       }, {
-        src: '/admin/factor',
+        src: '/factor',
         name: '公式系数',
         style: 'evaluate'
       }, {
-        src: '/admin/domestic',
+        src: '/domestic',
         name: '国内小包',
         style: 'truck'
       }, {
-        src: '/admin/local',
+        src: '/local',
         name: '当地配送',
         style: 'courier'
       }, {
-        src: '/admin/config',
+        src: '/config',
         name: '系统设置',
         style: 'config'
       }]

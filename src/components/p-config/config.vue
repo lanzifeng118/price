@@ -13,8 +13,8 @@ export default {
   data() {
     return {
       tabItems: [
-        { text: '用户列表', href: '/admin/config/', icon: 'user' },
-        { text: '修改密码', href: '/admin/config/password', icon: 'edit_circle' }
+        { text: '用户列表', href: '/config/', icon: 'user' },
+        { text: '修改密码', href: '/config/password', icon: 'edit_circle' }
       ]
     }
   },

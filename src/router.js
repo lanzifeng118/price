@@ -44,20 +44,6 @@ import ConfigPassword from 'components/p-config/password/index'
 export default [
   {
     path: '/',
-    redirect: { name: 'admin' }
-  },
-  {
-    path: '/login',
-    component: () => import('views/login.vue'),
-    meta: { loginPage: true }
-  },
-  {
-    path: '/error',
-    component: ErrorPage
-  },
-  {
-    path: '/admin',
-    name: 'admin',
     meta: { hasLogin: true }, // 需要登录
     component: Admin,
     redirect: { name: 'calculate' },
@@ -67,10 +53,9 @@ export default [
         name: 'calculate',
         meta: { level1: true },
         component: Calculate,
-        redirect: { name: 'calculateInput' },
         children: [
           {
-            path: 'input',
+            path: '/',
             component: CalculateInput,
             name: 'calculateInput'
           },
@@ -88,9 +73,8 @@ export default [
         path: 'product',
         component: Product,
         meta: { level2: true },
-        redirect: { name: 'productList' },
         children: [
-          { path: 'list', component: ProductList, name: 'productList' },
+          { path: '/', component: ProductList, name: 'productList' },
           { path: 'detail', component: ProductDetail }
         ]
       },
@@ -152,5 +136,14 @@ export default [
         ]
       }
     ]
+  },
+  {
+    path: '/login',
+    component: () => import('views/login.vue'),
+    meta: { loginPage: true }
+  },
+  {
+    path: '/error',
+    component: ErrorPage
   }
 ]

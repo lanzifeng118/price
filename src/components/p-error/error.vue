@@ -23,7 +23,7 @@
     },
     methods: {
       back() {
-        this.$router.push('/admin/home')
+        this.$router.push('/')
       }
     }
   }

@@ -13,10 +13,10 @@ export default {
   data() {
     return {
       tabItems: [
-        { text: '10%利润率', href: '/admin/lowest/', icon: 'eee' },
-        { text: '15%利润率', href: '/admin/lowest/ebay-15', icon: 'eee' },
-        { text: '10%利润率', href: '/admin/lowest/amazon-10', icon: 'amazon' },
-        { text: '15%利润率', href: '/admin/lowest/amazon-15', icon: 'amazon' }
+        { text: '10%利润率', href: '/lowest/', icon: 'eee' },
+        { text: '15%利润率', href: '/lowest/ebay-15', icon: 'eee' },
+        { text: '10%利润率', href: '/lowest/amazon-10', icon: 'amazon' },
+        { text: '15%利润率', href: '/lowest/amazon-15', icon: 'amazon' }
       ]
     }
   },

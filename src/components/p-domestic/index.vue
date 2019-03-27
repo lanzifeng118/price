@@ -13,10 +13,10 @@ export default {
   data() {
     return {
       tabItems: [
-        { text: '普通', href: '/admin/domestic/', icon: 'bag' },
-        { text: '带电', href: '/admin/domestic/electric', icon: 'electric' },
-        { text: '带磁', href: '/admin/domestic/magnetism', icon: 'magnetism' },
-        { text: '超尺寸', href: '/admin/domestic/oversize', icon: 'box' }
+        { text: '普通', href: '/domestic/', icon: 'bag' },
+        { text: '带电', href: '/domestic/electric', icon: 'electric' },
+        { text: '带磁', href: '/domestic/magnetism', icon: 'magnetism' },
+        { text: '超尺寸', href: '/domestic/oversize', icon: 'box' }
       ]
     }
   },

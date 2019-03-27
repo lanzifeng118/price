@@ -89,7 +89,7 @@ router.beforeEach((to, from, next) => {
   let matched = to.matched
 
   if (matched.length === 0) {
-    from.name ? next({ name: from.name }) : next('/admin')
+    from.name ? next({ name: from.name }) : next('/')
     return
   }
   if (matched.some(v => v.meta.hasLogin)) {
@@ -146,7 +146,7 @@ router.beforeEach((to, from, next) => {
   }
 
   function goNext(params) {
-    user === 'wl001' ? next('/admin/zone') : next('/admin')
+    user === 'wl001' ? next('/zone') : next('/')
   }
 })
 

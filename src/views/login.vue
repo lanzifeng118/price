@@ -116,7 +116,7 @@ export default {
             if (redirect) {
               this.$router.push(redirect)
             } else {
-              this.$router.push('/admin')
+              this.$router.push('/')
             }
           }, 300)
         })

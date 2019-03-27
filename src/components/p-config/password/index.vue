@@ -134,7 +134,7 @@ export default {
     },
     goback() {
       setTimeout(() => {
-        this.$router.push('/admin/config')
+        this.$router.push('/config')
       }, 700)
     }
   },

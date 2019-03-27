@@ -106,7 +106,7 @@ export default {
       if (!this.verify()) {
         return
       }
-      this.$router.push({path: '/admin/calculate/result', query: this.item})
+      this.$router.push({path: '/calculate/result', query: this.item})
     },
     verify() {
       let verify = util.verifyProduct(this.item)

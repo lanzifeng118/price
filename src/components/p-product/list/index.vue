@@ -292,7 +292,7 @@ export default {
     },
     forDetail(item) {
       item.local = '1'
-      this.$router.push({path: '/admin/product/detail', query: item})
+      this.$router.push({path: '/product/detail', query: item})
     },
     pagingPreClick() {
       this.paging.no--

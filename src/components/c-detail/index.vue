@@ -69,7 +69,7 @@ export default {
     },
     backUrl() {
       let url = this.invoke === 1 ? 'calculate' : 'product'
-      return `/admin/${url}`
+      return `/${url}`
     }
   },
   watch: {
@@ -152,7 +152,7 @@ export default {
     change() {
       let item = this.item
       item.local === '1' ? (item.local = '2') : (item.local = '1')
-      this.$router.push({ path: '/admin/product/detail', query: item })
+      this.$router.push({ path: '/product/detail', query: item })
     }
   },
   components: {
