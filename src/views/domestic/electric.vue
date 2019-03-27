@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import logistics from './components/logistics'
+import logistics from 'components/logistics'
 
 export default {
   data() {

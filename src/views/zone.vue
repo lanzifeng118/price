@@ -113,7 +113,6 @@ import { API_zone } from '../model/zone'
 import operate from 'components/c-operate/index'
 import pop from 'components/pop/pop'
 import util from 'components/tools/util'
-import api from 'components/tools/api'
 
 export default {
   data() {

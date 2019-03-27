@@ -140,11 +140,11 @@
 </template>
 
 <script>
+import { API_logistics } from '../model/logistics'
+
 import operate from 'components/c-operate/index'
 import upload from 'components/c-upload/index'
 import pop from 'components/pop/pop'
-import util from 'components/tools/util'
-import api from 'components/tools/api'
 
 export default {
   props: {
@@ -204,13 +204,11 @@ export default {
       this.items = []
       this.msg = '加载中...'
       // ajax
-      this.axios(api[this.apiKey].query({ type: this.type })).then(res => {
-        let data = res.data
-        // console.log(data)
-        if (data.code === 200) {
+      API_logistics[this.apiKey].query({ type: this.type })
+        .then(data => {
           if (this.apiKey === 'local') {
             const DIGITS = 3
-            data.data.forEach(v => {
+            data.forEach(v => {
               v.list.forEach(vL => {
                 let priceU = parseFloat(vL.price_unit)
                 vL.price_unit_rmb = priceU
@@ -229,13 +227,12 @@ export default {
               })
             })
           }
-          this.items = data.data
+          this.items = data
           this.msg = ''
-        } else {
+        })
+        .catch(err => {
           this.msg = '出错了，请稍后再试'
-          this.$toast.error('出错了，请稍后再试')
-        }
-      })
+        })
     },
     update() {
       this.getItems()
@@ -288,19 +285,17 @@ export default {
       if (!this.verify(item)) {
         return
       }
-      let text = type === 'insert' ? '添加' : '修改'
-      this.axios(api[this.apiKey][type](item)).then(res => {
-        // console.log(res)
-        let code = res.data.code
-        if (code === 200) {
+      const text = type === 'insert' ? '添加' : '修改'
+      API_logistics[this.apiKey][type](item)
+        .then(data => {
           this.busy = false
           this.$set(item, 'doType', 1)
           this.$toast.success(`${text}成功`)
           this.getItems()
-        } else {
-          this.$toast.error(`出错了，请稍后再试`)
-        }
-      })
+        })
+        .catch(err => {
+          this.$toast.error()
+        })
     },
     // delete
     deleteItem(item) {
@@ -320,15 +315,14 @@ export default {
     },
     confirmPop() {
       this.pop.show = false
-      this.axios(api[this.apiKey].delete(this.deleteIds)).then(res => {
-        let data = res.data
-        if (data.code === 200) {
+      API_logistics[this.apiKey].delete({ ids: this.deleteIds.toString() })
+        .then(data => {
           this.$toast.success('删除成功')
           this.getItems()
-        } else {
+        })
+        .catch(err => {
           this.$toast.error()
-        }
-      })
+        })
     },
     isBusy() {
       if (this.busy) {

@@ -7,7 +7,10 @@ export function post(url, method) {
         method: 'post',
         url: '/binheng/api' + url
       }
-      if (method) {
+      if (method === 'upload') {
+        params.headers = { 'content-type': 'multipart/form-data' }
+        params.data = data        
+      } else if (method){
         params.data = {
           method,
           data
@@ -15,6 +18,7 @@ export function post(url, method) {
       } else {
         params.data = data
       }
+      
       axios(params)
         .then(res => {
           const { code, data, msg } = res.data

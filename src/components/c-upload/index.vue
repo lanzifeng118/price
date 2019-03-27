@@ -101,29 +101,6 @@ export default {
         })
     },
     download() {
-      // this.axios.get(this.dowloadUrl, { params: data }).then(res => {
-      //   // console.log(res.data)
-      //   if (res.status === 200) {
-      //     let blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
-      //     console.log(blob)
-      //     let fileName = '文件名称.xls'
-      //     downFile(blob, fileName)
-      //   } else {
-      //     console.log('fail')
-      //   }
-      // })
-      // function downFile(blob, fileName) {
-      //   if (window.navigator.msSaveOrOpenBlob) {
-      //     navigator.msSaveBlob(blob, fileName)
-      //   } else {
-      //     let link = document.createElement('a')
-      //     link.href = window.URL.createObjectURL(blob)
-      //     console.log(link.href)
-      //     link.download = fileName
-      //     link.click()
-      //     window.URL.revokeObjectURL(link.href)
-      //   }
-      // }
       window.location.assign(this.dowloadUrl)
     }
   },

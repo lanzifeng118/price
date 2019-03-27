@@ -63,7 +63,6 @@ import { API_factor } from '../model/factor'
 
 import operate from 'components/c-operate/index'
 import util from 'components/tools/util'
-import api from 'components/tools/api'
 
 export default {
   data() {
