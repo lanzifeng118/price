@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       tabItems: [
-        { text: 'EBAY', href: '/local/', icon: 'eee' },
+        { text: 'Ebay', href: '/local/', icon: 'eee' },
         { text: 'Amazon', href: '/local/amazon', icon: 'amazon' },
         { text: 'Wish', href: '/local/wish', icon: 'evaluate' }
       ]

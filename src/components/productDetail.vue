@@ -18,11 +18,26 @@
         class="detail-save yellow button"
         @click="insert"
       >保存</button>
-      <button
+      <!-- <button
         v-else-if="invoke === 2"
         class="detail-save yellow button"
         @click="change"
-      >切换为{{item.local === '1' ? 'Amazon' : 'Ebay'}}</button>
+      >切换为{{item.local === '1' ? 'Amazon' : 'Ebay'}}</button> -->
+      <select
+        v-else-if="invoke === 2"
+        class="detail-save"
+        v-model="searchLocal"
+        @change="change"
+      >
+        <option
+          disabled
+          value=""
+        >选择当地配送</option>
+        <option
+          v-for="item in local"
+          :value="item.type"
+        >{{item.name}}</option>
+      </select>
       <result
         v-if="info"
         :localType="item.local"
@@ -64,6 +79,7 @@ export default {
       msg: '正在查询...',
       note: '',
       info: null,
+      searchLocal: '1',
       // pop
       pop: {
         text: '',
@@ -74,7 +90,7 @@ export default {
   computed: {
     item() {
       const { sku, profit_rate, selling_price, purchase_price, bulk, category, local, weight } = this.$route.query
-      console.log(category, this.categoryMap)
+      // console.log(category, this.categoryMap)
       const item = {
         sku: sku || '',
         profit_rate,
@@ -85,6 +101,7 @@ export default {
         category: this.categoryMap[category] ? category : this.category[0].type,
         local: this.localMap[local] ? local : this.local[0].type
       }
+      this.searchLocal = item.local
       // console.log(item)
       return item
     },
@@ -164,8 +181,8 @@ export default {
       }, 700)
     },
     change() {
-      let item = this.item
-      item.local === '1' ? (item.local = '2') : (item.local = '1')
+      const { item, searchLocal } = this
+      item.local = searchLocal
       this.$router.push({ path: '/product/detail', query: item })
     }
   },

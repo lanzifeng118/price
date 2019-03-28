@@ -37,6 +37,7 @@
         </thead>
         <tbody v-for="itemZ in items">
           <tr v-for="(item, index) in itemZ.list">
+            <!-- 国家 -->
             <td v-if="index === 0" :rowspan="logOrder.length">{{itemZ.name}}</td>
             <!-- 物流方式 -->
             <td>{{item.logName}}</td>
@@ -87,6 +88,10 @@ export default {
       type: String,
       required: true
     },
+    zoneShow: {
+      type: String,
+      defalut: ''
+    },
     info: {
       type: Object,
       required: true
@@ -111,9 +116,10 @@ export default {
       return this.lack ? '7.7%' : '5.55%'
     },
     items() {
-      const { info, product, localType } = this
+      const { info, product, localType, zoneShow } = this
       const { zone, factor, domestic, local } = info
-      return calPrice.cal(product, zone, factor, domestic, local, localType,  product.profit_rate, false)
+      const items = calPrice.cal(product, zone, factor, domestic, local, localType,  product.profit_rate, false)
+      return zoneShow ? items.filter(val => val.name === zoneShow) : items
     },
     ...mapState(['logOrder', 'user', 'categoryMap', 'localMap'])
   },

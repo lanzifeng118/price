@@ -215,8 +215,8 @@ function lowest(data, profitRate, backend = true) {
   const items = []
   const titles = ['SKU']
   zone.forEach(v => {
-    logOrder.forEach(vL => {
-      titles.push(v.name + '-' + vL.name.slice(0, 2))
+    logOrder.slice(0, 3).forEach(vL => {
+      titles.push(v.name + '-' + vL.name)
     })
   })
   product.list.forEach(v => {

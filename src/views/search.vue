@@ -14,6 +14,18 @@
           :value="item.type"
         >{{item.name}}</option>
       </select>
+      <select
+        v-model="search.zone"
+        @change="submitSelect"
+      >
+        <option
+          value=""
+        >所有地区</option>
+        <option
+          v-for="item in zone"
+          :value="item.name"
+        >{{item.name}}</option>
+      </select>
       <input
         type="text"
         v-model.trim.lazy="search.sku"
@@ -32,6 +44,7 @@
       :product="product"
       :info="info"
       :localType="search.local"
+      :zoneShow="search.zone"
       :invoke="3"
     ></result>
   </div>
@@ -40,6 +53,7 @@
 <script>
 import { mapState } from 'vuex'
 import { API_product } from '../model/product'
+import { API_zone } from '../model/zone'
 import result from 'components/productResult'
 import verifyProduct from '../libs/verifyProduct'
 
@@ -48,8 +62,10 @@ export default {
     return {
       search: {
         sku: '',
+        zone: '',
         local: '1'
       },
+      zone: [],
       msg: '',
       note: '',
       info: null,
@@ -57,7 +73,20 @@ export default {
     }
   },
   computed: mapState(['local']),
+  created() {
+    this.getZone()
+  },
   methods: {
+    getZone() {
+      API_zone.query()
+        .then(data => {
+          const { list } = data
+          if (list.length > 0) {
+            console.log(list)
+            this.zone = list
+          }
+        })
+    },
     submitSelect() {
       if (this.search.sku) {
         this.submit()

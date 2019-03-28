@@ -174,6 +174,7 @@ export default {
   max-height: 150px;
 }
 .nav-item {
+  border-bottom: 1px dashed #f2f2f2;
 }
 
 .nav-item-main {
@@ -206,8 +207,9 @@ export default {
 
 .nav-item-sub {
   display: block;
-  line-height: 35px;
-  padding-left: 35px;
+  font-size: 13px;
+  line-height: 30px;
+  padding-left: 30px;
 }
 
 .nav-item-sub .icon {

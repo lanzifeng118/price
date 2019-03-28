@@ -6,7 +6,7 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th width="20%"><span class="icon-nessisary"></span>当地配送</th>
+            <th width="20%"></span>当地配送</th>
             <th width="20%"><span class="icon-nessisary"></span>头程体积重系数</th>
             <th width="20%"><span class="icon-nessisary"></span>二程体积重系数</th>
             <th width="20%"><span class="icon-nessisary"></span>销售成本系数</th>
