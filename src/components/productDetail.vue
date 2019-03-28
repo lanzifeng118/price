@@ -25,6 +25,7 @@
       >切换为{{item.local === '1' ? 'Amazon' : 'Ebay'}}</button>
       <result
         v-if="info"
+        :localType="item.local"
         :product="item"
         :info="info"
         :invoke="invoke"
@@ -112,15 +113,10 @@ export default {
       }
       this.info = null
       this.msg = '正在查询...'
-      let item = this.item
-      // ajax
       // 商品种类、当地配送种类
-      let sendData = {
-        category: item.category,
-        local: item.local
-      }
+      const { category, local } = this.item
 
-      API_calculation.query(sendData)
+      API_calculation.query({ category, local })
         .then(data => {
           this.msg = ''
           this.info = data

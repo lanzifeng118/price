@@ -36,6 +36,29 @@ const local = [
 
 export const categoryMap = turnObj(category)
 export const localMap = turnObj(local)
+// export const logOrder = ['国内小包', '海运小包', '空运小包']
+export const logOrder = [
+  {
+    type: 1,
+    name: '国内小包'
+  },
+  {
+    type: 2,
+    name: 'FBW海运'
+  },
+  {
+    type: 3,
+    name: 'FBW空运'
+  },
+  {
+    type: 4,
+    name: '外仓空运'
+  },
+  {
+    type: 5,
+    name: '外仓海运'
+  }
+]
 
 export default {
   state: {
@@ -46,7 +69,7 @@ export default {
     categoryMap,
     local,
     localMap,
-    logOrder: ['国内小包', '海运小包', '空运小包']
+    logOrder,
   },
   mutations: {
     setUser(state, user) {

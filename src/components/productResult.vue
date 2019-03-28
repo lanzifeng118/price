@@ -7,8 +7,8 @@
       <span>采购价：¥{{product.purchase_price}}，</span>
       重量：{{product.weight}}g，
       体积：{{product.bulk  || '?'}}cm³，
-      种类：{{category[product.category]}}，
-      当地配送：{{local[product.local]}}
+      种类：{{categoryMap[product.category]}}，
+      当地配送：{{localMap[product.local]}}
     </h3>
     <div class="list-table-wrap">
       <table>
@@ -39,7 +39,7 @@
           <tr v-for="(item, index) in itemZ.list">
             <td v-if="index === 0" :rowspan="logOrder.length">{{itemZ.name}}</td>
             <!-- 物流方式 -->
-            <td>{{item.logType}}</td>
+            <td>{{item.logName}}</td>
             <!-- 售价 -->
             <td v-if="!lack">{{itemZ.currency_symbol}} {{item.sPrice}}</td>
             <!-- 采购成本 -->
@@ -74,13 +74,18 @@
 </template>
 
 <script>
-import calPrice from 'components/tools/calPrice'
+import { mapState } from 'vuex'
+import calPrice from '../libs/calPrice'
 export default {
   props: {
     // 1、计算 2、商品信息 3、查询 权限限制
     invoke: {
       type: Number,
       defalut: 1
+    },
+    localType: {
+      type: String,
+      required: true
     },
     info: {
       type: Object,
@@ -95,31 +100,22 @@ export default {
     return {}
   },
   computed: {
-    logOrder() {
-      return this.$store.state.logOrder
-    },
     lack() {
       return this.invoke === 2 || this.invoke === 3
     },
     limit() {
-      return this.invoke === 3 && this.$store.state.user === 'xs002'
+      return this.invoke === 3 && this.user === 'xs002'
     },
     width() {
       // search 13 limit 12
       return this.lack ? '7.7%' : '5.55%'
     },
-    category() {
-      return this.$store.state.categoryMap
-    },
-    local() {
-      return this.$store.state.localMap
-    },
     items() {
-      // console.log(this.search)
-      const { info, product } = this
-      const { zone } = info
-      return calPrice.cal(product, zone, info.factor, info.domestic, info.local, product.profit_rate, false)
-    }
+      const { info, product, localType } = this
+      const { zone, factor, domestic, local } = info
+      return calPrice.cal(product, zone, factor, domestic, local, localType,  product.profit_rate, false)
+    },
+    ...mapState(['logOrder', 'user', 'categoryMap', 'localMap'])
   },
   components: {}
 }

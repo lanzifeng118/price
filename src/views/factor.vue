@@ -6,14 +6,19 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th width="25%"><span class="icon-nessisary"></span>头程体积重系数</th>
-            <th width="25%"><span class="icon-nessisary"></span>二程体积重系数</th>
-            <th width="25%"><span class="icon-nessisary"></span>销售成本系数</th>
-            <th width="25%" class="list-table-wrap-th-operate">操作</th>
+            <th width="20%"><span class="icon-nessisary"></span>当地配送</th>
+            <th width="20%"><span class="icon-nessisary"></span>头程体积重系数</th>
+            <th width="20%"><span class="icon-nessisary"></span>二程体积重系数</th>
+            <th width="20%"><span class="icon-nessisary"></span>销售成本系数</th>
+            <th width="20%" class="list-table-wrap-th-operate">操作</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in items" :class="{edit: item.type === 2, add: item.type === 3}">
+            <!-- weight_1 -->
+            <td>
+              <div>{{localMap[item.localType]}}</div>
+            </td>
             <!-- weight_1 -->
             <td>
               <div v-if="item.type === 1">
@@ -60,6 +65,7 @@
 
 <script>
 import { API_factor } from '../model/factor'
+import { mapState } from 'vuex'
 
 import operate from 'components/c-operate/index'
 import { isNum } from '../libs/util'
@@ -68,10 +74,10 @@ export default {
   data() {
     return {
       items: [],
-      msg: '',
-      deleteIds: []
+      msg: ''
     }
   },
+  computed: mapState(['localMap']),
   created() {
     this.getItems()
   },
@@ -83,10 +89,13 @@ export default {
       // ajax
       API_factor.query()
         .then(data => {
+          console.log(data)
           this.msg = ''
-          let factor = data
-          factor.type = 1
-          this.items.push(factor)
+          data.type = 1
+          data.localType = '1'
+          this.items.push(data)
+          this.items.push({localType: '2', type: 1})
+          this.items.push({localType: '3', type: 1})
         })
         .catch(err => {
           this.msg = '出错了，请稍后再试'

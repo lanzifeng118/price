@@ -1,44 +1,5 @@
+import { logOrder } from '../store' // 物流方式
 const DIGITS = 2
-let logOrder = ['国内小包', '海运小包', '空运小包']
-
-/**
- * data: 组合好返回给前端的数据,属性有：
- *    product: total,list 下载时，list包含所有数据
- *    zone: 地区信息
- *    factor: 因子
- *    local: 当地配送物流
- *    domestic_1: 普通
- *    domestic_2: 带电
- *    domestic_3: 带磁
- *    domestic_4: 超尺寸
- * profitRate: 利润率，前端传入
- * backend: 是否后端使用，默认是，返回数据不太一样，后端返回一个二维数组
- */
-
-function lowest(data, profitRate, backend = true) {
-  // console.log(data)
-  // console.log(profitRate)
-  let product = data.product
-  let zone = data.zone
-  let factor = data.factor
-  let local = data.local
-
-  let items = []
-  let titles = ['SKU']
-  zone.forEach(v => {
-    logOrder.forEach(vL => {
-      titles.push(v.name + '-' + vL.slice(0, 2))
-    })
-  })
-  product.list.forEach(v => {
-    let arr = [v.sku]
-    let domestic = data[`domestic_${v.category}`]
-    arr = arr.concat(cal(v, zone, factor, domestic, local, profitRate))
-    items.push(arr)
-  })
-  return backend ? [titles].concat(items) : { titles, items }
-}
-
 /**
  * logFirst 头程成本
  * logSecond 二程成本(当地货币)
@@ -58,38 +19,47 @@ function lowest(data, profitRate, backend = true) {
  * local 当地配送
  * profitRate 商品预设利润率
  */
-function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly = true) {
-  // 计算重量
-  let pWeight = product.weight
-  let pBule = product.bulk
-  let weight = calWeight(pWeight, pBule, factor.weight_1)
-  let weightLocal = calWeight(pWeight, pBule, factor.weight_2)
-
-  let items = []
+function cal(product, zone, factor, domestic, local, localType, profitRate, sellPriceOnly = true) {
+  // console.log('product-----', product)
+  // console.log('zone-----', zone)
+  // console.log('factor-----', factor)
+  
+  const { weight: pWeight, bulk: pBulk } = product
+  
+  // 根据体积系数计算重量
+  const weight = calWeight(pWeight, pBulk, factor.weight_1)
+  const weightLocal = calWeight(pWeight, pBulk, factor.weight_2)
+  // console.log('weight-----', weight, weightLocal)
+  
+  const items = []
   zone.forEach(v => {
     v.list = []
-    let zoneLow = v.name.toLowerCase()
-    let exRate = parseFloat(v.exchange_rate)
-    let pPrice = parseFloat(product.purchase_price)
-    let sPrice = parseFloat(product.selling_price)
-    let priceSea = parseFloat(v.price_sea)
-    let priceAir = parseFloat(v.price_air)
-    let priceAirEm = parseFloat(v.price_air_em)
-    let currencySymbol = v.currency_symbol
+    // 地区名称、汇率、单价、采购价、售卖价
+    const { currency_symbol: currencySymbol } = v
+    const zoneName = v.name.toLowerCase()
+    const exRate = parseFloat(v.exchange_rate)
+    const priceSea = parseFloat(v.price_sea)
+    const priceAir = parseFloat(v.price_air)
+    const priceAirEm = parseFloat(v.price_air_em)
+    const pPrice = parseFloat(product.purchase_price)
+    const sPrice = parseFloat(product.selling_price)
 
-    logOrder.forEach((vL, iL) => {
-      let item = {}
-      item.logType = vL
-      if (iL === 0) {
+    // 商品详情页：当地配送为amazon和wish时，
+    const logistics =
+      sellPriceOnly || localType === '1' ? logOrder.slice(0, 3) : logOrder
+    
+    logistics.forEach(({ name, type }) => {
+      let item = { logName: name }
+      if (type === 1) {
         // 国内小包
-        // console.log(zoneLow)
-        item.logFirst = calLog(weight, domestic[zoneLow])
+        // console.log(zoneName)
+        item.logFirst = calLog(weight, domestic[zoneName])
         item.logSecond = 0
       } else {
-        if (iL === 1) {
+        if (type === 2) {
           // 海运小包
           item.logFirst = priceSea * weight
-        } else if (iL === 2) {
+        } else if (type === 3) {
           // 空运小包
           let category = product.category
           if (category === '2' || category === '3') {
@@ -99,9 +69,14 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
             item.logFirst = priceAir * weight
           }
         }
-        item.logSecond = calLog(weightLocal, local[zoneLow])
+
+        // TODO: 外仓空运、外仓海运
+
+        item.logSecond = calLog(weightLocal, local[zoneName])
       }
-      let factorSC = factor.sell_cost
+
+      const { sell_cost: sellCost } = factor // 销售成本系数
+
       // 采购成本
       item.pPrice = pPrice
       // 二程成本(人民币）
@@ -115,15 +90,16 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
         // 售价 人民币
         item.sPriceRmb = sPrice * exRate
         // 销售成本
-        item.costSell = item.sPriceRmb * factorSC
+        item.costSell = item.sPriceRmb * sellCost
         // 总成本
-        item.cost = pPrice + item.costSell + item.logFirst + item.logSecondRmb
+        item.cost =
+          pPrice + item.costSell + item.logFirst + item.logSecondRmb
         // 毛利润
         item.profit = item.sPriceRmb - item.cost
         // 是否盈利
         item.earn = item.profit > 0
         // 当前利润售价
-        item.profitRate = item.profit / item.sPriceRmb * 100
+        item.profitRate = (item.profit / item.sPriceRmb) * 100
         // 0 - 30利润率售价
         for (let k = 0; k <= 30; k += 5) {
           item[`pRate_${k}`] = calProfitRate(k / 100)
@@ -138,7 +114,7 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
       function calProfitRate(rate) {
         let f = item.logFirst
         let s = item.logSecondRmb
-        let result = (pPrice + f + s) / exRate / (1 - factorSC - rate)
+        let result = (pPrice + f + s) / exRate / (1 - sellCost - rate)
         return isNaN(result) ? result : result.toFixed(DIGITS)
       }
     })
@@ -172,6 +148,7 @@ function beautify(item) {
   return item
 }
 
+// 计算物流价格
 function calLog(weight, list) {
   weight = parseFloat(weight) || 0
   let total = 0
@@ -203,14 +180,54 @@ function calLog(weight, list) {
   // console.log(total)
   return total
 }
-
+/**
+ * 计算重量
+ * @param { Number } weight   重量
+ * @param { Number } bulk     体积
+ * @param { Number } rate     体积系数
+ */
 function calWeight(weight, bulk, rate) {
-  let weightReal = weight / 1000 || 0
-  let weightBulk = bulk / rate || 0
+  // console.log(weight, bulk, rate)
+  const weightReal = weight / 1000 || 0
+  const weightBulk = bulk / rate || 0
   // console.log(weightReal + '---')
   // console.log(weightBulk)
   return Math.round(Math.max(weightReal, weightBulk) * 100000) / 100000
 }
+
+/**
+ * data: 组合好返回给前端的数据,属性有：
+ *    product: total,list 下载时，list包含所有数据
+ *    zone: 地区信息
+ *    factor: 因子
+ *    local: 当地配送物流
+ *    domestic_1: 普通
+ *    domestic_2: 带电
+ *    domestic_3: 带磁
+ *    domestic_4: 超尺寸
+ * profitRate: 利润率，前端传入
+ * backend: 是否后端使用，默认是，返回数据不太一样，后端返回一个二维数组
+ */
+
+function lowest(data, profitRate, backend = true) {
+  const { product, zone, factor, local } = data
+
+  const items = []
+  const titles = ['SKU']
+  zone.forEach(v => {
+    logOrder.forEach(vL => {
+      titles.push(v.name + '-' + vL.name.slice(0, 2))
+    })
+  })
+  product.list.forEach(v => {
+    let arr = [v.sku]
+    let domestic = data[`domestic_${v.category}`]
+    arr = arr.concat(cal(v, zone, factor, domestic, local, '1', profitRate))
+    items.push(arr)
+  })
+  return backend ? [titles].concat(items) : { titles, items }
+}
+
 
 export default {
   cal,

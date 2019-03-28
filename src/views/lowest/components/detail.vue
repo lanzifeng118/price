@@ -16,19 +16,18 @@
           </tr>
         </tbody>
       </table>
-      <paging v-show="items.length > 0" :paging="paging" @pagingNextClick="pagingNextClick"   @pagingPreClick="pagingPreClick" @pagingChange="pagingChange">
+      <paging v-show="items.length > 0" :paging="paging" @pagingNextClick="pagingNextClick" @pagingPreClick="pagingPreClick" @pagingChange="pagingChange">
       </paging>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { API_product } from '../../../model/product'
 
 import paging from 'components/c-paging/index'
 import upload from 'components/c-upload/index'
-import calPrice from 'components/tools/calPrice'
+import calPrice from '../../../libs/calPrice'
 
 export default {
   props: ['profitRate', 'local'],
@@ -52,8 +51,7 @@ export default {
   computed: {
     dowloadUrl() {
       return `/binheng/api/goods/download/calresult?local=${this.local}&profitRate=${this.profitRate}`
-    },
-    ...mapState(['logOrder'])
+    }
   },
   methods: {
     getItems() {
