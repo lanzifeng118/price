@@ -19,7 +19,9 @@ export default {
   data() {
     return {}
   },
-  created() {},
+  created() {
+    console.log('local', this.$route.params.local)
+  },
   methods: {},
   components: {
     logistics

@@ -9,10 +9,12 @@ export default [
         path: 'calculate',
         name: 'calculate',
         meta: { level1: true },
+        redirect: { name: 'calculateInput' },
         component: () => import('views/calculate/index.vue'),
         children: [
           {
-            path: '/',
+            path: '',
+            name: 'calculateInput',
             component: () => import('views/calculate/input.vue')
           },
           {
@@ -50,7 +52,7 @@ export default [
         meta: { level1: true },
         children: [
           {
-            path: '/',
+            path: '',
             component: () => import('views/lowest/ebay-10.vue')
           },
           {
@@ -81,12 +83,12 @@ export default [
       },
       // domestic
       {
-        path: 'domestic',
+        path: 'domestic/:local',
         component: () => import('views/domestic/index.vue'),
         meta: { level4: true },
         children: [
           {
-            path: '/',
+            path: '',
             component: () => import('views/domestic/normal.vue')
           },
           {
@@ -109,8 +111,9 @@ export default [
         component: () => import('views/local/index.vue'),
         meta: { level4: true },
         children: [
-          { path: '/', component: () => import('views/local/ebay.vue') },
-          { path: 'amazon', component: () => import('views/local/amazon.vue') }
+          { path: '', component: () => import('views/local/ebay.vue') },
+          { path: 'amazon', component: () => import('views/local/amazon.vue') },
+          { path: 'wish', component: () => import('views/local/wish.vue') }
         ]
       },
       // config
@@ -120,7 +123,7 @@ export default [
         meta: { level5: true },
         children: [
           {
-            path: '/',
+            path: '',
             component: () => import('views/config/list.vue')
           },
           {

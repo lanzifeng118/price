@@ -15,7 +15,7 @@
 
 <script>
 import vHeader from 'components/header'
-import vNav from 'components/c-nav/nav'
+import vNav from 'components/nav'
 import global from 'components/tools/global'
 
 export default {

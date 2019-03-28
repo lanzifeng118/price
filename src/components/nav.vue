@@ -8,13 +8,25 @@
       class="nav-item"
       v-for="item in items"
     >
-      <router-link :to="item.src">
+      <router-link v-if="!item.children" class="nav-item-main" :to="item.src">
         <span
           class="icon"
           :class="'icon-' + item.style"
         >
         </span>{{item.name}}
       </router-link>
+      <div v-else>
+        <div class="nav-item-main">
+          <span
+            class="icon"
+            :class="'icon-' + item.style"
+          >
+          </span>{{item.name}}
+        </div>
+        <router-link v-for="sub in item.children" class="nav-item-sub" :to="sub.src">
+          <span class="icon icon-dot"></span>{{sub.name}}
+        </router-link>
+      </div>
     </li>
   </ul>
 </div>
@@ -46,8 +58,8 @@ export default {
   },
   computed: {
     items() {
-      let user = this.$store.state.user
-      let navs = [{
+      const user = this.$store.state.user
+      const navs = [{
         src: '/calculate',
         name: '计算',
         style: 'calculate'
@@ -74,7 +86,21 @@ export default {
       }, {
         src: '/domestic',
         name: '国内小包',
-        style: 'truck'
+        style: 'truck',
+        children: [
+          {
+            name: 'Ebay',
+            src: '/domestic/ebay'
+          },
+          {
+            name: 'Amazon',
+            src: '/domestic/amazon'
+          },
+          {
+            name: 'Wish',
+            src: '/domestic/wish'
+          }
+        ]
       }, {
         src: '/local',
         name: '当地配送',
@@ -149,11 +175,10 @@ export default {
   max-height: 150px;
 }
 .nav-item {
-  height: 50px;
-  line-height: 50px;
 }
 
-.nav-item a {
+.nav-item-main {
+  line-height: 50px;
   display: block;
   color: #515a6e;
   padding-left: 20px;
@@ -178,6 +203,16 @@ export default {
   bottom: 0;
   right: 0;
   background: #2d8cf0;
+}
+
+.nav-item-sub {
+  display: block;
+  line-height: 35px;
+  padding-left: 35px;
+}
+
+.nav-item-sub .icon {
+  margin-right: 5px;
 }
 
 </style>

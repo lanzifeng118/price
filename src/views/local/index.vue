@@ -14,7 +14,8 @@ export default {
     return {
       tabItems: [
         { text: 'EBAY', href: '/local/', icon: 'eee' },
-        { text: 'Amazon', href: '/local/amazon', icon: 'amazon' }
+        { text: 'Amazon', href: '/local/amazon', icon: 'amazon' },
+        { text: 'Wish', href: '/local/wish', icon: 'evaluate' }
       ]
     }
   },
