@@ -18,7 +18,6 @@
 
 <script>
 import pop from 'components/pop/pop'
-import util from 'components/tools/util'
 import api from 'components/tools/api'
 
 export default {

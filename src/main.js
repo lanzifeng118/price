@@ -6,10 +6,10 @@ import routes from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
-import util from 'components/tools/util'
 import Router from 'vue-router'
-
+import storeData from './store'
 import registryToast from 'components/toast'
+import { getCookie } from './libs/util'
 
 Vue.use(Router)
 Vue.use(VueAxios, axios)
@@ -24,49 +24,7 @@ const router = new Router({
 
 Vue.config.productionTip = false
 
-let category = [
-  {
-    type: '1',
-    name: '普通'
-  },
-  {
-    type: '2',
-    name: '带电'
-  },
-  {
-    type: '3',
-    name: '带磁'
-  },
-  {
-    type: '4',
-    name: '超U尺寸'
-  }
-]
-let local = [
-  {
-    type: '1',
-    name: 'Ebay'
-  },
-  {
-    type: '2',
-    name: 'Amazon'
-  }
-]
-let categoryMap = turnObj(category)
-let localMap = turnObj(local)
-
-const store = new Vuex.Store({
-  state: {
-    user: '',
-    userRole: '',
-    title: '广州缤恒定价查询系统',
-    category,
-    categoryMap,
-    local,
-    localMap,
-    logOrder: ['国内小包', '海运小包', '空运小包']
-  }
-})
+const store = new Vuex.Store(storeData)
 
 /**
  * admin 管理员 全部
@@ -81,16 +39,12 @@ const store = new Vuex.Store({
  */
 
 router.beforeEach((to, from, next) => {
-  let cookie = util.getCookie()
-  // console.log(cookie)
-  let user = cookie.account
+  const { account: user, role } = getCookie()
 
-  let state = store.state
-  state.user = user
-  state.userRole = cookie.role
-  // state.user = 'wl001'
+  store.commit('setUser', user)
+  store.commit('setUserRole', role)
 
-  let matched = to.matched
+  const { matched } = to
 
   if (matched.length === 0) {
     from.name ? next({ name: from.name }) : next('/')
@@ -149,7 +103,7 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  function goNext(params) {
+  function goNext() {
     user === 'wl001' ? next('/zone') : next('/')
   }
 })
@@ -164,11 +118,3 @@ new Vue({
     App
   }
 })
-
-function turnObj(arr) {
-  let map = {}
-  arr.forEach(v => {
-    map[v.type] = v.name
-  })
-  return map
-}

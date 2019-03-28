@@ -82,7 +82,7 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
       item.logType = vL
       if (iL === 0) {
         // 国内小包
-        console.log(domestic[zoneLow])
+        // console.log(zoneLow)
         item.logFirst = calLog(weight, domestic[zoneLow])
         item.logSecond = 0
       } else {

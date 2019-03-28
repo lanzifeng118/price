@@ -16,7 +16,7 @@
 <script>
 import vHeader from 'components/header'
 import vNav from 'components/nav'
-import global from 'components/tools/global'
+import { getWinHeigth } from '../libs/util'
 
 export default {
   data() {
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     getHeight() {
-      this.height = global.getWinHeigth() - 50
+      this.height = getWinHeigth() - 50
     }
   },
   components: {

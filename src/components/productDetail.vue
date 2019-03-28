@@ -44,10 +44,11 @@
 
 <script>
 import pop from 'components/pop/pop'
-import util from 'components/tools/util'
-import result from 'components/c-result/index'
+import result from 'components/productResult'
 import { API_calculation } from '../model/calculation'
 import { API_product } from '../model/product'
+import { mapState } from 'vuex'
+import verifyProduct from '../libs/verifyProduct'
 
 export default {
   props: {
@@ -71,24 +72,26 @@ export default {
   },
   computed: {
     item() {
-      let query = this.$route.query
-      let item = {
-        sku: query.sku || '',
-        profit_rate: query.profit_rate,
-        selling_price: query.selling_price,
-        purchase_price: query.purchase_price,
-        weight: query.weight,
-        bulk: query.bulk,
-        category: query.category,
-        local: query.local
+      const { sku, profit_rate, selling_price, purchase_price, bulk, category, local, weight } = this.$route.query
+      console.log(category, this.categoryMap)
+      const item = {
+        sku: sku || '',
+        profit_rate,
+        selling_price,
+        purchase_price,
+        weight,
+        bulk,
+        category: this.categoryMap[category] ? category : this.category[0].type,
+        local: this.localMap[local] ? local : this.local[0].type
       }
       // console.log(item)
       return item
     },
     backUrl() {
-      let url = this.invoke === 1 ? 'calculate' : 'product'
+      const url = this.invoke === 1 ? 'calculate' : 'product'
       return `/${url}`
-    }
+    },
+    ...mapState(['local', 'localMap', 'category', 'categoryMap'])
   },
   watch: {
     $route(to, from) {
@@ -100,7 +103,7 @@ export default {
   },
   methods: {
     cal() {
-      let msg = util.verifyProduct(this.item, this.invoke)
+      const msg = verifyProduct(this.item, this.invoke)
       if (msg) {
         this.msg = `参数错误，${msg}`
         this.$toast.warn(this.msg)

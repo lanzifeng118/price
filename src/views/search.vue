@@ -39,8 +39,8 @@
 <script>
 import { mapState } from 'vuex'
 import { API_product } from '../model/product'
-import util from 'components/tools/util'
-import result from 'components/c-result/index'
+import result from 'components/productResult'
+import verifyProduct from '../libs/verifyProduct'
 
 export default {
   data() {
@@ -74,7 +74,7 @@ export default {
           if (data) {
             data.product.local = this.serach.local
             // console.log(data.product)
-            let verifyMsg = util.verifyProduct(data.product, 2)
+            let verifyMsg = verifyProduct(data.product, 2)
             if (verifyMsg) {
               this.msg = `商品参数有误，${verifyMsg}`
               return

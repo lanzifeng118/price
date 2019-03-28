@@ -106,11 +106,11 @@
 <script>
 import { mapState } from 'vuex'
 import { API_product } from '../../model/product'
+import verifyProduct from '../../libs/verifyProduct'
 
 import operate from 'components/c-operate/index'
 import pop from 'components/pop/pop'
 import paging from 'components/c-paging/index'
-import util from 'components/tools/util'
 import upload from 'components/c-upload/index'
 
 export default {
@@ -260,7 +260,7 @@ export default {
         })
     },
     verify(item) {
-      let verify = util.verifyProduct(item, 2)
+      let verify = verifyProduct(item, 2)
       if (verify) {
         this.$toast.warn(verify)
         return false

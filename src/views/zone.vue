@@ -112,7 +112,7 @@ import { API_zone } from '../model/zone'
 
 import operate from 'components/c-operate/index'
 import pop from 'components/pop/pop'
-import util from 'components/tools/util'
+import { isNum } from '../libs/util'
 
 export default {
   data() {
@@ -252,7 +252,7 @@ export default {
         this.$toast.warn('汇率不能为空')
         return false
       }
-      if (item.sort && !util.isNum(item.sort)) {
+      if (item.sort && !isNum(item.sort)) {
         this.$toast.warn('顺序必须为整数')
         return false
       }

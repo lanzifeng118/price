@@ -62,7 +62,7 @@
 import { API_factor } from '../model/factor'
 
 import operate from 'components/c-operate/index'
-import util from 'components/tools/util'
+import { isNum } from '../libs/util'
 
 export default {
   data() {
@@ -119,7 +119,7 @@ export default {
         this.$toast.warn('头程体积重系数不能为空')
         return false
       }
-      if (!util.isNum(item.weight_1)) {
+      if (!isNum(item.weight_1)) {
         this.$toast.warn('头程体积重系数必须为数字')
         return false
       }
@@ -127,7 +127,7 @@ export default {
         this.$toast.warn('二程体积重系数不能为空')
         return false
       }
-      if (!util.isNum(item.weight_2)) {
+      if (!isNum(item.weight_2)) {
         this.$toast.warn('二程体积重系数必须为数字')
         return false
       }
@@ -135,7 +135,7 @@ export default {
         this.$toast.warn('销售成本系数系数不能为空')
         return false
       }
-      if (!util.isNum(item.sell_cost)) {
+      if (!isNum(item.sell_cost)) {
         this.$toast.warn('销售成本系数系数必须为数字')
         return false
       }

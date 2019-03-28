@@ -33,13 +33,12 @@
 </template>
 
 <script>
-import global from 'components/tools/global'
+import { getWinHeigth } from '../libs/util'
 
 export default {
   data() {
     return {
-      height: 0,
-      avatar: './static/images/avatar.png'
+      height: 0
     }
   },
   created () {
@@ -53,7 +52,7 @@ export default {
   },
   methods: {
     getHeight() {
-      this.height = global.getWinHeigth() - 50
+      this.height = getWinHeigth() - 50
     }
   },
   computed: {

@@ -54,7 +54,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import util from 'components/tools/util'
+import verifyProduct from '../../libs/verifyProduct'
 
 export default {
   data() {
@@ -100,7 +100,7 @@ export default {
       this.$router.push({path: '/calculate/result', query: this.item})
     },
     verify() {
-      let verify = util.verifyProduct(this.item)
+      const verify = verifyProduct(this.item)
       if (verify) {
         this.note = verify
         return false
