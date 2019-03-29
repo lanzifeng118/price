@@ -8,7 +8,7 @@
       重量：{{product.weight}}g，
       体积：{{product.bulk  || '?'}}cm³，
       种类：{{categoryMap[product.category]}}，
-      当地配送：{{localMap[product.local]}}
+      当地配送：{{localMapAll[product.local].name}}
     </h3>
     <div class="list-table-wrap">
       <table>
@@ -38,7 +38,7 @@
         <tbody v-for="itemZ in items">
           <tr v-for="(item, index) in itemZ.list">
             <!-- 国家 -->
-            <td v-if="index === 0" :rowspan="logOrder.length">{{itemZ.name}}</td>
+            <td v-if="index === 0" :rowspan="localMapAll[product.local].logistics.length">{{itemZ.name}}</td>
             <!-- 物流方式 -->
             <td>{{item.logName}}</td>
             <!-- 售价 -->
@@ -84,10 +84,6 @@ export default {
       type: Number,
       defalut: 1
     },
-    localType: {
-      type: String,
-      required: true
-    },
     zoneShow: {
       type: String,
       defalut: ''
@@ -116,12 +112,13 @@ export default {
       return this.lack ? '7.7%' : '5.55%'
     },
     items() {
-      const { info, product, localType, zoneShow } = this
+      const { info, product, zoneShow } = this
+      // console.log(product)
       const { zone, factor, domestic, local } = info
-      const items = calPrice.cal(product, zone, factor, domestic, local, localType,  product.profit_rate, false)
+      const items = calPrice.cal(product, zone, factor, domestic, local, product.profit_rate, false)
       return zoneShow ? items.filter(val => val.name === zoneShow) : items
     },
-    ...mapState(['logOrder', 'user', 'categoryMap', 'localMap'])
+    ...mapState(['user', 'categoryMap', 'localMapAll', 'logistics'])
   },
   components: {}
 }

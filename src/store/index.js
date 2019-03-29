@@ -1,4 +1,4 @@
-import { turnObj } from '../libs/util'
+import { turnObj, turnObj2 } from '../libs/util'
 
 const category = [
   {
@@ -22,43 +22,35 @@ const category = [
 const local = [
   {
     type: '1',
-    name: 'Ebay'
+    name: 'Ebay',
+    logistics: ['1', '2', '3']
   },
   {
     type: '2',
-    name: 'Amazon'
+    name: 'Amazon',
+    logistics: ['1', '4', '5', '2', '3']
   },
   {
     type: '3',
-    name: 'Wish'
+    name: 'Wish',
+    logistics: ['1', '6', '7', '2', '3']
   }
 ]
 
 export const categoryMap = turnObj(category)
 export const localMap = turnObj(local)
-// export const logOrder = ['国内小包', '海运小包', '空运小包']
-export const logOrder = [
-  {
-    type: 1,
-    name: '国内小包'
-  },
-  {
-    type: 2,
-    name: 'FBW海运'
-  },
-  {
-    type: 3,
-    name: 'FBW空运'
-  },
-  {
-    type: 4,
-    name: '外仓空运'
-  },
-  {
-    type: 5,
-    name: '外仓海运'
-  }
-]
+export const localMapAll = turnObj2(local)
+// console.log(localMapAll)
+
+export const logistics = {
+  '1': '国内小包',
+  '2': '外仓空运',
+  '3': '外仓海运',
+  '4': 'FBA海运',
+  '5': 'FBA空运',
+  '6': 'FBW海运',
+  '7': 'FBW海运',
+}
 
 export default {
   state: {
@@ -68,8 +60,9 @@ export default {
     category,
     categoryMap,
     local,
+    localMapAll,
     localMap,
-    logOrder,
+    logistics
   },
   mutations: {
     setUser(state, user) {

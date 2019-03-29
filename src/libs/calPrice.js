@@ -1,4 +1,4 @@
-import { logOrder } from '../store' // 物流方式
+import { localMapAll, logistics } from '../store' // 物流方式
 const DIGITS = 2
 /**
  * logFirst 头程成本
@@ -19,11 +19,10 @@ const DIGITS = 2
  * local 当地配送
  * profitRate 商品预设利润率
  */
-function cal(product, zone, factor, domestic, local, localType, profitRate, sellPriceOnly = true) {
+function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly = true) {
   // console.log('product-----', product)
   // console.log('zone-----', zone)
   // console.log('factor-----', factor)
-  
   const { weight: pWeight, bulk: pBulk } = product
   
   // 根据体积系数计算重量
@@ -44,22 +43,20 @@ function cal(product, zone, factor, domestic, local, localType, profitRate, sell
     const pPrice = parseFloat(product.purchase_price)
     const sPrice = parseFloat(product.selling_price)
 
-    // 商品详情页：当地配送为amazon和wish时，
-    const logistics =
-      sellPriceOnly || localType === '1' ? logOrder.slice(0, 3) : logOrder
+    const logs = localMapAll[product.local].logistics
     
-    logistics.forEach(({ name, type }) => {
-      let item = { logName: name }
-      if (type === 1) {
+    logs.forEach(logType => {
+      let item = { logName: logistics[logType] }
+      if (logType === '1') {
         // 国内小包
         // console.log(zoneName)
         item.logFirst = calLog(weight, domestic[zoneName])
         item.logSecond = 0
       } else {
-        if (type === 2) {
+        if (logType === '2') {
           // 海运小包
           item.logFirst = priceSea * weight
-        } else if (type === 3) {
+        } else if (logType === '3') {
           // 空运小包
           let category = product.category
           if (category === '2' || category === '3') {
@@ -214,15 +211,19 @@ function lowest(data, profitRate, backend = true) {
 
   const items = []
   const titles = ['SKU']
+  const localType = '1'
+
   zone.forEach(v => {
-    logOrder.slice(0, 3).forEach(vL => {
-      titles.push(v.name + '-' + vL.name)
+    localMapAll[localType].logistics.forEach(vL => {
+      titles.push(v.name + '-' + logistics[vL])
     })
   })
+
   product.list.forEach(v => {
     let arr = [v.sku]
-    let domestic = data[`domestic_${v.category}`]
-    arr = arr.concat(cal(v, zone, factor, domestic, local, '1', profitRate))
+    v.local = localType
+    const domestic = data[`domestic_${v.category}`]
+    arr = arr.concat(cal(v, zone, factor, domestic, local, profitRate))
     items.push(arr)
   })
   return backend ? [titles].concat(items) : { titles, items }

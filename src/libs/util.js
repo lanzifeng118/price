@@ -1,7 +1,15 @@
 export function turnObj(arr) {
-  let map = {}
+  const map = {}
   arr.forEach(v => {
     map[v.type] = v.name
+  })
+  return map
+}
+
+export function turnObj2(arr) {
+  const map = {}
+  arr.forEach(v => {
+    map[v.type] = v
   })
   return map
 }

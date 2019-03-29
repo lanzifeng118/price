@@ -11,14 +11,25 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th>排序</th>
-            <th width="11%"><span class="icon-nessisary"></span>地区名称</th>
-            <th width="11%"><span class="icon-nessisary"></span>货币符号</th>
-            <th width="11%"><span class="icon-nessisary"></span>汇率</th>
-            <th width="13%"><span class="icon icon-plane"></span>空运单价 / ¥</th>
-            <th width="16%"><span class="icon icon-plane"></span>空运单价（带电、磁） / ¥</th>
-            <th width="13%"><span class="icon icon-ship"></span>海运单价 / ¥</th>
-            <th v-if="user !== 'xs001'" width="13%" class="list-table-wrap-th-operate">操作</th>
+            <th rowspan="2">排序</th>
+            <th rowspan="2"><span class="icon-nessisary"></span>地区名称</th>
+            <th rowspan="2"><span class="icon-nessisary"></span>货币符号</th>
+            <th rowspan="2"><span class="icon-nessisary"></span>汇率</th>
+            <th colspan="3">外仓单价 / ￥</th>
+            <th colspan="3">FBA单价 / ￥</th>
+            <th colspan="3">FBW单价 / ￥</th>
+            <th v-if="user !== 'xs001'" width="120" rowspan="2"  class="list-table-wrap-th-operate">操作</th>
+          </tr>
+          <tr>
+            <th width="80" colspan="1">空运</th>
+            <th width="80" colspan="1">空运-电磁</th>
+            <th width="80" colspan="1">海运</th>
+            <th width="80" colspan="1">空运</th>
+            <th width="80" colspan="1">空运-电磁</th>
+            <th width="80" colspan="1">海运</th>
+            <th width="80" colspan="1">空运</th>
+            <th width="80" colspan="1">空运-电磁</th>
+            <th width="80" colspan="1">海运</th>
           </tr>
         </thead>
         <tbody>
@@ -86,6 +97,13 @@
                 <input type="text" v-model.trim.lazy.number="item.price_sea">
               </div>
             </td>
+            <!-- price_sea -->
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <!-- 操作 -->
             <td v-if="user !== 'xs001'">
               <operate 
