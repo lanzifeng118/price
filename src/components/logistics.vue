@@ -5,27 +5,38 @@
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
-        <thead>
-          <tr v-if="apiKey === 'local'">
-            <th>收费分区</th>
-            <th width="10%">开始重量段(Kg)</th>
-            <th width="10%">截止重量段(Kg)</th>
-            <th width="10%">价格（重量）</th>
-            <th width="10%">当地价格（重量）</th>
-            <th width="10%">价格（件）</th>
-            <th width="10%">当地价格（件）</th>
-            <th width="10%">附加处理费</th>
-            <th width="10%">当地附加处理费</th>            
-            <th width="12%" class="list-table-wrap-th-operate">操作</th>
+        <thead v-if="apiKey === 'local'">
+            <tr>
+              <th rowspan="2">收费分区</th>
+              <th colspan="2">重量段（Kg）</th>
+              <th colspan="4">单价</th>
+              <th colspan="2">附加处理费</th>
+              <th rowspan="2" width="12%" class="list-table-wrap-th-operate">操作</th>
+            </tr>    
+            <tr>
+              <th width="10%">开始</th>
+              <th width="10%">截止</th>
+              <th width="10%">重量／¥</th>
+              <th width="10%">重量</th>
+              <th width="10%">件／¥</th>
+              <th width="10%">件</th>
+              <th width="10%">国内／¥</th>
+              <th width="10%">当地</th>
+            </tr>
+        </thead>
+        <thead v-else>
+          <tr>
+            <th rowspan="2">收费分区</th>
+            <th colspan="2">重量段（Kg）</th>
+            <th colspan="2">单价／¥</th>
+            <th rowspan="2" width="15%">附加处理费</th>
+            <th rowspan="2" width="15%" class="list-table-wrap-th-operate">操作</th>
           </tr>
-          <tr v-else>
-            <th>收费分区</th>
-            <th width="15%">开始重量段(Kg)</th>
-            <th width="15%">截止重量段(Kg)</th>
-            <th width="15%">价格（重量）</th>
-            <th width="15%">价格（件）</th>
-            <th width="15%">附加处理费</th>
-            <th width="15%" class="list-table-wrap-th-operate">操作</th>
+          <tr>
+            <th width="15%">开始</th>
+            <th width="15%">截止</th>
+            <th width="15%">重量</th>
+            <th width="15%">件</th>
           </tr>
         </thead>
         <tbody v-for="(itemS, indexS) in items">
@@ -209,18 +220,19 @@ export default {
           if (this.apiKey === 'local') {
             const DIGITS = 3
             data.forEach(v => {
+              console.log(v)
               v.list.forEach(vL => {
-                let priceU = parseFloat(vL.price_unit)
+                const priceU = parseFloat(vL.price_unit)
                 vL.price_unit_rmb = priceU
                   ? (priceU * v.exchange_rate).toFixed(DIGITS)
                   : ''
 
-                let priceW = parseFloat(vL.price_weight)
+                const priceW = parseFloat(vL.price_weight)
                 vL.price_weight_rmb = priceW
                   ? (priceW * v.exchange_rate).toFixed(DIGITS)
                   : ''
 
-                let extraC = parseFloat(vL.extra_charge)
+                const extraC = parseFloat(vL.extra_charge)
                 vL.extra_charge_rmb = extraC
                   ? (extraC * v.exchange_rate).toFixed(DIGITS)
                   : ''

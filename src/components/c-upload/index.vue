@@ -83,8 +83,9 @@ export default {
       }
     },
     uploadFile(success, error) {
-      let formData = new FormData()
+      const formData = new FormData()
       formData.append('upload', this.file)
+      console.log(formData)
       this.axios(api[this.apiInKey](formData))
         .then(res => {
           let data = res.data
