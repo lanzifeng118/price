@@ -12,12 +12,11 @@
       <button class="button yellow" @click="download">
         <span class="icon icon-excel"></span>导出{{name}}</button>
     </div>
-    <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
+    <Pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></Pop>
   </div>
 </template>
 
 <script>
-import pop from 'components/pop/pop'
 import api from 'components/tools/api'
 
 export default {
@@ -104,9 +103,7 @@ export default {
       window.location.assign(this.dowloadUrl)
     }
   },
-  components: {
-    pop
-  }
+  components: {}
 }
 </script>
 

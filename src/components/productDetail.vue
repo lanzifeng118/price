@@ -46,7 +46,7 @@
         :invoke="invoke"
       ></result>
     </div>
-    <pop
+    <Pop
       v-if="invoke === 1"
       type="warning"
       :text="pop.text"
@@ -54,12 +54,11 @@
       @confirm="confirmPop"
       @close="closePop"
     >
-    </pop>
+    </Pop>
   </div>
 </template>
 
 <script>
-import pop from 'components/pop/pop'
 import result from 'components/productResult'
 import { API_calculation } from '../model/calculation'
 import { API_product } from '../model/product'
@@ -187,8 +186,7 @@ export default {
     }
   },
   components: {
-    result,
-    pop
+    result
   }
 }
 </script>

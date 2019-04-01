@@ -99,7 +99,7 @@
       <paging v-show="items.length > 0" :paging="paging" @pagingNextClick="pagingNextClick"   @pagingPreClick="pagingPreClick" @pagingChange="pagingChange">
       </paging>
     </div>
-    <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
+    <Pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></Pop>
   </div>
 </template>
 
@@ -109,7 +109,6 @@ import { API_product } from '../../model/product'
 import verifyProduct from '../../libs/verifyProduct'
 
 import operate from 'components/c-operate/index'
-import pop from 'components/pop/pop'
 import paging from 'components/c-paging/index'
 import upload from 'components/c-upload/index'
 
@@ -293,7 +292,6 @@ export default {
   },
   components: {
     operate,
-    pop,
     upload,
     paging
   }

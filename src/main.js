@@ -9,12 +9,14 @@ import Vuex from 'vuex'
 import Router from 'vue-router'
 import storeData from './store'
 import registryToast from 'components/toast'
+import Pop from 'components/pop'
 import { getCookie } from './libs/util'
 
 Vue.use(Router)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 Vue.use(registryToast)
+Vue.use(Pop)
 
 
 const router = new Router({

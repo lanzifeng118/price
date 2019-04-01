@@ -120,7 +120,7 @@
         </tbody>
       </table>
     </div>
-    <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
+    <Pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></Pop>
   </div>
 </template>
 
@@ -129,7 +129,6 @@ import { mapState } from 'vuex'
 import { API_zone } from '../model/zone'
 
 import operate from 'components/c-operate/index'
-import pop from 'components/pop/pop'
 import { isNum } from '../libs/util'
 
 export default {
@@ -289,8 +288,7 @@ export default {
     }
   },
   components: {
-    operate,
-    pop
+    operate
   }
 }
 </script>

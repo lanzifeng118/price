@@ -146,16 +146,14 @@
         <p>邮费：{{test.result.total}}</p>
       </div>
     </div>
-    <pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></pop>
+    <Pop type="warning" :text="pop.text" v-show="pop.show" @confirm="confirmPop" @close="closePop"></Pop>
   </div>
 </template>
 
 <script>
 import { API_logistics } from '../model/logistics'
-
 import operate from 'components/c-operate/index'
 import upload from 'components/c-upload/index'
-import pop from 'components/pop/pop'
 
 export default {
   props: {
@@ -410,7 +408,6 @@ export default {
   },
   components: {
     operate,
-    pop,
     upload
   }
 }
