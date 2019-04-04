@@ -2,9 +2,6 @@
   <div class="local-ebay">
     <!-- 1: ebay 2: amazon  -->
     <logistics 
-      uploadApiInKey="lInEbay" 
-      dowloadUrl="/binheng/api/local/download?type=1" 
-      uploadName="ebay"
       from="local"
       type="1"
     >

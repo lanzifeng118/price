@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import api from 'components/tools/api'
 import { API_domestic } from '../../model/domestic'
 import { API_Local } from '../../model/local'
 import { API_product } from '../../model/product'
@@ -71,12 +70,6 @@ export default {
     return {
       input: true,
       file: null,
-      // toast
-      toast: {
-        show: false,
-        text: '',
-        icon: ''
-      },
       // pop
       pop: {
         text: '',
@@ -122,7 +115,7 @@ export default {
   },
   methods: {
     chooseFile(e) {
-      let file = e.target.files[0]
+      const file = e.target.files[0]
       // console.log(file)
       this.pop.text = `确认用[${file.name}]覆盖原有数据？`
       this.pop.show = true
@@ -153,7 +146,17 @@ export default {
     uploadFile(success, error) {
       const formData = new FormData()
       formData.append('upload', this.file)
-      console.log(formData)
+
+      switch (this.from) {
+        case 'local':
+          formData.append('type', this.type)
+          break;
+        case 'domestic':
+          formData.append('type', this.type)
+          formData.append('local_type', this.localType)          
+          break;
+      }
+
       this.API.upload(formData)
         .then(res => {
           let data = res.data

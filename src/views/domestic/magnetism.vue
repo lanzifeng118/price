@@ -1,25 +1,15 @@
 <template>
-  <div class="domestic-normal">
-    <!-- 1: normal 2: electric 3: magnetism 4: oversize -->
-    <logistics 
-      uploadApiInKey="dInMagnetism" 
-      dowloadUrl="/binheng/api/domestic/download?type=3" 
-      uploadName="带磁"
-      apiKey="domestic"
-      :localType="localType"
-      type="3"
-    >
-    </logistics>
-  </div>
+  <v-detail type="3"></v-detail>
 </template>
 
 <script>
-import mixins from './mixins'
+import vDetail from './components/detail'
 export default {
-  mixins: [mixins]
+  components: {
+    vDetail
+  }
 }
 </script>
 
 <style>
-
 </style>

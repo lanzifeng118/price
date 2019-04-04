@@ -1,25 +1,16 @@
 <template>
-  <div class="domestic-normal">
-    <!-- 1: normal 2: electric 3: magnetism 4: oversize -->
-    <logistics 
-      uploadApiInKey="dInOversize" 
-      dowloadUrl="/binheng/api/domestic/download?type=4" 
-      uploadName="超尺寸"
-      apiKey="domestic"
-      :localType="localType"
-      type="4"
-    >
-    </logistics>
-  </div>
+  <v-detail type="4"></v-detail>
 </template>
 
 <script>
-import mixins from './mixins'
+import vDetail from './components/detail'
 export default {
-  mixins: [mixins]
+  components: {
+    vDetail
+  }
 }
 </script>
 
 <style>
-
 </style>
+
