@@ -1,4 +1,39 @@
-import { localMapAll, logistics } from '../store' // 物流方式
+const logistics = {
+  '1': '国内小包',
+  '2': '外仓海运',
+  '3': '外仓空运',
+  '4': 'FBA海运',
+  '5': 'FBA空运',
+  '6': 'FBW海运',
+  '7': 'FBW海运',
+}
+
+const localData = [
+  {
+    type: '1',
+    name: 'Ebay',
+    logistics: ['1', '2', '3']
+  },
+  {
+    type: '2',
+    name: 'Amazon',
+    logistics: ['1', '4', '5', '2', '3']
+  },
+  {
+    type: '3',
+    name: 'Wish',
+    logistics: ['1', '6', '7', '2', '3']
+  }
+]
+const localMapAll = turnObj2(localData)
+function turnObj2(arr) {
+  const map = {}
+  arr.forEach(v => {
+    map[v.type] = v
+  })
+  return map
+}
+
 const DIGITS = 2
 /**
  * logFirst 头程成本

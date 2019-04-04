@@ -127,24 +127,11 @@ export default {
     },
     confirmPop() {
       this.pop.show = false
-      if (this.file) {
-        this.input = false
-        this.$toast.upload('正在上传')
-        this.uploadFile(
-          data => {
-            // console.log(data)
-            this.$emit('update')
-            this.input = true
-            this.$toast.success('导入成功')
-          },
-          () => {
-            this.input = true
-            this.$toast.error('导入失败')
-          }
-        )
+      if (!this.file) {
+        return
       }
-    },
-    uploadFile(success, error) {
+      this.input = false
+      this.$toast.upload('正在上传')
       const formData = new FormData()
       formData.append('upload', this.file)
 
@@ -159,17 +146,15 @@ export default {
       }
 
       this.API.upload(formData)
-        .then(res => {
-          let data = res.data
-          if (data.code === 200) {
-            success(data)
-          } else {
-            error()
-          }
+        .then(data => {
+          this.$emit('update')
+          this.input = true
+          this.$toast.success('导入成功')
         })
         .catch(err => {
           console.log(err)
-          error()
+          this.input = true
+          this.$toast.error('导入失败')
         })
     },
     downloadFile() {
