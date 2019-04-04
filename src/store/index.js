@@ -44,8 +44,8 @@ export const localMapAll = turnObj2(local)
 
 export const logistics = {
   '1': '国内小包',
-  '2': '外仓空运',
-  '3': '外仓海运',
+  '2': '外仓海运',
+  '3': '外仓空运',
   '4': 'FBA海运',
   '5': 'FBA空运',
   '6': 'FBW海运',

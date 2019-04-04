@@ -77,9 +77,6 @@ export default {
           this.msg = '出错了，请稍后再试'
         })
     },
-    download() {
-      // 1
-    },
     pagingPreClick() {
       this.paging.no--
       this.getItems()

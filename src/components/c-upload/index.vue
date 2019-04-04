@@ -92,7 +92,6 @@ export default {
           _api = API_product
           break;
       }
-      console.log(_api)
       return _api
     },
     downloadUrl() {

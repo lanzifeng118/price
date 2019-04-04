@@ -210,7 +210,6 @@ export default {
     }
   },
   created() {
-    console.log('222')
     this.getItems()
   },
   mounted() {},
@@ -230,7 +229,7 @@ export default {
           if (!isDomestic) {
             const DIGITS = 3
             data.forEach(v => {
-              console.log(v)
+              // console.log(v)
               v.list.forEach(vL => {
                 const priceU = parseFloat(vL.price_unit)
                 vL.price_unit_rmb = priceU

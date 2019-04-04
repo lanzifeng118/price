@@ -142,7 +142,7 @@ export default {
       API_zone.query()
         .then(data => {
           const { list } = data
-          console.log(list)
+          // console.log(list)
           if (list.length > 0) {
             this.msg = ''
             list.forEach(v => {

@@ -74,7 +74,8 @@ export default {
   data() {
     return {
       items: [],
-      msg: ''
+      msg: '',
+      busy: false
     }
   },
   computed: mapState(['local', 'localMap']),
@@ -104,6 +105,10 @@ export default {
     },
     // type 1 初始化 2 edit
     editItem(item) {
+      if (this.isBusy()) {
+        return
+      }
+      this.busy = true
       item.type = 2
     },
     submitEdit(item) {
@@ -113,6 +118,7 @@ export default {
       API_factor.update(item)
         .then(data => {
           item.type = 1
+          this.busy = false
           this.$toast.success(`修改成功`)
           this.getItems()
         })
@@ -122,6 +128,7 @@ export default {
     },
     cancelEdit(item) {
       item.type = 1
+      this.busy = false
       this.getItems()
     },
     verify(item) {
@@ -150,7 +157,14 @@ export default {
         return false
       }
       return true
-    }
+    },
+    isBusy() {
+      if (this.busy) {
+        this.$toast.warn('请先提交编辑中的数据')
+        return true
+      }
+      return false
+    },
   },
   components: {
     operate

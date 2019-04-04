@@ -82,7 +82,7 @@ export default {
         .then(data => {
           const { list } = data
           if (list.length > 0) {
-            console.log(list)
+            // console.log(list)
             this.zone = list
           }
         })
