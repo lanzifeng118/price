@@ -99,10 +99,11 @@ export default {
         return
       }
       this.msg = '查询中...'
-      API_product.queryBySku(this.search)
+      const { sku, local } = this.search
+      API_product.queryBySku({ sku, local })
         .then(data => {
           if (data) {
-            data.product.local = this.search.local
+            data.product.local = local
             // console.log(data.product)
             let verifyMsg = verifyProduct(data.product, 2)
             if (verifyMsg) {
@@ -113,7 +114,7 @@ export default {
             this.product = data.product
             this.info = data
           } else {
-            this.msg = `无商品sku为${this.search.sku}的数据`
+            this.msg = `无商品sku为${sku}的数据`
           }
         })
         .catch(err => {

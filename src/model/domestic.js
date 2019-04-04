@@ -7,5 +7,6 @@ export const API_domestic = {
   insert: post(URL, 'insert'),
   update: post(URL, 'update'),
   delete: post(URL, 'delete'),
-  upload: post('/domestic/upload', 'upload')
+  upload: post('/domestic/upload', 'upload'),
+  downloadUrl: '/domestic/download'
 }

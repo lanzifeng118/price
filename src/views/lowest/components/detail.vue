@@ -1,6 +1,6 @@
 <template>
   <div class="lowest-detail">
-   <upload from="lowest" :dowload="dowloadUrl" :downloadOnly="true"></upload>
+   <upload from="lowest" :download="downloadUrl" :downloadOnly="true"></upload>
     <div class="list-table-wrap">
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
@@ -49,7 +49,7 @@ export default {
     this.getItems()
   },
   computed: {
-    dowloadUrl() {
+    downloadUrl() {
       return `/binheng/api/goods/download/calresult?local=${this.local}&profitRate=${this.profitRate}`
     }
   },

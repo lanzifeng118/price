@@ -204,7 +204,13 @@ export default {
       return this.isDomestic ? API_domestic : API_Local
     }
   },
+  watch: {
+    $route(to, from) {
+      this.getItems()
+    }
+  },
   created() {
+    console.log('222')
     this.getItems()
   },
   mounted() {},

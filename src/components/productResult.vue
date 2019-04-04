@@ -129,6 +129,8 @@ export default {
 </script>
 <style>
 .c-result-title {
+  padding-right: 180px;
+  line-height: 1.2;
   color: #32b514;
 }
 .c-result .list-table-wrap td.warn {

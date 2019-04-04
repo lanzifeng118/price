@@ -24,7 +24,7 @@
 
       <button
         class="button yellow"
-        @click="download"
+        @click="downloadFile"
       >
         <span class="icon icon-excel"></span>导出</button>
     </div>
@@ -42,6 +42,7 @@
 import { API_domestic } from '../../model/domestic'
 import { API_Local } from '../../model/local'
 import { API_product } from '../../model/product'
+import { log } from 'util';
 
 export default {
   props: {
@@ -61,7 +62,7 @@ export default {
       type: String,
       default: '1'
     },
-    dowload: {
+    download: {
       type: String,
       default: '' 
     }
@@ -91,23 +92,24 @@ export default {
           _api = API_product
           break;
       }
+      console.log(_api)
       return _api
     },
-    dowloadUrl() {
+    downloadUrl() {
       const PRE = '/binheng/api'
       let url
       switch (this.from) {
         case 'local':
-          url = `${PRE}${url}?type=${this.type}`
+          url = `${PRE}${this.API.downloadUrl}?type=${this.type}`
           break
         case 'domestic':
-          url = `${PRE}${url}?type=${this.type}&local_type=${this.localType}`
+          url = `${PRE}${this.API.downloadUrl}?type=${this.type}&local_type=${this.localType}`
           break
         case 'product':
-          url = `${PRE}${url}`
+          url = `${PRE}${this.API.downloadUrl}`
           break
         case 'lowest':
-          url = this.dowload
+          url = this.download
           break
       }
       return url
@@ -171,8 +173,9 @@ export default {
           error()
         })
     },
-    download() {
-      window.location.assign(this.dowloadUrl)
+    downloadFile() {
+      // console.log(this.API, this.downloadUrl)
+      window.location.assign(this.downloadUrl)
     }
   },
   components: {}

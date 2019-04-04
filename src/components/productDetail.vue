@@ -138,7 +138,7 @@ export default {
           this.info = data
         })
         .catch(err => {
-          this.msg = '出错了...'  
+          this.msg = '出错了...'
           this.$toast.error()
         })
     },

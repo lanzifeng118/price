@@ -10,5 +10,5 @@ export const API_product = {
   updateBySku: post(URL, 'updateBySku'),
   delete: post(URL, 'delete'),
   upload: post('/goods/in', 'upload'),
-  download: '/goods/download'
+  downloadUrl: '/goods/download'
 }
