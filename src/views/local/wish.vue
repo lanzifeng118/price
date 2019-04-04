@@ -5,7 +5,7 @@
       uploadApiInKey="lInEbay" 
       dowloadUrl="/binheng/api/local/download?type=3" 
       uploadName="wish"
-      apiKey="local"
+      from="local"
       type="3"
     >
     </logistics>

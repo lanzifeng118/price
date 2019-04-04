@@ -15,24 +15,28 @@
         <thead>
           <!-- cn -->
           <tr>
-            <th>国家</th>
-            <th :width="width">物流方式</th>
-            <th v-if="!lack" :width="width">售价(当地货币）</th>
-            <th :width="width">采购成本¥</th>
-            <th :width="width">头程成本¥</th>
-            <th :width="width">二程成本¥</th>
-            <th v-if="!lack" :width="width">销售成本¥</th>
-            <th v-if="!lack" :width="width">总成本¥</th>
-            <th v-if="!lack" :width="width">毛利润¥</th>
-            <th v-if="!lack" :width="width">当前利润率</th>
-            <th :width="width">{{product.profit_rate}}%利润率售价</th>
-            <th :width="width">0%利润率售价</th>
-            <th :width="width">5%利润率售价</th>
-            <th :width="width">10%利润率售价</th>
-            <th :width="width">15%利润率售价</th>
-            <th :width="width">20%利润率售价</th>
-            <th :width="width">25%利润率售价</th>
-            <th :width="width">30%利润率售价</th>
+            <th rowspan="2">国家</th>
+            <th :width="width" rowspan="2">物流方式</th>
+            <th v-if="!lack" rowspan="2" :width="width">售价(当地货币）</th>
+            <th :colspan="lack ? 3 : 5">成本</th>
+            <th v-if="!lack" rowspan="2" :width="width">毛利润</th>
+            <th v-if="!lack" rowspan="2" :width="width">当前利润率</th>
+            <th colspan="8">利润率售价</th>
+          </tr>
+          <tr>
+            <th :width="width">采购</th>
+            <th :width="width">头程</th>
+            <th :width="width">二程</th>
+            <th v-if="!lack" :width="width">销售</th>
+            <th v-if="!lack" :width="width">总成本</th>
+            <th :width="width">{{product.profit_rate}}%</th>
+            <th :width="width">0%</th>
+            <th :width="width">5%</th>
+            <th :width="width">10%</th>
+            <th :width="width">15%</th>
+            <th :width="width">20%</th>
+            <th :width="width">25%</th>
+            <th :width="width">30%</th>
           </tr>
         </thead>
         <tbody v-for="itemZ in items">

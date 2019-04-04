@@ -1,11 +1,11 @@
 <template>
   <div class="logistics">
-    <upload @update="update" :apiInKey="uploadApiInKey" :dowloadUrl="dowloadUrl" :name="uploadName"></upload>
+    <upload @update="update" :from="from" :type="type" :localType="localType"></upload>
     <div class="list-table-wrap">
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
-        <thead v-if="apiKey === 'local'">
+        <thead v-if="!isDomestic">
             <tr>
               <th rowspan="2">收费分区</th>
               <th colspan="2">重量段（Kg）</th>
@@ -49,9 +49,9 @@
             <td>-</td>
             <td>-</td>
             <td>-</td>
-            <td v-if="apiKey === 'local'">-</td>
-            <td v-if="apiKey === 'local'">-</td>
-            <td v-if="apiKey === 'local'">-</td>
+            <td v-if="!isDomestic">-</td>
+            <td v-if="!isDomestic">-</td>
+            <td v-if="!isDomestic">-</td>
             <td>无数据</td>
           </tr>
           <tr v-else v-for="(item, index) in itemS.list" :class="{edit: item.doType === 2, add: item.doType === 3}">
@@ -77,7 +77,7 @@
               </div>
             </td>
             <!-- price_weight 人民币 -->
-            <td v-if="apiKey === 'local'">
+            <td v-if="!isDomestic">
               {{ item.price_weight_rmb ? '¥ ' + item.price_weight_rmb : '-'}}
             </td>
             <!-- price_weight -->
@@ -90,7 +90,7 @@
               </div>
             </td>
             <!-- price_unit 人民币 -->
-            <td v-if="apiKey === 'local'">
+            <td v-if="!isDomestic">
               {{ item.price_unit_rmb ? '¥ ' + item.price_unit_rmb : '-'}}
             </td>
             <!-- price_unit -->
@@ -103,7 +103,7 @@
               </div>
             </td>
             <!-- extra_charge 人民币 -->
-            <td v-if="apiKey === 'local'">
+            <td v-if="!isDomestic">
               {{ item.extra_charge_rmb ? '¥ ' + item.extra_charge_rmb : '-'}}
             </td>
             <!-- extra_charge -->
@@ -151,13 +151,14 @@
 </template>
 
 <script>
-import { API_logistics } from '../model/logistics'
+import { API_domestic } from '../model/domestic'
+import { API_Local } from '../model/local.js'
 import operate from 'components/c-operate/index'
 import upload from 'components/c-upload/index'
 
 export default {
   props: {
-    apiKey: {
+    from: {
       type: String,
       required: true
     },
@@ -165,17 +166,9 @@ export default {
       type: String,
       required: true
     },
-    uploadApiInKey: {
+    localType: {
       type: String,
-      required: true
-    },
-    dowloadUrl: {
-      type: String,
-      required: true
-    },
-    uploadName: {
-      type: String,
-      default: ''
+      default: '1'
     }
   },
   data() {
@@ -203,6 +196,14 @@ export default {
       }
     }
   },
+  computed: {
+    isDomestic() {
+      return this.from === 'domestic'
+    },
+    API() {
+      return this.isDomestic ? API_domestic : API_Local
+    }
+  },
   created() {
     this.getItems()
   },
@@ -213,9 +214,14 @@ export default {
       this.items = []
       this.msg = '加载中...'
       // ajax
-      API_logistics[this.apiKey].query({ type: this.type })
+      const { type, localType, isDomestic } = this
+      const param = { type: this.type }
+      if (isDomestic) {
+        param.local_type = localType
+      }
+      this.API.query(param)
         .then(data => {
-          if (this.apiKey === 'local') {
+          if (!isDomestic) {
             const DIGITS = 3
             data.forEach(v => {
               console.log(v)
@@ -295,12 +301,17 @@ export default {
       if (!this.verify(item)) {
         return
       }
-      const text = type === 'insert' ? '添加' : '修改'
-      API_logistics[this.apiKey][type](item)
+      const isInsert = type === 'insert'
+      
+      if (isInsert && this.isDomestic) {
+        item.local_type = this.localType
+      }
+
+      API[type](item)
         .then(data => {
           this.busy = false
           this.$set(item, 'doType', 1)
-          this.$toast.success(`${text}成功`)
+          this.$toast.success(`${isInsert ? '添加' : '修改'}成功`)
           this.getItems()
         })
         .catch(err => {
@@ -325,7 +336,7 @@ export default {
     },
     confirmPop() {
       this.pop.show = false
-      API_logistics[this.apiKey].delete({ ids: this.deleteIds.toString() })
+      this.API.delete({ ids: this.deleteIds.toString() })
         .then(data => {
           this.$toast.success('删除成功')
           this.getItems()

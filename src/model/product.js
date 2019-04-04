@@ -8,5 +8,7 @@ export const API_product = {
   insert: post(URL, 'insert'),
   update: post(URL, 'update'),
   updateBySku: post(URL, 'updateBySku'),
-  delete: post(URL, 'delete')
+  delete: post(URL, 'delete'),
+  upload: post('/goods/in', 'upload'),
+  download: '/goods/download'
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="lowest-detail">
-   <upload :dowloadUrl="dowloadUrl" name="" :downloadOnly="true"></upload>
+   <upload from="lowest" :dowload="dowloadUrl" :downloadOnly="true"></upload>
     <div class="list-table-wrap">
       <!-- msg -->
       <div class="list-table-wrap-none">{{msg}}</div>

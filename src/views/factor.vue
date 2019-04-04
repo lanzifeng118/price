@@ -77,7 +77,7 @@ export default {
       msg: ''
     }
   },
-  computed: mapState(['localMap']),
+  computed: mapState(['local', 'localMap']),
   created() {
     this.getItems()
   },
@@ -89,13 +89,14 @@ export default {
       // ajax
       API_factor.query()
         .then(data => {
-          console.log(data)
+          // console.log(data, this.local)
           this.msg = ''
-          data.type = 1
-          data.localType = '1'
-          this.items.push(data)
-          this.items.push({localType: '2', type: 1})
-          this.items.push({localType: '3', type: 1})
+          this.local.forEach(val => {
+            const item = data[val.type]
+            item.type = 1
+            item.localType = val.type
+            this.items.push(item)
+          })
         })
         .catch(err => {
           this.msg = '出错了，请稍后再试'

@@ -6,6 +6,7 @@
       dowloadUrl="/binheng/api/domestic/download?type=1" 
       uploadName="普通"
       apiKey="domestic"
+      :localType="localType"
       type="1"
     >
     </logistics>
@@ -13,17 +14,9 @@
 </template>
 
 <script>
-import logistics from 'components/logistics'
-
+import mixins from './mixins'
 export default {
-  data() {
-    return {}
-  },
-  created() {},
-  methods: {},
-  components: {
-    logistics
-  }
+  mixins: [mixins]
 }
 </script>
 

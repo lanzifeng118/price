@@ -6,6 +6,7 @@
       dowloadUrl="/binheng/api/domestic/download?type=2"
       uploadName="带电"
       apiKey="domestic"
+      :localType="localType"
       type="2"
     >
     </logistics>
@@ -13,19 +14,9 @@
 </template>
 
 <script>
-import logistics from 'components/logistics'
-
+import mixins from './mixins'
 export default {
-  data() {
-    return {}
-  },
-  created() {
-    console.log('local', this.$route.params.local)
-  },
-  methods: {},
-  components: {
-    logistics
-  }
+  mixins: [mixins]
 }
 </script>
 

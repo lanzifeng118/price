@@ -35,75 +35,7 @@
         <tbody>
           <tr v-for="(item, index) in items" :class="{edit: item.type === 2, add: item.type === 3}">
             <!-- sort -->
-            <td>
-              <div v-if="item.type === 1">
-                {{item.sort}}
-              </div>
-              <div v-else>
-                <input type="text" v-model.trim.lazy="item.sort">
-              </div>
-            </td>
-            <!-- name -->
-            <td>
-              <div v-if="item.type === 1">
-                {{item.name}}
-              </div>
-              <div v-else>
-                <input type="text" v-model.trim.lazy="item.name" @change="upperCase(item)">
-              </div>
-            </td>
-            <!-- currency_symbol -->
-            <td>
-              <div v-if="item.type === 1">
-                {{item.currency_symbol}}
-              </div>
-              <div v-else>
-                <input type="text" v-model.trim.lazy="item.currency_symbol">
-              </div>
-            </td>
-            <!-- exchange_rate -->
-            <td>
-              <div v-if="item.type === 1">
-                {{item.exchange_rate}}
-              </div>
-              <div v-else>
-                <input type="text" v-model.trim.lazy.number="item.exchange_rate">
-              </div>
-            </td>
-            <!-- price_air -->
-            <td>
-              <div v-if="item.type === 1">
-                {{item.price_air}}
-              </div>
-              <div v-else>
-                <input type="text" v-model.trim.lazy.number="item.price_air">
-              </div>
-            </td>
-            <!-- price_air_em -->
-            <td>
-              <div v-if="item.type === 1">
-                {{item.price_air_em}}
-              </div>
-              <div v-else>
-                <input type="text" v-model.trim.lazy.number="item.price_air_em">
-              </div>
-            </td>
-            <!-- price_sea -->
-            <td>
-              <div v-if="item.type === 1">
-                {{item.price_sea}}
-              </div>
-              <div v-else>
-                <input type="text" v-model.trim.lazy.number="item.price_sea">
-              </div>
-            </td>
-            <!-- price_sea -->
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <v-edit-td v-for="config in configs" :item="item" :config="config" @change="upperCase"></v-edit-td>
             <!-- 操作 -->
             <td v-if="user !== 'xs001'">
               <operate 
@@ -127,7 +59,7 @@
 <script>
 import { mapState } from 'vuex'
 import { API_zone } from '../model/zone'
-
+import vEditTd from 'components/editTd'
 import operate from 'components/c-operate/index'
 import { isNum } from '../libs/util'
 
@@ -142,7 +74,60 @@ export default {
       pop: {
         text: '',
         show: false
-      }
+      },
+      configs: [
+        {
+          name: 'sort',
+        }, 
+        {
+          name: 'name',
+          input: 'number',
+          onChange: true
+        },
+        {
+          name: 'currency_symbol'
+        },
+        {
+          name: 'exchange_rate',
+          input: 'number'
+        },
+        {
+          name: 'price_air',
+          input: 'number'
+        },
+        {
+          name: 'price_air_em',
+          input: 'number'
+        },
+        {
+          name: 'price_sea',
+          input: 'number'
+        },
+        {
+          name: 'fba_price_air',
+          input: 'number'
+        },
+        {
+          name: 'fba_price_em',
+          input: 'number'
+        },
+        {
+          name: 'fba_price_sea',
+          input: 'number'
+        },
+        {
+          name: 'fbw_price_air',
+          input: 'number'
+        },
+        {
+          name: 'fbw_price_em',
+          input: 'number'
+        },
+        {
+          name: 'fbw_price_sea',
+          input: 'number'
+        }
+      ]
     }
   },
   computed: mapState(['user']),
@@ -157,6 +142,7 @@ export default {
       API_zone.query()
         .then(data => {
           const { list } = data
+          console.log(list)
           if (list.length > 0) {
             this.msg = ''
             list.forEach(v => {
@@ -283,12 +269,16 @@ export default {
       }
       return false
     },
-    upperCase(item) {
-      item.name = item.name.toUpperCase()
+    upperCase(event) {
+      const  { name, item } = event
+      if (name === 'name') {
+        item.name = item.name.toUpperCase()
+      } 
     }
   },
   components: {
-    operate
+    operate,
+    vEditTd
   }
 }
 </script>

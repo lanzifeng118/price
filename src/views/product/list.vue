@@ -4,7 +4,7 @@
       <button class="f-left button list-btn-add" @click="addItem">
         <span class="icon icon-round_add"></span>添加商品
       </button>
-      <upload class="f-right" @update="getItems" apiInKey="inProduct" dowloadUrl="/binheng/api/goods/download" name="商品"></upload>
+      <upload class="f-right" @update="getItems" from="product"></upload>
     </div>
     <div class="product-list-tips">商品种类：<b>普通</b>、<b>带电</b>、<b>带磁</b>、<b>超尺寸</b>，不合格数据将被过滤</div>
     <div class="list-table-wrap">
