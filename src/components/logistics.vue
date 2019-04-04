@@ -307,7 +307,7 @@ export default {
         item.local_type = this.localType
       }
 
-      API[type](item)
+      this.API[type](item)
         .then(data => {
           this.busy = false
           this.$set(item, 'doType', 1)
@@ -370,8 +370,8 @@ export default {
     calTest() {
       // 实重=重量(g)/1000
       // 体积重=体积（cm³）/6000
-      let test = this.test
-      let result = test.result
+      const { test } = this
+      const { result } = test
       result.total = null
       result.ok = true
       result.weight = this.test.weight || 0
