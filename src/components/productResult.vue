@@ -62,15 +62,15 @@
             <!-- 当前利润率 -->
             <td v-if="!lack" :class="[item.earn ? 'ok' : 'warn']">{{item.profitRate ? item.profitRate + '%' : '-'}}</td>
             <!-- 预设利润率售价 -->
-            <td :class="{ok: lack }">{{item.pRate_defalut ? itemZ.currency_symbol + ' ' + item.pRate_defalut : '-'}}</td>
+            <td :class="{ok: lack }">{{item.pRate_defalut ? item.symbol + ' ' + item.pRate_defalut : '-'}}</td>
             <!-- 0% -->
-            <td>{{item.pRate_0 ? itemZ.currency_symbol + ' ' + item.pRate_0 : '-'}}</td>
-            <td>{{item.pRate_5 ? itemZ.currency_symbol + ' ' + item.pRate_5 : '-'}}</td>
-            <td>{{item.pRate_10 ? itemZ.currency_symbol + ' ' + item.pRate_10 : '-'}}</td>
-            <td>{{item.pRate_15 ? itemZ.currency_symbol + ' ' + item.pRate_15 : '-'}}</td>
-            <td>{{item.pRate_20 ? itemZ.currency_symbol + ' ' + item.pRate_20 : '-'}}</td>
-            <td>{{item.pRate_25 ? itemZ.currency_symbol + ' ' + item.pRate_25 : '-'}}</td>
-            <td>{{item.pRate_30 ? itemZ.currency_symbol + ' ' + item.pRate_30 : '-'}}</td>
+            <td>{{item.pRate_0 ? item.symbol + ' ' + item.pRate_0 : '-'}}</td>
+            <td>{{item.pRate_5 ? item.symbol + ' ' + item.pRate_5 : '-'}}</td>
+            <td>{{item.pRate_10 ? item.symbol + ' ' + item.pRate_10 : '-'}}</td>
+            <td>{{item.pRate_15 ? item.symbol + ' ' + item.pRate_15 : '-'}}</td>
+            <td>{{item.pRate_20 ? item.symbol + ' ' + item.pRate_20 : '-'}}</td>
+            <td>{{item.pRate_25 ? item.symbol + ' ' + item.pRate_25 : '-'}}</td>
+            <td>{{item.pRate_30 ? item.symbol + ' ' + item.pRate_30 : '-'}}</td>
           </tr>
         </tbody>
       </table>

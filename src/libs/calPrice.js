@@ -31,6 +31,22 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
   // console.log('weight-----', weight, weightLocal)
   
   const items = []
+  const { local: localType } = product
+  let US = null
+  if (localType == '3') {
+    for (let index = 0; index < zone.length; index++) {
+      const val = zone[index]
+      if(val.name === 'US') {
+        US = {
+          symbol: val.currency_symbol,
+          rate: val.exchange_rate
+        }
+        break
+      }
+    }
+  }
+
+  // console.log(US)
   zone.forEach(v => {
     v.list = []
     // 地区名称、汇率、单价、采购价、售卖价
@@ -39,8 +55,8 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
     const exRate = parseFloat(v.exchange_rate)
     const pPrice = parseFloat(product.purchase_price)
     const sPrice = parseFloat(product.selling_price)
-
-    const logs = localMapAll[product.local].logistics
+    
+    const logs = localMapAll[localType].logistics
     const { category } = product
       // console.log(logs)
     logs.forEach(logType => {
@@ -130,11 +146,13 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
         let prd = item.pRate_defalut
         items.push(prd ? currencySymbol + ' ' + prd : '-')
       }
+      
+      item.symbol = US ? US.symbol : currencySymbol
 
       function calProfitRate(rate) {
-        let f = item.logFirst
-        let s = item.logSecondRmb
-        let result = (pPrice + f + s) / exRate / (1 - sellCost - rate)
+        const { logFirst: f, logSecondRmb: s } = item
+        const ex = US ? US.rate : exRate
+        let result = (pPrice + f + s) / ex / (1 - sellCost - rate)
         return isNaN(result) ? result : result.toFixed(DIGITS)
       }
     })
