@@ -49,7 +49,7 @@ export const logistics = {
   '4': 'FBA海运',
   '5': 'FBA空运',
   '6': 'FBW海运',
-  '7': 'FBW海运',
+  '7': 'FBW空运',
 }
 
 export default {
