@@ -113,7 +113,9 @@ export default [
         children: [
           { path: '', component: () => import('views/local/ebay.vue') },
           { path: 'amazon', component: () => import('views/local/amazon.vue') },
-          { path: 'wish', component: () => import('views/local/wish.vue') }
+          { path: 'wish', component: () => import('views/local/wish.vue') },
+          { path: 'amazonOut', component: () => import('views/local/amazonOut.vue') },
+          { path: 'wishOut', component: () => import('views/local/wishOut.vue') }
         ]
       },
       // config

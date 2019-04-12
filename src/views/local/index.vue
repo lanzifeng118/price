@@ -15,7 +15,9 @@ export default {
       tabItems: [
         { text: 'Ebay', href: '/local/', icon: 'eee' },
         { text: 'Amazon', href: '/local/amazon', icon: 'amazon' },
-        { text: 'Wish', href: '/local/wish', icon: 'wish' }
+        { text: 'Wish', href: '/local/wish', icon: 'wish' },
+        { text: 'Amazon外仓', href: '/local/amazonOut', icon: '' },
+        { text: 'Wish外仓', href: '/local/wishOut', icon: '' }
       ]
     }
   },

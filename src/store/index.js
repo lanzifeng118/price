@@ -37,8 +37,20 @@ const local = [
   }
 ]
 
+const localOut = [...local, ... [
+  {
+    type: '4',
+    name: 'Amazon外仓',
+  },
+  {
+    type: '5',
+    name: 'Wish外仓',
+  }
+]]
+
 export const categoryMap = turnObj(category)
 export const localMap = turnObj(local)
+export const localOutMap = turnObj(localOut)
 export const localMapAll = turnObj2(local)
 // console.log(localMapAll)
 
@@ -62,6 +74,8 @@ export default {
     local,
     localMapAll,
     localMap,
+    localOut,
+    localOutMap,
     logistics
   },
   mutations: {

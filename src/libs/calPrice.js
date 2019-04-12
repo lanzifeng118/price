@@ -21,13 +21,11 @@ const DIGITS = 2
  */
 function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly = true) {
   // console.log('product-----', product)
-  // console.log('zone-----', zone)
+  // console.log('local-----', local)
   // console.log('factor-----', factor)
   const { weight: pWeight, bulk: pBulk } = product
   
   // 根据体积系数计算重量
-  const weight = calWeight(pWeight, pBulk, factor.weight_1)
-  const weightLocal = calWeight(pWeight, pBulk, factor.weight_2)
   // console.log('weight-----', weight, weightLocal)
   
   const items = []
@@ -45,6 +43,15 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
       }
     }
   }
+  let factorCal
+
+  function calFactor(type) {
+    return {
+      weight: calWeight(pWeight, pBulk, factor[type].weight_1),
+      weightLocal: calWeight(pWeight, pBulk, factor[type].weight_2),
+      sellCost: factor[type].sell_cost
+    }
+  }
 
   // console.log(US)
   zone.forEach(v => {
@@ -58,20 +65,34 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
     
     const logs = localMapAll[localType].logistics
     const { category } = product
-      // console.log(logs)
+    // console.log(logs)
     logs.forEach(logType => {
+      let localCal = localType
+      factorCal = calFactor(localType)
+
+      function setOut() {
+        if (localType === '2') {
+          localCal = '4'
+          factorCal = calFactor(localCal)
+        } else if (localType === '3') {
+          localCal = '5'
+          factorCal = calFactor(localCal)
+        }
+      }
+
       let item = { logName: logistics[logType] }
       if (logType === '1') {
         // 国内小包
         // console.log(zoneName)
-        item.logFirst = calLog(weight, domestic[zoneName])
+        item.logFirst = calLog(factorCal.weight, domestic[zoneName])
         item.logSecond = 0
       } else {
+        // 海运
         if (logType === '2' || logType === '4' || logType === '6') {
-          // 海运
           let priceSea
           switch (logType) {
             case '2':
+              setOut()
               priceSea = parseFloat(v.price_sea)
               break;
             case '4':
@@ -81,11 +102,13 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
               priceSea = parseFloat(v.fbw_price_sea)
               break;
           }
-          item.logFirst = priceSea * weight
+          item.logFirst = priceSea * factorCal.weight
         } else {
+          // 空运
           let priceAir, priceAirEm
           switch (logType) {
             case '3':
+              setOut()
               priceAir = parseFloat(v.price_air)
               priceAirEm = parseFloat(v.price_air_em)
               break;
@@ -101,18 +124,23 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
           // 外仓空运
           if (category === '2' || category === '3') {
             // 带电带磁
-            item.logFirst = priceAirEm * weight
+            item.logFirst = priceAirEm * factorCal.weight
           } else {
-            item.logFirst = priceAir * weight
+            item.logFirst = priceAir * factorCal.weight
           }
         }
-        // TODO: 外仓空运、外仓海运
 
-        item.logSecond = calLog(weightLocal, local[zoneName])
+        // console.log(localCal)
+        item.logSecond = calLog(factorCal.weightLocal, local[localCal][zoneName])
+        
+        // item.logSecond = calLog(factorCal.weightLocal, local[zoneName])
       }
-
-      const { sell_cost: sellCost } = factor // 销售成本系数
-
+      
+      const { sellCost } = factorCal
+      // console.log('sellCost----', sellCost)
+      
+      // 销售成本
+      item.costSell = item.sPriceRmb * sellCost
       // 采购成本
       item.pPrice = pPrice
       // 二程成本(人民币）
@@ -125,8 +153,6 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
         item.sPrice = sPrice
         // 售价 人民币
         item.sPriceRmb = sPrice * exRate
-        // 销售成本
-        item.costSell = item.sPriceRmb * sellCost
         // 总成本
         item.cost =
           pPrice + item.costSell + item.logFirst + item.logSecondRmb

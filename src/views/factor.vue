@@ -17,7 +17,7 @@
           <tr v-for="(item, index) in items" :class="{edit: item.type === 2, add: item.type === 3}">
             <!-- weight_1 -->
             <td>
-              <div>{{localMap[item.localType]}}</div>
+              <div>{{localOutMap[item.localType]}}</div>
             </td>
             <!-- weight_1 -->
             <td>
@@ -57,6 +57,7 @@
               ></operate>
             </td>
           </tr>
+
         </tbody>
       </table>
     </div>
@@ -78,7 +79,7 @@ export default {
       busy: false
     }
   },
-  computed: mapState(['local', 'localMap']),
+  computed: mapState(['localOut', 'localOutMap']),
   created() {
     this.getItems()
   },
@@ -90,9 +91,9 @@ export default {
       // ajax
       API_factor.query()
         .then(data => {
-          // console.log(data, this.local)
+          console.log(data, this.local)
           this.msg = ''
-          this.local.forEach(val => {
+          this.localOut.forEach(val => {
             const item = data[val.type]
             item.type = 1
             item.localType = val.type
