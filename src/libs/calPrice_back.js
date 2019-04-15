@@ -332,7 +332,10 @@ function lowest(data, profitRate, backend = true) {
 }
 
 
-export default {
-  cal,
-  lowest
-}
+// export default {
+//   cal,
+//   lowest
+// }
+
+module.exports.cal = cal
+module.exports.lowest = lowest

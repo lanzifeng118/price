@@ -139,20 +139,20 @@ function cal(product, zone, factor, domestic, local, profitRate, sellPriceOnly =
       const { sellCost } = factorCal
       // console.log('sellCost----', sellCost)
       
-      // 销售成本
-      item.costSell = item.sPriceRmb * sellCost
       // 采购成本
       item.pPrice = pPrice
       // 二程成本(人民币）
       item.logSecondRmb = item.logSecond * exRate
       // 预设利润售价
       item.pRate_defalut = calProfitRate(profitRate / 100)
-
+      
       if (!sellPriceOnly) {
         // 售价
         item.sPrice = sPrice
         // 售价 人民币
         item.sPriceRmb = sPrice * exRate
+        // 销售成本
+        item.costSell = item.sPriceRmb * sellCost
         // 总成本
         item.cost =
           pPrice + item.costSell + item.logFirst + item.logSecondRmb

@@ -91,7 +91,7 @@ export default {
       // ajax
       API_factor.query()
         .then(data => {
-          console.log(data, this.local)
+          // console.log(data, this.local)
           this.msg = ''
           this.localOut.forEach(val => {
             const item = data[val.type]
