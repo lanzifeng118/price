@@ -308,12 +308,12 @@ function calWeight(weight, bulk, rate) {
  * backend: 是否后端使用，默认是，返回数据不太一样，后端返回一个二维数组
  */
 
-function lowest(data, profitRate, backend = true) {
+function lowest(localType, data, profitRate, backend = true) {
   const { product, zone, factor, local } = data
 
   const items = []
   const titles = ['SKU']
-  const localType = '1'
+  // const localType = '1'
 
   zone.forEach(v => {
     localMapAll[localType].logistics.forEach(vL => {

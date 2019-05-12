@@ -68,7 +68,7 @@ export default {
       API_product.queryForCalculate(page)
         .then(data => {
           this.msg = ''
-          let result = calPrice.lowest(data, this.profitRate, false)
+          let result = calPrice.lowest(this.local, data, this.profitRate, false)
           this.titles = result.titles
           this.items = result.items
           this.paging.total = data.product.total
@@ -106,5 +106,8 @@ export default {
   top: -55px;
   right: 0;
 }
+/* .lowest-detail .list-table-wrap td {
+  padding: 5px 0px;
+} */
 
 </style>
